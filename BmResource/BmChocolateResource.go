@@ -3,9 +3,9 @@ package BmResource
 import (
 	"github.com/alfredyang1986/BmPods/BmMockDataStorage"
 	"github.com/manyminds/api2go"
-	"github.com/manyminds/api2go/examples/model"
 	"errors"
 	"net/http"
+	"github.com/alfredyang1986/BmPods/BmModel"
 )
 
 type BmChocolateResource struct {
@@ -26,7 +26,7 @@ func (c BmChocolateResource) FindAll(r api2go.Request) (api2go.Responder, error)
 		// /v0/users/1/sweets
 		userID := usersID[0]
 		// filter out sweets with userID, in real world, you would just run a different database query
-		filteredSweets := []model.Chocolate{}
+		filteredSweets := []BmModel.Chocolate{}
 		user, err := c.UserStorage.GetOne(userID)
 		if err != nil {
 			return &Response{}, err
@@ -52,7 +52,7 @@ func (c BmChocolateResource) FindOne(ID string, r api2go.Request) (api2go.Respon
 
 // Create a new choc
 func (c BmChocolateResource) Create(obj interface{}, r api2go.Request) (api2go.Responder, error) {
-	choc, ok := obj.(model.Chocolate)
+	choc, ok := obj.(BmModel.Chocolate)
 	if !ok {
 		return &Response{}, api2go.NewHTTPError(errors.New("Invalid instance given"), "Invalid instance given", http.StatusBadRequest)
 	}
@@ -70,7 +70,7 @@ func (c BmChocolateResource) Delete(id string, r api2go.Request) (api2go.Respond
 
 // Update a choc
 func (c BmChocolateResource) Update(obj interface{}, r api2go.Request) (api2go.Responder, error) {
-	choc, ok := obj.(model.Chocolate)
+	choc, ok := obj.(BmModel.Chocolate)
 	if !ok {
 		return &Response{}, api2go.NewHTTPError(errors.New("Invalid instance given"), "Invalid instance given", http.StatusBadRequest)
 	}

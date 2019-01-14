@@ -4,12 +4,9 @@ import (
 	"fmt"
 	"github.com/alfredyang1986/BmPods/BmPodsDefine"
 	"github.com/manyminds/api2go"
-	"github.com/manyminds/api2go/examples/resolver"
-	"github.com/manyminds/api2go/examples/storage"
-	"github.com/manyminds/api2go/examples/model"
-	"github.com/manyminds/api2go/examples/resource"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
+	"github.com/alfredyang1986/BmPods/BmApiResolver"
 )
 
 func main() {
@@ -18,11 +15,8 @@ func main() {
 	pod.RegisterSerFromYAML("Resources/alfredtest.yaml")
 
 	port := 31415
-	api := api2go.NewAPIWithResolver("v0", &resolver.RequestURL{Port: port})
-	userStorage := storage.NewUserStorage()
-	chocStorage := storage.NewChocolateStorage()
-	api.AddResource(model.User{}, resource.UserResource{ChocStorage: chocStorage, UserStorage: userStorage})
-	api.AddResource(model.Chocolate{}, resource.ChocolateResource{ChocStorage: chocStorage, UserStorage: userStorage})
+	api := api2go.NewAPIWithResolver("v0", &BmApiResolver.RequestURL{Port: port})
+	pod.RegisterAllResource(api)
 
 	fmt.Printf("Listening on :%d", port)
 	handler := api.Handler().(*httprouter.Router)

@@ -1,6 +1,6 @@
 package BmPodsDefine
 
-type BmResource interface {
+type BmRes interface {
 	GetResourceName() string
 	//GetResourceIns() interface{}
 	//GetResourceRelationshipsIns() interface{}

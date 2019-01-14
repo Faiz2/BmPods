@@ -3,11 +3,11 @@ package BmResource
 import (
 	"github.com/alfredyang1986/BmPods/BmMockDataStorage"
 	"github.com/manyminds/api2go"
-	"github.com/manyminds/api2go/examples/model"
 	"errors"
 	"net/http"
 	"strconv"
 	"sort"
+	"github.com/alfredyang1986/BmPods/BmModel"
 )
 
 type BmUserResource struct {
@@ -21,12 +21,12 @@ func (s BmUserResource) GetResourceName() string {
 
 // FindAll to satisfy api2go data source interface
 func (s BmUserResource) FindAll(r api2go.Request) (api2go.Responder, error) {
-	var result []model.User
+	var result []BmModel.User
 	users := s.UserStorage.GetAll()
 
 	for _, user := range users {
 		// get all sweets for the user
-		user.Chocolates = []*model.Chocolate{}
+		user.Chocolates = []*BmModel.Chocolate{}
 		for _, chocolateID := range user.ChocolatesIDs {
 			choc, err := s.ChocStorage.GetOne(chocolateID)
 			if err != nil {
@@ -43,7 +43,7 @@ func (s BmUserResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 // PaginatedFindAll can be used to load users in chunks
 func (s BmUserResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Responder, error) {
 	var (
-		result                      []model.User
+		result                      []BmModel.User
 		number, size, offset, limit string
 		keys                        []int
 	)
@@ -124,7 +124,7 @@ func (s BmUserResource) FindOne(ID string, r api2go.Request) (api2go.Responder, 
 		return &Response{}, api2go.NewHTTPError(err, err.Error(), http.StatusNotFound)
 	}
 
-	user.Chocolates = []*model.Chocolate{}
+	user.Chocolates = []*BmModel.Chocolate{}
 	for _, chocolateID := range user.ChocolatesIDs {
 		choc, err := s.ChocStorage.GetOne(chocolateID)
 		if err != nil {
@@ -137,7 +137,7 @@ func (s BmUserResource) FindOne(ID string, r api2go.Request) (api2go.Responder, 
 
 // Create method to satisfy `api2go.DataSource` interface
 func (s BmUserResource) Create(obj interface{}, r api2go.Request) (api2go.Responder, error) {
-	user, ok := obj.(model.User)
+	user, ok := obj.(BmModel.User)
 	if !ok {
 		return &Response{}, api2go.NewHTTPError(errors.New("Invalid instance given"), "Invalid instance given", http.StatusBadRequest)
 	}
@@ -156,7 +156,7 @@ func (s BmUserResource) Delete(id string, r api2go.Request) (api2go.Responder, e
 
 //Update stores all changes on the user
 func (s BmUserResource) Update(obj interface{}, r api2go.Request) (api2go.Responder, error) {
-	user, ok := obj.(model.User)
+	user, ok := obj.(BmModel.User)
 	if !ok {
 		return &Response{}, api2go.NewHTTPError(errors.New("Invalid instance given"), "Invalid instance given", http.StatusBadRequest)
 	}

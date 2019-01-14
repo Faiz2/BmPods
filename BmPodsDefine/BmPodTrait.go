@@ -6,6 +6,10 @@ import (
 	"io/ioutil"
 	"github.com/alfredyang1986/BmPods/BmPanic"
 	"github.com/alfredyang1986/BmPods/BmFactory"
+	"github.com/alfredyang1986/BmPods/BmModel"
+	"github.com/manyminds/api2go"
+	"github.com/alfredyang1986/BmPods/BmResource"
+	"github.com/alfredyang1986/BmPods/BmMockDataStorage"
 )
 
 type Pod struct {
@@ -28,6 +32,13 @@ func (p *Pod) RegisterSerFromYAML(path string) {
 		panic(BmPanic.ALFRED_TEST_ERROR)
 	}
 
-	ins := BmFactory.GetInstanceByName(conf.Resource).(BmResource)
+	ins := BmFactory.GetInstanceByName(conf.Resource).(BmRes)
 	fmt.Println(ins.GetResourceName())
+}
+
+func (p Pod) RegisterAllResource(api *api2go.API) {
+	userStorage := BmMockDataStorage.NewUserStorage()
+	chocStorage := BmMockDataStorage.NewChocolateStorage()
+	api.AddResource(BmModel.User{}, BmResource.BmUserResource{ChocStorage: chocStorage, UserStorage: userStorage})
+	api.AddResource(BmModel.Chocolate{}, BmResource.BmChocolateResource{ChocStorage: chocStorage, UserStorage: userStorage})
 }
