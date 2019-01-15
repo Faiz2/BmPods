@@ -8,15 +8,15 @@ resources:
   method: NewUserResource
   storages:
   - BmUserStorage
-    BmChocolateStorage
+  - BmChocolateStorage
 - name: BmChocolateResource
   method: NewChocolateResource
   storages:
   - BmUserStorage
-    BmChocolateStorage
+  - BmChocolateStorage
 models:
 - BmUser
-  BmChocolate
+- BmChocolate
 services:
 - name: bm-user
   model: BmUser
@@ -31,6 +31,3 @@ services:
 - name: bm-chocolate
   model: BmChocolate
   resource: BmChocolateResource
-  storage:
-  - BmChocolateStorage
-    BmUserStorage

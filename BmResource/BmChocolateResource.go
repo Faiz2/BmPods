@@ -6,31 +6,31 @@ import (
 	"errors"
 	"net/http"
 	"github.com/alfredyang1986/BmPods/BmModel"
+	"reflect"
 )
 
 type BmChocolateResource struct {
 	ChocStorage *BmDataStorage.ChocolateStorage
 	UserStorage *BmDataStorage.UserStorage
-
-	Storages map[string]BmDataStorage.BmStorage
 }
 
-func (c *BmChocolateResource) GetResourceName() string {
-	return "bm-user"
-}
-
-func (c *BmChocolateResource) RegisterRelateStorage(n string, i BmDataStorage.BmStorage) {
-	if c.Storages == nil {
-		c.Storages = make(map[string]BmDataStorage.BmStorage)
+func (c BmChocolateResource) NewChocolateResource(args ...interface{}) BmChocolateResource {
+	var us *BmDataStorage.UserStorage
+	var cs *BmDataStorage.ChocolateStorage
+	sds := args[0].([]BmDataStorage.BmStorage)
+	for _, arg := range sds {
+		tp := reflect.ValueOf(arg).Elem().Type()
+		if tp.Name() == "UserStorage" {
+			us = arg.(*BmDataStorage.UserStorage)
+		} else if tp.Name() == "ChocolateStorage" {
+			cs = arg.(*BmDataStorage.ChocolateStorage)
+		}
 	}
+	return BmChocolateResource { UserStorage:us, ChocStorage:cs }
 
-	c.Storages[n] = i
 
-	if n == "self" {
-		c.ChocStorage = i.(*BmDataStorage.ChocolateStorage)
-	} else if n == "users" {
-		c.UserStorage = i.(*BmDataStorage.UserStorage)
-	}
+
+	return BmChocolateResource{}
 }
 
 // FindAll chocolates

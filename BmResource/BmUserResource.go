@@ -8,31 +8,27 @@ import (
 	"strconv"
 	"sort"
 	"github.com/alfredyang1986/BmPods/BmModel"
+	"reflect"
 )
 
 type BmUserResource struct {
 	ChocStorage *BmDataStorage.ChocolateStorage
 	UserStorage *BmDataStorage.UserStorage
-
-	Storages map[string]BmDataStorage.BmStorage
 }
 
-func (s *BmUserResource) GetResourceName() string {
-	return "bm-user"
-}
-
-func (s *BmUserResource) RegisterRelateStorage(n string, i BmDataStorage.BmStorage) {
-	if s.Storages == nil {
-		s.Storages = make(map[string]BmDataStorage.BmStorage)
+func (s BmUserResource) NewUserResource(args ...interface{}) BmUserResource {
+	var us *BmDataStorage.UserStorage
+	var cs *BmDataStorage.ChocolateStorage
+	sds := args[0].([]BmDataStorage.BmStorage)
+	for _, arg := range sds {
+		tp := reflect.ValueOf(arg).Elem().Type()
+		if tp.Name() == "UserStorage" {
+			us = arg.(*BmDataStorage.UserStorage)
+		} else if tp.Name() == "ChocolateStorage" {
+			cs = arg.(*BmDataStorage.ChocolateStorage)
+		}
 	}
-
-	s.Storages[n] = i
-
-	if n == "self" {
-		s.UserStorage = i.(*BmDataStorage.UserStorage)
-	} else if n == "chocolates" {
-		s.ChocStorage = i.(*BmDataStorage.ChocolateStorage)
-	}
+	return BmUserResource{ UserStorage:us, ChocStorage:cs }
 }
 
 // FindAll to satisfy api2go data source interface

@@ -23,15 +23,23 @@ func (c byID) Less(i, j int) bool {
 }
 
 // NewChocolateStorage initializes the storage
-func NewChocolateStorage() *ChocolateStorage {
-	return &ChocolateStorage{make(map[string]*BmModel.Chocolate), 1}
-}
+//func NewChocolateStorage() *ChocolateStorage {
+//	return &ChocolateStorage{make(map[string]*BmModel.Chocolate), 1}
+//}
 
 // ChocolateStorage stores all of the tasty chocolate, needs to be injected into
 // User and Chocolate Resource. In the real world, you would use a database for that.
 type ChocolateStorage struct {
 	chocolates map[string]*BmModel.Chocolate
 	idCount    int
+}
+
+func (s ChocolateStorage) NewChocolateStorage() *ChocolateStorage {
+	return &ChocolateStorage{make(map[string]*BmModel.Chocolate), 1}
+}
+
+func (s *ChocolateStorage) GetStorageName() string {
+	return "BmChocolateStorage"
 }
 
 // GetAll of the chocolate

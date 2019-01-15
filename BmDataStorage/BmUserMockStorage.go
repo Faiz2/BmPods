@@ -10,14 +10,22 @@ import (
 )
 
 // NewUserStorage initializes the storage
-func NewUserStorage() *UserStorage {
-	return &UserStorage{make(map[string]*BmModel.User), 1}
-}
+//func NewUserStorage() *UserStorage {
+//	return &UserStorage{make(map[string]*BmModel.User), 1}
+//}
 
 // UserStorage stores all users
 type UserStorage struct {
 	users   map[string]*BmModel.User
 	idCount int
+}
+
+func (s UserStorage) NewUserStorage() *UserStorage {
+	return &UserStorage{make(map[string]*BmModel.User), 1}
+}
+
+func (s *UserStorage) GetStorageName() string {
+	return "BmUserStorage"
 }
 
 // GetAll returns the user map (because we need the ID as key too)
