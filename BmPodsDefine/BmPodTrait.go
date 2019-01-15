@@ -53,8 +53,6 @@ func (p *Pod) CreateStorageInstances() {
 		inc, _ := BmSingleton.GetFactoryInstance().ReflectFunctionCall(any, name)
 		p.Storages[s.Name] = inc.Interface()
 	}
-
-	fmt.Println(p.Storages)
 }
 
 func (p *Pod) CreateResourceInstances() {
@@ -74,8 +72,6 @@ func (p *Pod) CreateResourceInstances() {
 		inc, _ := BmSingleton.GetFactoryInstance().ReflectFunctionCall(any, name, args)
 		p.Resources[r.Name] = inc.Interface()
 	}
-
-	fmt.Println(p.Resources)
 }
 
 func (p Pod) RegisterAllResource(api *api2go.API) {
@@ -84,25 +80,4 @@ func (p Pod) RegisterAllResource(api *api2go.API) {
 		res := p.Resources[ser.Resource]
 		api.AddResource(md.(jsonapi.MarshalIdentifier), res)
 	}
-
-	//res := BmFactory.GetResourceByName(p.conf.Resource).(BmResource.BmRes)
-	//stor := BmFactory.GetStorageByName(p.conf.Storage).(BmDataStorage.BmStorage)
-	//res.RegisterRelateStorage("self", stor)
-	//for _, o2o := range p.conf.Relationships.One2one {
-	//	storage := BmFactory.GetStorageByName(o2o["storage"]).(BmDataStorage.BmStorage)
-	//	res.RegisterRelateStorage(o2o["storage"], storage)
-	//}
-	//
-	//for _, o2m := range p.conf.Relationships.One2many {
-	//	storage := BmFactory.GetStorageByName(o2m["storage"]).(BmDataStorage.BmStorage)
-	//	res.RegisterRelateStorage(o2m["storage"], storage)
-	//}
-	//
-	//fmt.Println(res)
-	//api.AddResource(BmModel.User{}, res)
-
-	//userStorage := BmMockDataStorage.NewUserStorage()
-	//chocStorage := BmMockDataStorage.NewChocolateStorage()
-	//api.AddResource(BmModel.User{}, BmResource.BmUserResource{ChocStorage: chocStorage, UserStorage: userStorage})
-	//api.AddResource(BmModel.Chocolate{}, BmResource.BmChocolateResource{ChocStorage: chocStorage, UserStorage: userStorage})
 }

@@ -19,19 +19,13 @@ var BLACKMIRROR_STORAGE_FACTORY = map[string]interface{}{
 	"BmChocolateStorage": BmDataStorage.ChocolateStorage{} }
 
 func GetModelByName(name string) interface{}{
-	//tp := BLACKMIRROR_MODEL_FACTORY[name]
-	//return GetFactoryInstance().ReflectInstanceByTp(tp)
 	return BLACKMIRROR_MODEL_FACTORY[name]
 }
 
 func GetResourceByName(name string) interface{}{
-	//tp := BLACKMIRROR_RESOURCE_FACTORY[name]
-	//return GetFactoryInstance().ReflectPointerByTp(tp)
 	return BLACKMIRROR_RESOURCE_FACTORY[name]
 }
 
 func GetStorageByName(name string) interface{}{
-	//tp := BLACKMIRROR_STORAGE_FACTORY[name]
-	//return GetFactoryInstance().ReflectPointerByTp(tp)
 	return BLACKMIRROR_STORAGE_FACTORY[name]
 }
