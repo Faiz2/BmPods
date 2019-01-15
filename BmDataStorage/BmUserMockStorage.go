@@ -1,4 +1,4 @@
-package BmMockDataStorage
+package BmDataStorage
 
 import (
 	"errors"

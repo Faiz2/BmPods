@@ -1,10 +1,11 @@
 package BmPodsDefine
 
 type Conf struct {
-	Resource string `yaml: "resource"`
-	Collection string `yaml: "collection"`
+	Model string
+	Resource string
+	Storage string
 	Relationships struct{
-		One2one []string
-		One2many []string
+		One2one []map[string]string
+		One2many []map[string]string
 	}
 }

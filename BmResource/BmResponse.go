@@ -9,9 +9,9 @@ type Response struct {
 // Metadata returns additional meta data
 func (r Response) Metadata() map[string]interface{} {
 	return map[string]interface{}{
-		"author":      "The api2go examples crew",
-		"license":     "wtfpl",
-		"license-url": "http://www.wtfpl.net",
+		"author":      "Blackmirror Inc. AlfredYang",
+		"license":     "blackmirror.tech",
+		"license-url": "http://www.dongdakid.com",
 	}
 }
 

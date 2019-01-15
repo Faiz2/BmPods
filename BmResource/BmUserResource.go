@@ -1,7 +1,7 @@
 package BmResource
 
 import (
-	"github.com/alfredyang1986/BmPods/BmMockDataStorage"
+	"github.com/alfredyang1986/BmPods/BmDataStorage"
 	"github.com/manyminds/api2go"
 	"errors"
 	"net/http"
@@ -11,12 +11,28 @@ import (
 )
 
 type BmUserResource struct {
-	ChocStorage *BmMockDataStorage.ChocolateStorage
-	UserStorage *BmMockDataStorage.UserStorage
+	ChocStorage *BmDataStorage.ChocolateStorage
+	UserStorage *BmDataStorage.UserStorage
+
+	Storages map[string]BmDataStorage.BmStorage
 }
 
-func (s BmUserResource) GetResourceName() string {
+func (s *BmUserResource) GetResourceName() string {
 	return "bm-user"
+}
+
+func (s *BmUserResource) RegisterRelateStorage(n string, i BmDataStorage.BmStorage) {
+	if s.Storages == nil {
+		s.Storages = make(map[string]BmDataStorage.BmStorage)
+	}
+
+	s.Storages[n] = i
+
+	if n == "self" {
+		s.UserStorage = i.(*BmDataStorage.UserStorage)
+	} else if n == "chocolates" {
+		s.ChocStorage = i.(*BmDataStorage.ChocolateStorage)
+	}
 }
 
 // FindAll to satisfy api2go data source interface

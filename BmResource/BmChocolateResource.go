@@ -1,7 +1,7 @@
 package BmResource
 
 import (
-	"github.com/alfredyang1986/BmPods/BmMockDataStorage"
+	"github.com/alfredyang1986/BmPods/BmDataStorage"
 	"github.com/manyminds/api2go"
 	"errors"
 	"net/http"
@@ -9,12 +9,28 @@ import (
 )
 
 type BmChocolateResource struct {
-	ChocStorage *BmMockDataStorage.ChocolateStorage
-	UserStorage *BmMockDataStorage.UserStorage
+	ChocStorage *BmDataStorage.ChocolateStorage
+	UserStorage *BmDataStorage.UserStorage
+
+	Storages map[string]BmDataStorage.BmStorage
 }
 
-func (c BmChocolateResource) GetResourceName() string {
+func (c *BmChocolateResource) GetResourceName() string {
 	return "bm-user"
+}
+
+func (c *BmChocolateResource) RegisterRelateStorage(n string, i BmDataStorage.BmStorage) {
+	if c.Storages == nil {
+		c.Storages = make(map[string]BmDataStorage.BmStorage)
+	}
+
+	c.Storages[n] = i
+
+	if n == "self" {
+		c.ChocStorage = i.(*BmDataStorage.ChocolateStorage)
+	} else if n == "users" {
+		c.UserStorage = i.(*BmDataStorage.UserStorage)
+	}
 }
 
 // FindAll chocolates

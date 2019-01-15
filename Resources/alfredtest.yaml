@@ -1,9 +1,7 @@
-resource: BmUser
-collection: BmUser
+model: BmUser
+resource: BmUserResource
+storage: BmUserStorage
 relationships:
-  one2one:
-  - abcde
-    12345
   one2many:
-  - qwert
-    67890
+  - name: chocolates
+    storage: BmChocolateStorage
