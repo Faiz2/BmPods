@@ -14,11 +14,10 @@ type BmChocolateResource struct {
 	UserStorage *BmDataStorage.UserStorage
 }
 
-func (c BmChocolateResource) NewChocolateResource(args ...interface{}) BmChocolateResource {
+func (c BmChocolateResource) NewChocolateResource(args []BmDataStorage.BmStorage) BmChocolateResource {
 	var us *BmDataStorage.UserStorage
 	var cs *BmDataStorage.ChocolateStorage
-	sds := args[0].([]BmDataStorage.BmStorage)
-	for _, arg := range sds {
+	for _, arg := range args {
 		tp := reflect.ValueOf(arg).Elem().Type()
 		if tp.Name() == "UserStorage" {
 			us = arg.(*BmDataStorage.UserStorage)
@@ -27,10 +26,6 @@ func (c BmChocolateResource) NewChocolateResource(args ...interface{}) BmChocola
 		}
 	}
 	return BmChocolateResource { UserStorage:us, ChocStorage:cs }
-
-
-
-	return BmChocolateResource{}
 }
 
 // FindAll chocolates

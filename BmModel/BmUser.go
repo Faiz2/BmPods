@@ -3,13 +3,15 @@ package BmModel
 import (
 	"errors"
 	"github.com/manyminds/api2go/jsonapi"
+	"gopkg.in/mgo.v2/bson"
 )
 
 // User is a generic database user
 type User struct {
 	ID string `json:"-"`
-	//rename the username field to user-name.
-	Username      string       `json:"user-name"`
+	Id_ bson.ObjectId `bson:"_id"`
+
+	Username      string       `json:"user-name" bson:"username"`
 	PasswordHash  string       `json:"-"`
 	Chocolates    []*Chocolate `json:"-"`
 	ChocolatesIDs []string     `json:"-"`

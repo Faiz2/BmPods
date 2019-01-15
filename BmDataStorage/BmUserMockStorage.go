@@ -7,16 +7,21 @@ import (
 
 	"github.com/manyminds/api2go"
 	"github.com/alfredyang1986/BmPods/BmModel"
+	"github.com/alfredyang1986/BmPods/BmDaemons/BmMongodb"
+	"github.com/alfredyang1986/BmPods/BmDaemons"
 )
 
 // UserStorage stores all users
 type UserStorage struct {
 	users   map[string]*BmModel.User
 	idCount int
+
+	db *BmMongodb.BmMongodb
 }
 
-func (s UserStorage) NewUserStorage() *UserStorage {
-	return &UserStorage{make(map[string]*BmModel.User), 1}
+func (s UserStorage) NewUserStorage(args []BmDaemons.BmDaemon) *UserStorage {
+	mdb := args[0].(*BmMongodb.BmMongodb)
+	return &UserStorage{make(map[string]*BmModel.User), 1, mdb}
 }
 
 // GetAll returns the user map (because we need the ID as key too)
@@ -36,10 +41,16 @@ func (s UserStorage) GetOne(id string) (BmModel.User, error) {
 
 // Insert a user
 func (s *UserStorage) Insert(c BmModel.User) string {
+	// mock data in memory
 	id := fmt.Sprintf("%d", s.idCount)
 	c.ID = id
 	s.users[id] = &c
 	s.idCount++
+
+	// real data in the mongodb
+	fmt.Println("start")
+	fmt.Println(s.db)
+
 	return id
 }
 

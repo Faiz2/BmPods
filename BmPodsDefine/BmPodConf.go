@@ -4,6 +4,7 @@ type Conf struct {
 	Storages []struct{
 		Name string
 		Method string
+		Daemons []string
 	}
 	Resources []struct{
 		Name string
@@ -26,5 +27,10 @@ type Conf struct {
 				Method map[string]string
 			}
 		}
+	}
+	Daemons []struct{
+		Name string
+		Method string
+		Args map[string]string
 	}
 }

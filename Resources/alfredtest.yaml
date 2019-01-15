@@ -1,6 +1,8 @@
 storages:
 - name: BmUserStorage
   method: NewUserStorage
+  daemons:
+  - BmMongodbDaemon
 - name: BmChocolateStorage
   method: NewChocolateStorage
 resources:
@@ -31,3 +33,10 @@ services:
 - name: bm-chocolate
   model: BmChocolate
   resource: BmChocolateResource
+daemons:
+- name: BmMongodbDaemon
+  method: NewMongoDBDaemon
+  args:
+    host: localhost
+    port: 27017
+    database: ddsaas

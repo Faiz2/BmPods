@@ -11,6 +11,7 @@ import (
 	"github.com/alfredyang1986/BmPods/BmResource"
 	"github.com/alfredyang1986/BmPods/BmSingleton"
 	"github.com/manyminds/api2go/jsonapi"
+	"github.com/alfredyang1986/BmPods/BmDaemons"
 )
 
 type Pod struct {
@@ -20,6 +21,7 @@ type Pod struct {
 
 	Storages map[string]BmDataStorage.BmStorage
 	Resources map[string]BmResource.BmRes
+	Daemons map[string]BmDaemons.BmDaemon
 }
 
 func (p *Pod) RegisterSerFromYAML(path string) {
@@ -37,8 +39,23 @@ func (p *Pod) RegisterSerFromYAML(path string) {
 		panic(BmPanic.ALFRED_TEST_ERROR)
 	}
 
+	p.CreateDaemonInstances()
 	p.CreateStorageInstances()
 	p.CreateResourceInstances()
+}
+
+func (p *Pod) CreateDaemonInstances() {
+	if p.Daemons == nil {
+		p.Daemons = make(map[string]BmDaemons.BmDaemon)
+	}
+
+	for _, d := range p.conf.Daemons {
+		any := BmFactory.GetDaemonByName(d.Name)
+		name := d.Method
+		args := d.Args
+		inc, _ := BmSingleton.GetFactoryInstance().ReflectFunctionCall(any, name, args)
+		p.Daemons[d.Name] = inc.Interface()
+	}
 }
 
 func (p *Pod) CreateStorageInstances() {
@@ -50,7 +67,13 @@ func (p *Pod) CreateStorageInstances() {
 	for _, s := range p.conf.Storages {
 		any := BmFactory.GetStorageByName(s.Name)
 		name := s.Method
-		inc, _ := BmSingleton.GetFactoryInstance().ReflectFunctionCall(any, name)
+		var args []BmDaemons.BmDaemon
+		for _, d := range s.Daemons {
+			tmp := p.Daemons[d]
+			args = append(args, tmp)
+		}
+
+		inc, _ := BmSingleton.GetFactoryInstance().ReflectFunctionCall(any, name, args)
 		p.Storages[s.Name] = inc.Interface()
 	}
 }

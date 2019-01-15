@@ -5,6 +5,7 @@ import (
 	"sort"
 
 	"github.com/alfredyang1986/BmPods/BmModel"
+	"github.com/alfredyang1986/BmPods/BmDaemons"
 )
 
 // sorting
@@ -29,7 +30,7 @@ type ChocolateStorage struct {
 	idCount    int
 }
 
-func (s ChocolateStorage) NewChocolateStorage() *ChocolateStorage {
+func (s ChocolateStorage) NewChocolateStorage(args []BmDaemons.BmDaemon) *ChocolateStorage {
 	return &ChocolateStorage{make(map[string]*BmModel.Chocolate), 1}
 }
 

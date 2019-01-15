@@ -16,11 +16,10 @@ type BmUserResource struct {
 	UserStorage *BmDataStorage.UserStorage
 }
 
-func (s BmUserResource) NewUserResource(args ...interface{}) BmUserResource {
+func (s BmUserResource) NewUserResource(args []BmDataStorage.BmStorage) BmUserResource {
 	var us *BmDataStorage.UserStorage
 	var cs *BmDataStorage.ChocolateStorage
-	sds := args[0].([]BmDataStorage.BmStorage)
-	for _, arg := range sds {
+	for _, arg := range args {
 		tp := reflect.ValueOf(arg).Elem().Type()
 		if tp.Name() == "UserStorage" {
 			us = arg.(*BmDataStorage.UserStorage)
