@@ -31,9 +31,18 @@ func (s UserStorage) GetAll() map[string]*BmModel.User {
 
 // GetOne user
 func (s UserStorage) GetOne(id string) (BmModel.User, error) {
-	user, ok := s.users[id]
-	if ok {
-		return *user, nil
+	//user, ok := s.users[id]
+	//if ok {
+	//	return *user, nil
+	//}
+	//errMessage := fmt.Sprintf("User for id %s not found", id)
+	//return BmModel.User{}, api2go.NewHTTPError(errors.New(errMessage), errMessage, http.StatusNotFound)
+
+	in := BmModel.User{ ID:id }
+	out := BmModel.User{ ID:id }
+	err := s.db.FindOne(&in, &out)
+	if err == nil {
+		return out, nil
 	}
 	errMessage := fmt.Sprintf("User for id %s not found", id)
 	return BmModel.User{}, api2go.NewHTTPError(errors.New(errMessage), errMessage, http.StatusNotFound)

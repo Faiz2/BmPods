@@ -5,9 +5,9 @@ import (
 	"errors"
 	"reflect"
 	"github.com/alfredyang1986/BmPods/BmModel"
-	"github.com/alfredyang1986/blackmirror/bmmate"
 	"gopkg.in/mgo.v2/bson"
 	"fmt"
+	"github.com/alfredyang1986/blackmirror/bmmate"
 )
 
 const (
@@ -53,6 +53,51 @@ func (m *BmMongodb) InsertBmObject(ptr BmModel.BmModelBase) (string, error) {
 	return "", err
 }
 
+func (m *BmMongodb) ExistsBmObject(ptr BmModel.BmModelBase, out BmModel.BmModelBase) (bool, error) {
+	session, err := mgo.Dial(m.Host + ":" + m.Port)
+	if err != nil {
+		return false, errors.New("dial db error")
+	}
+	defer session.Close()
+
+	oid := m.resetId_WithId(ptr)
+	v := reflect.ValueOf(ptr).Elem()
+	cn := v.Type().Name()
+	c := session.DB(m.Database).C(cn)
+
+	rst, err := Struct2map(v)
+	rst["_id"] = oid
+	err = c.Find(rst).One(out)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	m.resetIdWithId_(out)
+	return true, nil
+}
+
+func (m *BmMongodb) FindOne(ptr BmModel.BmModelBase, out BmModel.BmModelBase) error {
+	session, err := mgo.Dial(m.Host + ":" + m.Port)
+	if err != nil {
+		return errors.New("dial db error")
+	}
+	defer session.Close()
+
+	oid := m.resetId_WithId(ptr)
+	v := reflect.ValueOf(ptr).Elem()
+	cn := v.Type().Name()
+	c := session.DB(m.Database).C(cn)
+
+	err = c.Find(bson.M{ "_id": oid }).One(out)
+	if err != nil {
+		fmt.Println(err)
+		return errors.New("query error")
+	}
+
+	m.resetIdWithId_(out)
+	return nil
+}
+
 func (m *BmMongodb) generateModelId_(ptr BmModel.BmModelBase) bson.ObjectId {
 	f := reflect.ValueOf(ptr).Elem().FieldByName("Id_")
 	v := bson.NewObjectId()
@@ -63,10 +108,18 @@ func (m *BmMongodb) generateModelId_(ptr BmModel.BmModelBase) bson.ObjectId {
 func (m *BmMongodb) resetIdWithId_(ptr BmModel.BmModelBase) string {
 	f := reflect.ValueOf(ptr).Elem().FieldByName("Id_")
 	t := f.Interface().(bson.ObjectId)
-	fmt.Println(t.Hex())
 	fs := reflect.ValueOf(ptr).Elem().FieldByName("ID")
 	fs.SetString(t.Hex())
 	return t.Hex()
+}
+
+func (m *BmMongodb) resetId_WithId(ptr BmModel.BmModelBase) bson.ObjectId {
+	fs := reflect.ValueOf(ptr).Elem().FieldByName("ID")
+	t := fs.Interface().(string)
+	f := reflect.ValueOf(ptr).Elem().FieldByName("Id_")
+	v := bson.ObjectIdHex(t)
+	f.Set(reflect.ValueOf(v))
+	return v
 }
 
 func AttrValue(v reflect.Value) (interface{}, error) {
