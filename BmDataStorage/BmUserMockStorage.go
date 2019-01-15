@@ -26,7 +26,20 @@ func (s UserStorage) NewUserStorage(args []BmDaemons.BmDaemon) *UserStorage {
 
 // GetAll returns the user map (because we need the ID as key too)
 func (s UserStorage) GetAll() map[string]*BmModel.User {
-	return s.users
+	//return s.users
+	in := BmModel.User{}
+	out := make([]BmModel.User, 10)
+	err := s.db.FindMulti(&in, &out)
+	if err == nil {
+		tmp := make(map[string]*BmModel.User)
+		for _, iter := range out {
+			s.db.ResetIdWithId_(&iter)
+			tmp[iter.ID] = &iter
+		}
+		return tmp
+	} else {
+		return s.users
+	}
 }
 
 // GetOne user

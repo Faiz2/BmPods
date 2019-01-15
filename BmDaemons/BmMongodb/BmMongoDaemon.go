@@ -39,7 +39,7 @@ func (m *BmMongodb) InsertBmObject(ptr BmModel.BmModelBase) (string, error) {
 	}
 	defer session.Close()
 
-	oid := m.generateModelId_(ptr)
+	oid := m.GenerateModelId_(ptr)
 	v := reflect.ValueOf(ptr).Elem()
 	cn := v.Type().Name()
 	c := session.DB(m.Database).C(cn)
@@ -48,7 +48,7 @@ func (m *BmMongodb) InsertBmObject(ptr BmModel.BmModelBase) (string, error) {
 	rst["_id"] = oid
 	err = c.Insert(rst)
 	if err == nil {
-		return m.resetIdWithId_(ptr), nil
+		return m.ResetIdWithId_(ptr), nil
 	}
 	return "", err
 }
@@ -60,19 +60,17 @@ func (m *BmMongodb) ExistsBmObject(ptr BmModel.BmModelBase, out BmModel.BmModelB
 	}
 	defer session.Close()
 
-	oid := m.resetId_WithId(ptr)
+	oid := m.ResetId_WithId(ptr)
 	v := reflect.ValueOf(ptr).Elem()
 	cn := v.Type().Name()
 	c := session.DB(m.Database).C(cn)
 
-	rst, err := Struct2map(v)
-	rst["_id"] = oid
-	err = c.Find(rst).One(out)
+	err = c.Find(bson.M{ "_id": oid }).One(out)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	m.resetIdWithId_(out)
+	m.ResetIdWithId_(out)
 	return true, nil
 }
 
@@ -83,29 +81,51 @@ func (m *BmMongodb) FindOne(ptr BmModel.BmModelBase, out BmModel.BmModelBase) er
 	}
 	defer session.Close()
 
-	oid := m.resetId_WithId(ptr)
+	oid := m.ResetId_WithId(ptr)
 	v := reflect.ValueOf(ptr).Elem()
 	cn := v.Type().Name()
 	c := session.DB(m.Database).C(cn)
 
 	err = c.Find(bson.M{ "_id": oid }).One(out)
 	if err != nil {
-		fmt.Println(err)
 		return errors.New("query error")
 	}
 
-	m.resetIdWithId_(out)
+	m.ResetIdWithId_(out)
 	return nil
 }
 
-func (m *BmMongodb) generateModelId_(ptr BmModel.BmModelBase) bson.ObjectId {
+func (m *BmMongodb) FindMulti (ptr BmModel.BmModelBase, out interface{}) error {
+	session, err := mgo.Dial(m.Host + ":" + m.Port)
+	if err != nil {
+		return errors.New("dial db error")
+	}
+	defer session.Close()
+
+	v := reflect.ValueOf(ptr).Elem()
+	cn := v.Type().Name()
+	c := session.DB(m.Database).C(cn)
+
+	err = c.Find(bson.M{}).All(out)
+	if err != nil {
+		return errors.New("error find multi")
+	}
+
+	//for _, item := range out {
+	//	m.resetIdWithId_(&item)
+	//}
+
+	return nil
+}
+
+func (m *BmMongodb) GenerateModelId_(ptr BmModel.BmModelBase) bson.ObjectId {
 	f := reflect.ValueOf(ptr).Elem().FieldByName("Id_")
 	v := bson.NewObjectId()
 	f.Set(reflect.ValueOf(v))
 	return v
 }
 
-func (m *BmMongodb) resetIdWithId_(ptr BmModel.BmModelBase) string {
+func (m *BmMongodb) ResetIdWithId_(ptr BmModel.BmModelBase) string {
 	f := reflect.ValueOf(ptr).Elem().FieldByName("Id_")
 	t := f.Interface().(bson.ObjectId)
 	fs := reflect.ValueOf(ptr).Elem().FieldByName("ID")
@@ -113,7 +133,7 @@ func (m *BmMongodb) resetIdWithId_(ptr BmModel.BmModelBase) string {
 	return t.Hex()
 }
 
-func (m *BmMongodb) resetId_WithId(ptr BmModel.BmModelBase) bson.ObjectId {
+func (m *BmMongodb) ResetId_WithId(ptr BmModel.BmModelBase) bson.ObjectId {
 	fs := reflect.ValueOf(ptr).Elem().FieldByName("ID")
 	t := fs.Interface().(string)
 	f := reflect.ValueOf(ptr).Elem().FieldByName("Id_")
