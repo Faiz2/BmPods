@@ -42,16 +42,18 @@ func (s UserStorage) GetOne(id string) (BmModel.User, error) {
 // Insert a user
 func (s *UserStorage) Insert(c BmModel.User) string {
 	// mock data in memory
-	id := fmt.Sprintf("%d", s.idCount)
-	c.ID = id
-	s.users[id] = &c
-	s.idCount++
+	//id := fmt.Sprintf("%d", s.idCount)
+	//c.ID = id
+	//s.users[id] = &c
+	//s.idCount++
 
 	// real data in the mongodb
-	fmt.Println("start")
-	fmt.Println(s.db)
+	tmp, err := s.db.InsertBmObject(&c)
+	if err != nil {
+		fmt.Println(err)
+	}
 
-	return id
+	return tmp
 }
 
 // Delete one :(

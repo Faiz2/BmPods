@@ -6,6 +6,8 @@ import (
 	"reflect"
 	"github.com/alfredyang1986/BmPods/BmModel"
 	"github.com/alfredyang1986/blackmirror/bmmate"
+	"gopkg.in/mgo.v2/bson"
+	"fmt"
 )
 
 const (
@@ -26,7 +28,7 @@ type NoPtr struct {
 func (m BmMongodb) NewMongoDBDaemon(args map[string]string) *BmMongodb {
 	return &BmMongodb{
 		Host: args["host"],
-		Port: args["part"],
+		Port: args["port"],
 		Database: args["database"] }
 }
 
@@ -37,13 +39,34 @@ func (m *BmMongodb) InsertBmObject(ptr BmModel.BmModelBase) (string, error) {
 	}
 	defer session.Close()
 
+	oid := m.generateModelId_(ptr)
 	v := reflect.ValueOf(ptr).Elem()
 	cn := v.Type().Name()
 	c := session.DB(m.Database).C(cn)
 
 	rst, err := Struct2map(v)
+	rst["_id"] = oid
 	err = c.Insert(rst)
+	if err == nil {
+		return m.resetIdWithId_(ptr), nil
+	}
 	return "", err
+}
+
+func (m *BmMongodb) generateModelId_(ptr BmModel.BmModelBase) bson.ObjectId {
+	f := reflect.ValueOf(ptr).Elem().FieldByName("Id_")
+	v := bson.NewObjectId()
+	f.Set(reflect.ValueOf(v))
+	return v
+}
+
+func (m *BmMongodb) resetIdWithId_(ptr BmModel.BmModelBase) string {
+	f := reflect.ValueOf(ptr).Elem().FieldByName("Id_")
+	t := f.Interface().(bson.ObjectId)
+	fmt.Println(t.Hex())
+	fs := reflect.ValueOf(ptr).Elem().FieldByName("ID")
+	fs.SetString(t.Hex())
+	return t.Hex()
 }
 
 func AttrValue(v reflect.Value) (interface{}, error) {
