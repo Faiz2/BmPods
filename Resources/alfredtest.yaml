@@ -1,7 +1,36 @@
-model: BmUser
-resource: BmUserResource
-storage: BmUserStorage
-relationships:
-  one2many:
-  - name: chocolates
-    storage: BmChocolateStorage
+storages:
+- name: BmUserStorage
+  method: NewUserStorage
+- name: BmChocolateStorage
+  method: NewChocolateStorage
+resources:
+- name: BmUserResource
+  method: NewUserResource
+  storages:
+  - BmUserStorage
+    BmChocolateStorage
+- name: BmChocolateResource
+  method: NewChocolateResource
+  storages:
+  - BmUserStorage
+    BmChocolateStorage
+models:
+- BmUser
+  BmChocolate
+services:
+- name: bm-user
+  model: BmUser
+  resource: BmUserResource
+  relationships:
+    one2many:
+    - name: sweets
+      method:
+      - set: setfunc
+        append: appendfunc
+        delete: deletefunc
+- name: bm-chocolate
+  model: BmChocolate
+  resource: BmChocolateResource
+  storage:
+  - BmChocolateStorage
+    BmUserStorage

@@ -5,11 +5,7 @@ import (
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"github.com/alfredyang1986/BmPods/BmPanic"
-	"github.com/alfredyang1986/BmPods/BmFactory"
 	"github.com/manyminds/api2go"
-	"github.com/alfredyang1986/BmPods/BmModel"
-	"github.com/alfredyang1986/BmPods/BmResource"
-	"github.com/alfredyang1986/BmPods/BmDataStorage"
 )
 
 type Pod struct {
@@ -33,26 +29,26 @@ func (p *Pod) RegisterSerFromYAML(path string) {
 		panic(BmPanic.ALFRED_TEST_ERROR)
 	}
 
-	ins := BmFactory.GetResourceByName(p.conf.Resource).(BmResource.BmRes)
-	fmt.Println(ins.GetResourceName())
+	//ins := BmFactory.GetResourceByName(p.conf.Resource).(BmResource.BmRes)
+	//fmt.Println(ins.GetResourceName())
 }
 
 func (p Pod) RegisterAllResource(api *api2go.API) {
-	res := BmFactory.GetResourceByName(p.conf.Resource).(BmResource.BmRes)
-	stor := BmFactory.GetStorageByName(p.conf.Storage).(BmDataStorage.BmStorage)
-	res.RegisterRelateStorage("self", stor)
-	for _, o2o := range p.conf.Relationships.One2one {
-		storage := BmFactory.GetStorageByName(o2o["storage"]).(BmDataStorage.BmStorage)
-		res.RegisterRelateStorage(o2o["storage"], storage)
-	}
-
-	for _, o2m := range p.conf.Relationships.One2many {
-		storage := BmFactory.GetStorageByName(o2m["storage"]).(BmDataStorage.BmStorage)
-		res.RegisterRelateStorage(o2m["storage"], storage)
-	}
-
-	fmt.Println(res)
-	api.AddResource(BmModel.User{}, res)
+	//res := BmFactory.GetResourceByName(p.conf.Resource).(BmResource.BmRes)
+	//stor := BmFactory.GetStorageByName(p.conf.Storage).(BmDataStorage.BmStorage)
+	//res.RegisterRelateStorage("self", stor)
+	//for _, o2o := range p.conf.Relationships.One2one {
+	//	storage := BmFactory.GetStorageByName(o2o["storage"]).(BmDataStorage.BmStorage)
+	//	res.RegisterRelateStorage(o2o["storage"], storage)
+	//}
+	//
+	//for _, o2m := range p.conf.Relationships.One2many {
+	//	storage := BmFactory.GetStorageByName(o2m["storage"]).(BmDataStorage.BmStorage)
+	//	res.RegisterRelateStorage(o2m["storage"], storage)
+	//}
+	//
+	//fmt.Println(res)
+	//api.AddResource(BmModel.User{}, res)
 
 	//userStorage := BmMockDataStorage.NewUserStorage()
 	//chocStorage := BmMockDataStorage.NewChocolateStorage()
