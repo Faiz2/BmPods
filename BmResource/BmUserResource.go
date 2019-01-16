@@ -61,12 +61,12 @@ func (s BmUserResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respond
 	users := s.UserStorage.GetAll()
 
 	for k := range users {
-		i, err := strconv.ParseInt(k, 10, 64)
-		if err != nil {
-			return 0, &Response{}, err
-		}
+		//i, err := strconv.ParseInt(k, 10, 64)
+		//if err != nil {
+		//	return 0, &Response{}, err
+		//}
 
-		keys = append(keys, int(i))
+		keys = append(keys, int(k))
 	}
 	sort.Ints(keys)
 
@@ -103,7 +103,7 @@ func (s BmUserResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respond
 			if i >= uint64(len(users)) {
 				break
 			}
-			result = append(result, *users[strconv.FormatInt(int64(keys[i]), 10)])
+			//result = append(result, *users[strconv.FormatInt(int64(keys[i]), 10)])
 		}
 	} else {
 		limitI, err := strconv.ParseUint(limit, 10, 64)
@@ -120,7 +120,7 @@ func (s BmUserResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respond
 			if i >= uint64(len(users)) {
 				break
 			}
-			result = append(result, *users[strconv.FormatInt(int64(keys[i]), 10)])
+			//result = append(result, *users[strconv.FormatInt(int64(keys[i]), 10)])
 		}
 	}
 

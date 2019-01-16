@@ -5,6 +5,8 @@ storages:
   - BmMongodbDaemon
 - name: BmChocolateStorage
   method: NewChocolateStorage
+  daemons:
+  - BmMongodbDaemon
 resources:
 - name: BmUserResource
   method: NewUserResource

@@ -2,10 +2,12 @@ package BmDataStorage
 
 import (
 	"fmt"
-	"sort"
-
 	"github.com/alfredyang1986/BmPods/BmModel"
 	"github.com/alfredyang1986/BmPods/BmDaemons"
+	"github.com/alfredyang1986/BmPods/BmDaemons/BmMongodb"
+	"github.com/manyminds/api2go"
+	"errors"
+	"net/http"
 )
 
 // sorting
@@ -28,60 +30,71 @@ func (c byID) Less(i, j int) bool {
 type ChocolateStorage struct {
 	chocolates map[string]*BmModel.Chocolate
 	idCount    int
+
+	db *BmMongodb.BmMongodb
 }
 
 func (s ChocolateStorage) NewChocolateStorage(args []BmDaemons.BmDaemon) *ChocolateStorage {
-	return &ChocolateStorage{make(map[string]*BmModel.Chocolate), 1}
+	mdb := args[0].(*BmMongodb.BmMongodb)
+	return &ChocolateStorage{make(map[string]*BmModel.Chocolate), 1, mdb}
 }
 
 // GetAll of the chocolate
 func (s ChocolateStorage) GetAll() []BmModel.Chocolate {
-	result := []BmModel.Chocolate{}
-	for key := range s.chocolates {
-		result = append(result, *s.chocolates[key])
+	in := BmModel.Chocolate{}
+	out := make([]BmModel.Chocolate, 10)
+	err := s.db.FindMulti(&in, &out)
+	if err == nil {
+		//tmp := make([]*BmModel.User, 10)
+		for _, iter := range out {
+			s.db.ResetIdWithId_(&iter)
+			//tmp = append(tmp, &iter)
+		}
+		return out
+	} else {
+		return nil
 	}
-
-	sort.Sort(byID(result))
-	return result
 }
 
 // GetOne tasty chocolate
 func (s ChocolateStorage) GetOne(id string) (BmModel.Chocolate, error) {
-	choc, ok := s.chocolates[id]
-	if ok {
-		return *choc, nil
+	in := BmModel.Chocolate{ ID:id }
+	out := BmModel.Chocolate{ ID:id }
+	err := s.db.FindOne(&in, &out)
+	if err == nil {
+		return out, nil
 	}
-
-	return BmModel.Chocolate{}, fmt.Errorf("Chocolate for id %s not found", id)
+	errMessage := fmt.Sprintf("User for id %s not found", id)
+	return BmModel.Chocolate{}, api2go.NewHTTPError(errors.New(errMessage), errMessage, http.StatusNotFound)
 }
 
 // Insert a fresh one
 func (s *ChocolateStorage) Insert(c BmModel.Chocolate) string {
-	id := fmt.Sprintf("%d", s.idCount)
-	c.ID = id
-	s.chocolates[id] = &c
-	s.idCount++
-	return id
+	tmp, err := s.db.InsertBmObject(&c)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return tmp
 }
 
 // Delete one :(
 func (s *ChocolateStorage) Delete(id string) error {
-	_, exists := s.chocolates[id]
-	if !exists {
+	in := BmModel.Chocolate{ ID:id }
+	err := s.db.Delete(&in)
+	if err != nil {
 		return fmt.Errorf("Chocolate with id %s does not exist", id)
 	}
-	delete(s.chocolates, id)
 
 	return nil
 }
 
 // Update updates an existing chocolate
 func (s *ChocolateStorage) Update(c BmModel.Chocolate) error {
-	_, exists := s.chocolates[c.ID]
-	if !exists {
-		return fmt.Errorf("Chocolate with id %s does not exist", c.ID)
+	err := s.db.Update(&c)
+	if err != nil {
+		return fmt.Errorf("Chocolate with id does not exist")
 	}
-	s.chocolates[c.ID] = &c
 
 	return nil
 }

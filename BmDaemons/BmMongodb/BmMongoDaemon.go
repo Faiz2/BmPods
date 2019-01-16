@@ -118,6 +118,46 @@ func (m *BmMongodb) FindMulti (ptr BmModel.BmModelBase, out interface{}) error {
 	return nil
 }
 
+func (m *BmMongodb) Delete (ptr BmModel.BmModelBase) error {
+	session, err := mgo.Dial(m.Host + ":" + m.Port)
+	if err != nil {
+		return errors.New("dial db error")
+	}
+	defer session.Close()
+
+	oid := m.ResetId_WithId(ptr)
+	v := reflect.ValueOf(ptr).Elem()
+	cn := v.Type().Name()
+	c := session.DB(m.Database).C(cn)
+
+	err = c.Remove(bson.M{ "_id": oid})
+	if err != nil {
+		return errors.New("error delete by id")
+	}
+	return nil
+}
+
+func (m *BmMongodb) Update (ptr BmModel.BmModelBase) error {
+	session, err := mgo.Dial(m.Host + ":" + m.Port)
+	if err != nil {
+		return errors.New("dial db error")
+	}
+	defer session.Close()
+
+	oid := m.ResetId_WithId(ptr)
+	v := reflect.ValueOf(ptr).Elem()
+	cn := v.Type().Name()
+	c := session.DB(m.Database).C(cn)
+
+	rst, err := Struct2map(v)
+	rst["_id"] = oid
+	err = c.Update(bson.M{ "_id": oid }, rst)
+	if err != nil {
+		return errors.New("error update by id")
+	}
+	return nil
+}
+
 func (m *BmMongodb) GenerateModelId_(ptr BmModel.BmModelBase) bson.ObjectId {
 	f := reflect.ValueOf(ptr).Elem().FieldByName("Id_")
 	v := bson.NewObjectId()

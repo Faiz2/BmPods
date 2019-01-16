@@ -25,32 +25,26 @@ func (s UserStorage) NewUserStorage(args []BmDaemons.BmDaemon) *UserStorage {
 }
 
 // GetAll returns the user map (because we need the ID as key too)
-func (s UserStorage) GetAll() map[string]*BmModel.User {
-	//return s.users
+func (s UserStorage) GetAll() []*BmModel.User {
 	in := BmModel.User{}
 	out := make([]BmModel.User, 10)
 	err := s.db.FindMulti(&in, &out)
 	if err == nil {
-		tmp := make(map[string]*BmModel.User)
+		tmp := make([]*BmModel.User, 10)
+		//tmp := make(map[string]*BmModel.User)
 		for _, iter := range out {
 			s.db.ResetIdWithId_(&iter)
-			tmp[iter.ID] = &iter
+			tmp = append(tmp, &iter)
+			//tmp[iter.ID] = &iter
 		}
 		return tmp
 	} else {
-		return s.users
+		return nil //make(map[string]*BmModel.User)
 	}
 }
 
 // GetOne user
 func (s UserStorage) GetOne(id string) (BmModel.User, error) {
-	//user, ok := s.users[id]
-	//if ok {
-	//	return *user, nil
-	//}
-	//errMessage := fmt.Sprintf("User for id %s not found", id)
-	//return BmModel.User{}, api2go.NewHTTPError(errors.New(errMessage), errMessage, http.StatusNotFound)
-
 	in := BmModel.User{ ID:id }
 	out := BmModel.User{ ID:id }
 	err := s.db.FindOne(&in, &out)
@@ -63,13 +57,6 @@ func (s UserStorage) GetOne(id string) (BmModel.User, error) {
 
 // Insert a user
 func (s *UserStorage) Insert(c BmModel.User) string {
-	// mock data in memory
-	//id := fmt.Sprintf("%d", s.idCount)
-	//c.ID = id
-	//s.users[id] = &c
-	//s.idCount++
-
-	// real data in the mongodb
 	tmp, err := s.db.InsertBmObject(&c)
 	if err != nil {
 		fmt.Println(err)
@@ -80,22 +67,21 @@ func (s *UserStorage) Insert(c BmModel.User) string {
 
 // Delete one :(
 func (s *UserStorage) Delete(id string) error {
-	_, exists := s.users[id]
-	if !exists {
+	in := BmModel.User{ ID:id }
+	err := s.db.Delete(&in)
+	if err != nil {
 		return fmt.Errorf("User with id %s does not exist", id)
 	}
-	delete(s.users, id)
 
 	return nil
 }
 
 // Update a user
 func (s *UserStorage) Update(c BmModel.User) error {
-	_, exists := s.users[c.ID]
-	if !exists {
-		return fmt.Errorf("User with id %s does not exist", c.ID)
+	err := s.db.Update(&c)
+	if err != nil {
+		return fmt.Errorf("User with id does not exist")
 	}
-	s.users[c.ID] = &c
 
 	return nil
 }
