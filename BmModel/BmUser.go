@@ -14,7 +14,7 @@ type User struct {
 	Username      string       `json:"user-name" bson:"username"`
 	PasswordHash  string       `json:"-"`
 	Chocolates    []*Chocolate `json:"-"`
-	ChocolatesIDs []string     `json:"-"`
+	ChocolatesIDs []string     `json:"-" bson:"chocolatesIds"`
 	exists        bool
 }
 

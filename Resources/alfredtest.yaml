@@ -25,13 +25,6 @@ services:
 - name: bm-user
   model: BmUser
   resource: BmUserResource
-  relationships:
-    one2many:
-    - name: sweets
-      method:
-      - set: setfunc
-        append: appendfunc
-        delete: deletefunc
 - name: bm-chocolate
   model: BmChocolate
   resource: BmChocolateResource
