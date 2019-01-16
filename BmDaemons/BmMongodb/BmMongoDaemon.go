@@ -106,7 +106,7 @@ func (m *BmMongodb) FindMulti (ptr BmModel.BmModelBase, out interface{}, skip in
 	cn := v.Type().Name()
 	c := session.DB(m.Database).C(cn)
 
-	if skip > 0 && take > 0 {
+	if skip < 0 && take < 0 {
 		err = c.Find(bson.M{}).All(out)
 	} else {
 		err = c.Find(bson.M{}).Skip(skip).Limit(take).All(out)
