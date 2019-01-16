@@ -6,7 +6,6 @@ import (
 	"errors"
 	"net/http"
 	"strconv"
-	"sort"
 	"github.com/alfredyang1986/BmPods/BmModel"
 	"reflect"
 )
@@ -33,7 +32,7 @@ func (s BmUserResource) NewUserResource(args []BmDataStorage.BmStorage) BmUserRe
 // FindAll to satisfy api2go data source interface
 func (s BmUserResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 	var result []BmModel.User
-	users := s.UserStorage.GetAll()
+	users := s.UserStorage.GetAll(-1, -1)
 
 	for _, user := range users {
 		// get all sweets for the user
@@ -56,19 +55,7 @@ func (s BmUserResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respond
 	var (
 		result                      []BmModel.User
 		number, size, offset, limit string
-		keys                        []int
 	)
-	users := s.UserStorage.GetAll()
-
-	for k := range users {
-		//i, err := strconv.ParseInt(k, 10, 64)
-		//if err != nil {
-		//	return 0, &Response{}, err
-		//}
-
-		keys = append(keys, int(k))
-	}
-	sort.Ints(keys)
 
 	numberQuery, ok := r.QueryParams["page[number]"]
 	if ok {
@@ -88,23 +75,21 @@ func (s BmUserResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respond
 	}
 
 	if size != "" {
-		sizeI, err := strconv.ParseUint(size, 10, 64)
+		sizeI, err := strconv.ParseInt(size, 10, 64)
 		if err != nil {
 			return 0, &Response{}, err
 		}
 
-		numberI, err := strconv.ParseUint(number, 10, 64)
+		numberI, err := strconv.ParseInt(number, 10, 64)
 		if err != nil {
 			return 0, &Response{}, err
 		}
 
 		start := sizeI * (numberI - 1)
-		for i := start; i < start+sizeI; i++ {
-			if i >= uint64(len(users)) {
-				break
-			}
-			//result = append(result, *users[strconv.FormatInt(int64(keys[i]), 10)])
+		for _, iter := range s.UserStorage.GetAll(int(start), int(sizeI)) {
+			result = append(result, *iter)
 		}
+
 	} else {
 		limitI, err := strconv.ParseUint(limit, 10, 64)
 		if err != nil {
@@ -116,15 +101,15 @@ func (s BmUserResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respond
 			return 0, &Response{}, err
 		}
 
-		for i := offsetI; i < offsetI+limitI; i++ {
-			if i >= uint64(len(users)) {
-				break
-			}
-			//result = append(result, *users[strconv.FormatInt(int64(keys[i]), 10)])
+		for _, iter := range s.UserStorage.GetAll(int(offsetI), int(limitI)) {
+			result = append(result, *iter)
 		}
 	}
 
-	return uint(len(users)), &Response{Res: result}, nil
+	in := BmModel.User{}
+	count := s.UserStorage.Count(in)
+
+	return uint(count), &Response{Res: result}, nil
 }
 
 // FindOne to satisfy `api2go.DataSource` interface

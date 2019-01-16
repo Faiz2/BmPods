@@ -43,7 +43,7 @@ func (s ChocolateStorage) NewChocolateStorage(args []BmDaemons.BmDaemon) *Chocol
 func (s ChocolateStorage) GetAll() []BmModel.Chocolate {
 	in := BmModel.Chocolate{}
 	out := make([]BmModel.Chocolate, 10)
-	err := s.db.FindMulti(&in, &out)
+	err := s.db.FindMulti(&in, &out, -1, -1)
 	if err == nil {
 		//tmp := make([]*BmModel.User, 10)
 		for _, iter := range out {

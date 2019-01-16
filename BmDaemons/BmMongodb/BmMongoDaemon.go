@@ -95,7 +95,7 @@ func (m *BmMongodb) FindOne(ptr BmModel.BmModelBase, out BmModel.BmModelBase) er
 	return nil
 }
 
-func (m *BmMongodb) FindMulti (ptr BmModel.BmModelBase, out interface{}) error {
+func (m *BmMongodb) FindMulti (ptr BmModel.BmModelBase, out interface{}, skip int, take int) error {
 	session, err := mgo.Dial(m.Host + ":" + m.Port)
 	if err != nil {
 		return errors.New("dial db error")
@@ -106,14 +106,15 @@ func (m *BmMongodb) FindMulti (ptr BmModel.BmModelBase, out interface{}) error {
 	cn := v.Type().Name()
 	c := session.DB(m.Database).C(cn)
 
-	err = c.Find(bson.M{}).All(out)
+	if skip > 0 && take > 0 {
+		err = c.Find(bson.M{}).All(out)
+	} else {
+		err = c.Find(bson.M{}).Skip(skip).Limit(take).All(out)
+	}
+
 	if err != nil {
 		return errors.New("error find multi")
 	}
-
-	//for _, item := range out {
-	//	m.resetIdWithId_(&item)
-	//}
 
 	return nil
 }
@@ -156,6 +157,25 @@ func (m *BmMongodb) Update (ptr BmModel.BmModelBase) error {
 		return errors.New("error update by id")
 	}
 	return nil
+}
+
+func (m *BmMongodb) Count(ptr BmModel.BmModelBase) (int, error) {
+	session, err := mgo.Dial(m.Host + ":" + m.Port)
+	if err != nil {
+		return 0, errors.New("dial db error")
+	}
+	defer session.Close()
+
+	//m.ResetId_WithId(ptr)
+	v := reflect.ValueOf(ptr).Elem()
+	cn := v.Type().Name()
+	c := session.DB(m.Database).C(cn)
+
+	result, err := c.Find(bson.M{}).Count()
+	if err != nil {
+		return 0, errors.New("error count by id")
+	}
+	return result, nil
 }
 
 func (m *BmMongodb) GenerateModelId_(ptr BmModel.BmModelBase) bson.ObjectId {
