@@ -159,6 +159,7 @@ models:
 - BmRoom
 - BmYard
 - BmClass
+- BmUnit
 
 services:
 - name: bm-kid
@@ -203,6 +204,9 @@ services:
 - name: bm-class
   model: BmClass
   resource: BmClassResource
+- name: bm-uint
+  model: BmUnit
+  resource: BmUintResource
 
 
 daemons:
