@@ -31,6 +31,11 @@ storages:
   method: NewBrandStorage
   daemons:
   - BmMongodbDaemon
+- name: BmStudentStorage
+  method: NewStudentStorage
+  daemons:
+  - BmMongodbDaemon
+
 
 resources:
 - name: BmSessioninfoResource
@@ -76,7 +81,11 @@ resources:
   - BmBrandStorage
   - BmCategoryStorage
   - BmImageStorage
-
+- name: BmStudentResource
+  method: NewStudentResource
+  storages:
+  - BmStudentStorage
+  - BmKidStorage
 
 models:
 - BmKid
@@ -86,6 +95,7 @@ models:
 - BmReservableItem
 - BmCategory
 - BmBrand
+- BmStudent
 
 
 services:
@@ -113,7 +123,9 @@ services:
 - name: bm-brand
   model: BmBrand
   resource: BmBrandResource
-
+- name: bm-student
+  model: BmStudent
+  resource: BmStudentResource
 
 daemons:
 - name: BmMongodbDaemon
