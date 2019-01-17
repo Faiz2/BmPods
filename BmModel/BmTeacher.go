@@ -20,13 +20,26 @@ type Teacher struct {
 	WeChat      string  `json:"wechat" bson:"wechat"`
 	JobTitle    string  `json:"job-title" bson:"job-title"`
 	JobType     float64 `json:"job-type" bson:"job-type"` //0-兼职, 1-全职
-	IdCardNo    string  `json:"idCardNo" bson:"idCardNo"`
+	IdCardNo    string  `json:"id-card-no" bson:"id-card-no"`
 	Major       string  `json:"major" bson:"major"`
-	TeachYears  float64 `json:"teachYears" bson:"teachYears"`
+	TeachYears  float64 `json:"teach-years" bson:"teach-years"`
+
 	Province    string  `json:"province" bson:"province"`
 	City        string  `json:"city" bson:"city"`
 	District    string  `json:"district" bson:"district"`
 	Address     string  `json:"address" bson:"address"`
 	NativePlace string  `json:"nativePlace" bson:"nativePlace"`
+
 	CreateTime  float64 `json:"create_time" bson:"create_time"`
+}
+
+// GetID to satisfy jsonapi.MarshalIdentifier interface
+func (c Teacher) GetID() string {
+	return c.ID
+}
+
+// SetID to satisfy jsonapi.UnmarshalIdentifier interface
+func (c *Teacher) SetID(id string) error {
+	c.ID = id
+	return nil
 }
