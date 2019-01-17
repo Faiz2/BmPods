@@ -51,6 +51,10 @@ storages:
   method: NewYardStorage
   daemons:
   - BmMongodbDaemon
+- name: BmClassStorage
+  method: NewClassStorage
+  daemons:
+  - BmMongodbDaemon
 - name: BmUnitStorage
   method: NewUnitStorage
   daemons:
@@ -124,6 +128,14 @@ resources:
   - BmYardStorage
   - BmImageStorage
   - BmRoomStorage
+- name: BmClassResource
+  method: NewClassResource
+  storages:
+  - BmClassStorage
+  - BmReservableItemStorage
+  - BmYardStorage
+  - BmStudentStorage
+  - BmTeacherStorage
 - name: BmUnitResource
   method: NewUnitResource
   storages:
@@ -143,6 +155,7 @@ models:
 - BmTeacher
 - BmRoom
 - BmYard
+- BmClass
 
 services:
 - name: bm-kid
@@ -184,6 +197,9 @@ services:
 - name: bm-yard
   model: BmYard
   resource: BmYardResource
+- name: bm-class
+  model: BmClass
+  resource: BmClassResource
 
 
 daemons:
@@ -192,4 +208,4 @@ daemons:
   args:
     host: localhost
     port: 27017
-    database: ddsaas
+    database: test
