@@ -13,10 +13,12 @@ import (
 type BmApplyResource struct {
 	BmKidStorage *BmDataStorage.BmKidStorage
 	BmApplyStorage *BmDataStorage.BmApplyStorage
+	BmApplicantStorage *BmDataStorage.BmApplicantStorage
 }
 
 func (s BmApplyResource) NewApplyResource(args []BmDataStorage.BmStorage) BmApplyResource {
 	var us *BmDataStorage.BmApplyStorage
+	var ts *BmDataStorage.BmApplicantStorage
 	var cs *BmDataStorage.BmKidStorage
 	for _, arg := range args {
 		tp := reflect.ValueOf(arg).Elem().Type()
@@ -24,9 +26,11 @@ func (s BmApplyResource) NewApplyResource(args []BmDataStorage.BmStorage) BmAppl
 			us = arg.(*BmDataStorage.BmApplyStorage)
 		} else if tp.Name() == "BmKidStorage" {
 			cs = arg.(*BmDataStorage.BmKidStorage)
+		} else if tp.Name() == "BmApplicantStorage" {
+			ts = arg.(*BmDataStorage.BmApplicantStorage)
 		}
 	}
-	return BmApplyResource{ BmApplyStorage:us, BmKidStorage:cs }
+	return BmApplyResource{ BmApplyStorage:us, BmKidStorage:cs, BmApplicantStorage:ts }
 }
 
 // FindAll to satisfy api2go data source interface
@@ -44,6 +48,15 @@ func (s BmApplyResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 			}
 			model.Kids = append(model.Kids, &choc)
 		}
+
+		if model.ApplicantID != "" {
+			applicant, err := s.BmApplicantStorage.GetOne(model.ApplicantID)
+			if err != nil {
+				return &Response{}, err
+			}
+			model.Applicant = applicant
+		}
+
 		result = append(result, *model)
 	}
 

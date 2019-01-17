@@ -86,7 +86,9 @@ func (u Apply) GetReferencedStructs() []jsonapi.MarshalIdentifier {
 		result = append(result, u.Kids[key])
 	}
 
-	result = append(result, u.Applicant)
+	if u.ApplicantID != "" {
+		result = append(result, u.Applicant)
+	}
 
 	return result
 }

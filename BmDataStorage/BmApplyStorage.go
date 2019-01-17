@@ -33,7 +33,6 @@ func (s BmApplyStorage) GetAll(skip int, take int) []*BmModel.Apply {
 	err := s.db.FindMulti(&in, &out, skip, take)
 	if err == nil {
 		var tmp []*BmModel.Apply
-		//tmp := make(map[string]*BmModel.Apply)
 		for i := 0; i < len(out); i++ {
 			ptr := out[i]
 			s.db.ResetIdWithId_(&ptr)
