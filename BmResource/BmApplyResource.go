@@ -20,9 +20,9 @@ func (s BmApplyResource) NewApplyResource(args []BmDataStorage.BmStorage) BmAppl
 	var cs *BmDataStorage.BmKidStorage
 	for _, arg := range args {
 		tp := reflect.ValueOf(arg).Elem().Type()
-		if tp.Name() == BmDataStorage.ModelStorageName {
+		if tp.Name() == "BmApplyStorage" {
 			us = arg.(*BmDataStorage.BmApplyStorage)
-		} else if tp.Name() == BmDataStorage.ModelLeafStorageName {
+		} else if tp.Name() == "BmKidStorage" {
 			cs = arg.(*BmDataStorage.BmKidStorage)
 		}
 	}

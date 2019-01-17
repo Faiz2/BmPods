@@ -12,22 +12,26 @@ type Apply struct {
 	Id_ bson.ObjectId `json:"-" bson:"_id"`
 
 	Status       float64  `json:"status" bson:"status"` //0=未处理，1=已处理
-	ApplyTime    float64  `json:"apply_time" bson:"apply_time"`
-	ExceptTime   float64  `json:"except_time" bson:"except_time"`
-	CreateTime   float64  `json:"create_time" bson:"create_time"`
-	ApplyeeId    string   `json:"applyeeId" bson:"applyeeId"`
-	BrandId      string   `json:"brandId" bson:"brandId"`
-	ApplyFrom    string   `json:"applyFrom" bson:"applyFrom"`
-	CourseType   float64  `json:"courseType" bson:"courseType"` //0活动 1体验课 2普通课程 -1预注册
-	CourseName   string   `json:"courseName" bson:"courseName"`
+	ApplyTime    float64  `json:"apply-time" bson:"apply-time"`
+	ExceptTime   float64  `json:"except-time" bson:"except-time"`
+	CreateTime   float64  `json:"create-time" bson:"create-time"`
+	BrandId      string   `json:"brand-id" bson:"brand-id"`
+	ApcantId     string    `json:"applicant-id" bson:"applicant-id"`
+	ApplyFrom    string   `json:"apply-from" bson:"apply-from"`
+	CourseType   float64  `json:"course-type" bson:"course-type"` //0活动 1体验课 2普通课程 -1预注册
+	CourseName   string   `json:"course-name" bson:"course-name"`
 	Contact      string   `json:"contact" bson:"contact"`
-	ReservableId string   `json:"reservableId" bson:"reservableId"`
+	ReservableId string   `json:"reservable-id" bson:"reservable-id"`
+
 	Kids         []*Kid   `json:"-"`
 	KidsIDs      []string `json:"-" bson:"kidsIds"`
+
+	ApplicantID	 string 	`json:"-"`
+	Applicant	 Applicant `json:"-"`
 }
 
 //var ApplyName = strings.ToLower("Kid") + "s"
-var ApplyName = "apply" + "s"
+//var ApplyName = "apply" + "s"
 
 // GetID to satisfy jsonapi.MarshalIdentifier interface
 func (u Apply) GetID() string {
@@ -44,8 +48,12 @@ func (u *Apply) SetID(id string) error {
 func (u Apply) GetReferences() []jsonapi.Reference {
 	return []jsonapi.Reference{
 		{
-			Type: ApplyName,
-			Name: ApplyName,
+			Type: "Applicant",
+			Name: "applicant",
+		},
+		{
+			Type: "Kid",
+			Name: "kids",
 		},
 	}
 }
@@ -53,13 +61,19 @@ func (u Apply) GetReferences() []jsonapi.Reference {
 // GetReferencedIDs to satisfy the jsonapi.MarshalLinkedRelations interface
 func (u Apply) GetReferencedIDs() []jsonapi.ReferenceID {
 	result := []jsonapi.ReferenceID{}
-	for _, chocolateID := range u.KidsIDs {
+	for _, kID := range u.KidsIDs {
 		result = append(result, jsonapi.ReferenceID{
-			ID:   chocolateID,
-			Type: ApplyName,
-			Name: ApplyName,
+			ID:   kID,
+			Type: "kid",
+			Name: "kids",
 		})
 	}
+
+	result = append(result, jsonapi.ReferenceID{
+		ID: u.ApplicantID,
+		Type: "applicant",
+		Name: "applicant",
+	})
 
 	return result
 }
@@ -71,12 +85,23 @@ func (u Apply) GetReferencedStructs() []jsonapi.MarshalIdentifier {
 		result = append(result, u.Kids[key])
 	}
 
+	result = append(result, u.Applicant)
+
 	return result
+}
+
+func (u *Apply) SetToOneReferenceID(name, ID string) error {
+	if name == "applicant" {
+		u.ApplicantID = ID
+		return nil
+	}
+
+	return errors.New("There is no to-one relationship with the name " + name)
 }
 
 // SetToManyReferenceIDs sets the leafs reference IDs and satisfies the jsonapi.UnmarshalToManyRelations interface
 func (u *Apply) SetToManyReferenceIDs(name string, IDs []string) error {
-	if name == ApplyName {
+	if name == "kids" {
 		u.KidsIDs = IDs
 		return nil
 	}
@@ -86,7 +111,7 @@ func (u *Apply) SetToManyReferenceIDs(name string, IDs []string) error {
 
 // AddToManyIDs adds some new leafs that a users loves so much
 func (u *Apply) AddToManyIDs(name string, IDs []string) error {
-	if name == ApplyName {
+	if name == "kids" {
 		u.KidsIDs = append(u.KidsIDs, IDs...)
 		return nil
 	}
@@ -96,7 +121,7 @@ func (u *Apply) AddToManyIDs(name string, IDs []string) error {
 
 // DeleteToManyIDs removes some leafs from a users because they made him very sick
 func (u *Apply) DeleteToManyIDs(name string, IDs []string) error {
-	if name == ApplyName {
+	if name == "kids" {
 		for _, ID := range IDs {
 			for pos, oldID := range u.KidsIDs {
 				if ID == oldID {

@@ -4,7 +4,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-type Applyee struct {
+type Applicant struct {
 	ID  string        `json:"-"`
 	Id_ bson.ObjectId `bson:"_id"`
 
@@ -17,12 +17,12 @@ type Applyee struct {
 }
 
 // GetID to satisfy jsonapi.MarshalIdentifier interface
-func (u Applyee) GetID() string {
+func (u Applicant) GetID() string {
 	return u.ID
 }
 
 // SetID to satisfy jsonapi.UnmarshalIdentifier interface
-func (u *Applyee) SetID(id string) error {
+func (u *Applicant) SetID(id string) error {
 	u.ID = id
 	return nil
 }
