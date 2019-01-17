@@ -13,20 +13,28 @@ import (
 type BmStudentResource struct {
 	BmStudentStorage *BmDataStorage.BmStudentStorage
 	BmKidStorage *BmDataStorage.BmKidStorage
+	BmTeacherStorage *BmDataStorage.BmTeacherStorage
+	BmGuardianStorage *BmDataStorage.BmGuardianStorage
 }
 
 func (s BmStudentResource) NewStudentResource(args []BmDataStorage.BmStorage) BmStudentResource {
 	var ss *BmDataStorage.BmStudentStorage
 	var ks *BmDataStorage.BmKidStorage
+	var gs *BmDataStorage.BmGuardianStorage
+	var ts *BmDataStorage.BmTeacherStorage
 	for _, arg := range args {
 		tp := reflect.ValueOf(arg).Elem().Type()
 		if tp.Name() == "BmStudentStorage" {
 			ss = arg.(*BmDataStorage.BmStudentStorage)
 		} else if tp.Name() == "BmKidStorage" {
 			ks = arg.(*BmDataStorage.BmKidStorage)
+		} else if tp.Name() == "BmGuardianStorage" {
+			gs = arg.(*BmDataStorage.BmGuardianStorage)
+		} else if tp.Name() == "BmTeacherStorage" {
+			ts = arg.(*BmDataStorage.BmTeacherStorage)
 		}
 	}
-	return BmStudentResource{BmStudentStorage: ss, BmKidStorage: ks}
+	return BmStudentResource{BmStudentStorage: ss, BmKidStorage: ks, BmGuardianStorage: gs, BmTeacherStorage: ts}
 }
 
 // FindAll to satisfy api2go data source interface
@@ -35,15 +43,14 @@ func (s BmStudentResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 	studs := s.BmStudentStorage.GetAll(-1, -1)
 
 	for _, user := range studs {
-		// get all sweets for the user
-		//user.Guardians = []*BmModel.Chocolate{}
-		//for _, chocolateID := range user.ChocolatesIDs {
-		//	choc, err := s.ChocStorage.GetOne(chocolateID)
-		//	if err != nil {
-		//		return &Response{}, err
-		//	}
-		//	user.Chocolates = append(user.Chocolates, &choc)
-		//}
+		user.Guardians = []*BmModel.Guardian{}
+		for _, gId := range user.GuardiansIDs {
+			g, err := s.BmGuardianStorage.GetOne(gId)
+			if err != nil {
+				return &Response{}, err
+			}
+			user.Guardians = append(user.Guardians, &g)
+		}
 
 		if user.KidID != "" {
 			k, err := s.BmKidStorage.GetOne(user.KidID)
@@ -53,14 +60,13 @@ func (s BmStudentResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 			user.Kid = &k
 		}
 
-		//if user.TeacherID != "" {
-		//	k, err := s.BmTeacherStorage.GetOne(user.TeacherID)
-		//	if err != nil {
-		//		return &Response{}, err
-		//	}
-		//	user.Teacher = &k
-		//}
-		//
+		if user.TeacherID != "" {
+			k, err := s.BmTeacherStorage.GetOne(user.TeacherID)
+			if err != nil {
+				return &Response{}, err
+			}
+			user.Teacher = &k
+		}
 
 		result = append(result, *user)
 	}
@@ -138,14 +144,14 @@ func (s BmStudentResource) FindOne(ID string, r api2go.Request) (api2go.Responde
 		return &Response{}, api2go.NewHTTPError(err, err.Error(), http.StatusNotFound)
 	}
 
-	//user.Guardians = []*BmModel.Chocolate{}
-	//for _, chocolateID := range user.ChocolatesIDs {
-	//	choc, err := s.ChocStorage.GetOne(chocolateID)
-	//	if err != nil {
-	//		return &Response{}, err
-	//	}
-	//	user.Chocolates = append(user.Chocolates, &choc)
-	//}
+	user.Guardians = []*BmModel.Guardian{}
+	for _, chocolateID := range user.GuardiansIDs {
+		choc, err := s.BmGuardianStorage.GetOne(chocolateID)
+		if err != nil {
+			return &Response{}, err
+		}
+		user.Guardians = append(user.Guardians, &choc)
+	}
 
 	if user.KidID != "" {
 		k, err := s.BmKidStorage.GetOne(user.KidID)
@@ -155,14 +161,13 @@ func (s BmStudentResource) FindOne(ID string, r api2go.Request) (api2go.Responde
 		user.Kid = &k
 	}
 
-	//if user.TeacherID != "" {
-	//	k, err := s.BmTeacherStorage.GetOne(user.TeacherID)
-	//	if err != nil {
-	//		return &Response{}, err
-	//	}
-	//	user.Teacher = &k
-	//}
-	//
+	if user.TeacherID != "" {
+		k, err := s.BmTeacherStorage.GetOne(user.TeacherID)
+		if err != nil {
+			return &Response{}, err
+		}
+		user.Teacher = &k
+	}
 
 	return &Response{Res: user}, nil
 }
