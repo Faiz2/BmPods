@@ -1,12 +1,12 @@
 package BmDataStorage
 
 import (
+	"errors"
 	"fmt"
-	"github.com/alfredyang1986/BmPods/BmModel"
 	"github.com/alfredyang1986/BmPods/BmDaemons"
 	"github.com/alfredyang1986/BmPods/BmDaemons/BmMongodb"
+	"github.com/alfredyang1986/BmPods/BmModel"
 	"github.com/manyminds/api2go"
-	"errors"
 	"net/http"
 )
 
@@ -43,8 +43,8 @@ func (s BmModelLeafStorageExample) GetAll() []BmModel.ModelLeafExample {
 
 // GetOne tasty modelleaf
 func (s BmModelLeafStorageExample) GetOne(id string) (BmModel.ModelLeafExample, error) {
-	in := BmModel.ModelLeafExample{ ID:id }
-	out := BmModel.ModelLeafExample{ ID:id }
+	in := BmModel.ModelLeafExample{ID: id}
+	out := BmModel.ModelLeafExample{ID: id}
 	err := s.db.FindOne(&in, &out)
 	if err == nil {
 		return out, nil
@@ -65,7 +65,7 @@ func (s *BmModelLeafStorageExample) Insert(c BmModel.ModelLeafExample) string {
 
 // Delete one :(
 func (s *BmModelLeafStorageExample) Delete(id string) error {
-	in := BmModel.ModelLeafExample{ ID:id }
+	in := BmModel.ModelLeafExample{ID: id}
 	err := s.db.Delete(&in)
 	if err != nil {
 		return fmt.Errorf("ModelLeafExample with id %s does not exist", id)

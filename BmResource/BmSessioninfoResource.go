@@ -10,40 +10,53 @@ import (
 	"strconv"
 )
 
-type BmModelResourceExample struct {
-	BmModelLeafStorageExample *BmDataStorage.BmModelLeafStorageExample
-	BmModelStorageExample     *BmDataStorage.BmModelStorageExample
+type BmSessioninfoResource struct {
+	BmImageStorage       *BmDataStorage.BmImageStorage
+	BmSessioninfoStorage     *BmDataStorage.BmSessioninfoStorage
+	BmCategoryStorage *BmDataStorage.BmCategoryStorage
 }
 
-func (s BmModelResourceExample) NewModelResource(args []BmDataStorage.BmStorage) BmModelResourceExample {
-	var us *BmDataStorage.BmModelStorageExample
-	var cs *BmDataStorage.BmModelLeafStorageExample
+func (s BmSessioninfoResource) NewSessioninfoResource(args []BmDataStorage.BmStorage) BmSessioninfoResource {
+	var us *BmDataStorage.BmSessioninfoStorage
+	var ts *BmDataStorage.BmCategoryStorage
+	var cs *BmDataStorage.BmImageStorage
 	for _, arg := range args {
 		tp := reflect.ValueOf(arg).Elem().Type()
-		if tp.Name() == "BmModelStorageExample" {
-			us = arg.(*BmDataStorage.BmModelStorageExample)
-		} else if tp.Name() == "BmModelLeafStorageExample" {
-			cs = arg.(*BmDataStorage.BmModelLeafStorageExample)
+		if tp.Name() == "BmSessioninfoStorage" {
+			us = arg.(*BmDataStorage.BmSessioninfoStorage)
+		} else if tp.Name() == "BmImageStorage" {
+			cs = arg.(*BmDataStorage.BmImageStorage)
+		} else if tp.Name() == "BmCategoryStorage" {
+			ts = arg.(*BmDataStorage.BmCategoryStorage)
 		}
 	}
-	return BmModelResourceExample{BmModelStorageExample: us, BmModelLeafStorageExample: cs}
+	return BmSessioninfoResource{BmSessioninfoStorage: us, BmImageStorage: cs, BmCategoryStorage: ts}
 }
 
 // FindAll to satisfy api2go data source interface
-func (s BmModelResourceExample) FindAll(r api2go.Request) (api2go.Responder, error) {
-	var result []BmModel.ModelExample
-	models := s.BmModelStorageExample.GetAll(-1, -1)
+func (s BmSessioninfoResource) FindAll(r api2go.Request) (api2go.Responder, error) {
+	var result []BmModel.Sessioninfo
+	models := s.BmSessioninfoStorage.GetAll(-1, -1)
 
 	for _, model := range models {
 		// get all sweets for the model
-		model.ModelLeafs = []*BmModel.ModelLeafExample{}
-		for _, modelLeafID := range model.ModelLeafsIDs {
-			choc, err := s.BmModelLeafStorageExample.GetOne(modelLeafID)
+		model.Images = []*BmModel.Image{}
+		for _, kID := range model.ImagesIDs {
+			choc, err := s.BmImageStorage.GetOne(kID)
 			if err != nil {
 				return &Response{}, err
 			}
-			model.ModelLeafs = append(model.ModelLeafs, &choc)
+			model.Images = append(model.Images, &choc)
 		}
+
+		if model.CategoryID != "" {
+			applicant, err := s.BmCategoryStorage.GetOne(model.CategoryID)
+			if err != nil {
+				return &Response{}, err
+			}
+			model.Category = applicant
+		}
+
 		result = append(result, *model)
 	}
 
@@ -51,9 +64,9 @@ func (s BmModelResourceExample) FindAll(r api2go.Request) (api2go.Responder, err
 }
 
 // PaginatedFindAll can be used to load models in chunks
-func (s BmModelResourceExample) PaginatedFindAll(r api2go.Request) (uint, api2go.Responder, error) {
+func (s BmSessioninfoResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Responder, error) {
 	var (
-		result                      []BmModel.ModelExample
+		result                      []BmModel.Sessioninfo
 		number, size, offset, limit string
 	)
 
@@ -86,7 +99,7 @@ func (s BmModelResourceExample) PaginatedFindAll(r api2go.Request) (uint, api2go
 		}
 
 		start := sizeI * (numberI - 1)
-		for _, iter := range s.BmModelStorageExample.GetAll(int(start), int(sizeI)) {
+		for _, iter := range s.BmSessioninfoStorage.GetAll(int(start), int(sizeI)) {
 			result = append(result, *iter)
 		}
 
@@ -101,62 +114,62 @@ func (s BmModelResourceExample) PaginatedFindAll(r api2go.Request) (uint, api2go
 			return 0, &Response{}, err
 		}
 
-		for _, iter := range s.BmModelStorageExample.GetAll(int(offsetI), int(limitI)) {
+		for _, iter := range s.BmSessioninfoStorage.GetAll(int(offsetI), int(limitI)) {
 			result = append(result, *iter)
 		}
 	}
 
-	in := BmModel.ModelExample{}
-	count := s.BmModelStorageExample.Count(in)
+	in := BmModel.Sessioninfo{}
+	count := s.BmSessioninfoStorage.Count(in)
 
 	return uint(count), &Response{Res: result}, nil
 }
 
 // FindOne to satisfy `api2go.DataSource` interface
 // this method should return the model with the given ID, otherwise an error
-func (s BmModelResourceExample) FindOne(ID string, r api2go.Request) (api2go.Responder, error) {
-	model, err := s.BmModelStorageExample.GetOne(ID)
+func (s BmSessioninfoResource) FindOne(ID string, r api2go.Request) (api2go.Responder, error) {
+	model, err := s.BmSessioninfoStorage.GetOne(ID)
 	if err != nil {
 		return &Response{}, api2go.NewHTTPError(err, err.Error(), http.StatusNotFound)
 	}
 
-	model.ModelLeafs = []*BmModel.ModelLeafExample{}
-	for _, modelLeafID := range model.ModelLeafsIDs {
-		choc, err := s.BmModelLeafStorageExample.GetOne(modelLeafID)
+	model.Images = []*BmModel.Image{}
+	for _, kID := range model.ImagesIDs {
+		choc, err := s.BmImageStorage.GetOne(kID)
 		if err != nil {
 			return &Response{}, err
 		}
-		model.ModelLeafs = append(model.ModelLeafs, &choc)
+		model.Images = append(model.Images, &choc)
 	}
 	return &Response{Res: model}, nil
 }
 
 // Create method to satisfy `api2go.DataSource` interface
-func (s BmModelResourceExample) Create(obj interface{}, r api2go.Request) (api2go.Responder, error) {
-	model, ok := obj.(BmModel.ModelExample)
+func (s BmSessioninfoResource) Create(obj interface{}, r api2go.Request) (api2go.Responder, error) {
+	model, ok := obj.(BmModel.Sessioninfo)
 	if !ok {
 		return &Response{}, api2go.NewHTTPError(errors.New("Invalid instance given"), "Invalid instance given", http.StatusBadRequest)
 	}
 
-	id := s.BmModelStorageExample.Insert(model)
+	id := s.BmSessioninfoStorage.Insert(model)
 	model.ID = id
 
 	return &Response{Res: model, Code: http.StatusCreated}, nil
 }
 
 // Delete to satisfy `api2go.DataSource` interface
-func (s BmModelResourceExample) Delete(id string, r api2go.Request) (api2go.Responder, error) {
-	err := s.BmModelStorageExample.Delete(id)
+func (s BmSessioninfoResource) Delete(id string, r api2go.Request) (api2go.Responder, error) {
+	err := s.BmSessioninfoStorage.Delete(id)
 	return &Response{Code: http.StatusNoContent}, err
 }
 
 //Update stores all changes on the model
-func (s BmModelResourceExample) Update(obj interface{}, r api2go.Request) (api2go.Responder, error) {
-	model, ok := obj.(BmModel.ModelExample)
+func (s BmSessioninfoResource) Update(obj interface{}, r api2go.Request) (api2go.Responder, error) {
+	model, ok := obj.(BmModel.Sessioninfo)
 	if !ok {
 		return &Response{}, api2go.NewHTTPError(errors.New("Invalid instance given"), "Invalid instance given", http.StatusBadRequest)
 	}
 
-	err := s.BmModelStorageExample.Update(model)
+	err := s.BmSessioninfoStorage.Update(model)
 	return &Response{Res: model, Code: http.StatusNoContent}, err
 }

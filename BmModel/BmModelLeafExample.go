@@ -4,9 +4,9 @@ import "gopkg.in/mgo.v2/bson"
 
 // ModelLeafExample is the ModelLeafExample that a user consumes in order to get fat and happy
 type ModelLeafExample struct {
-	ID    string `json:"-"`
-	Id_ bson.ObjectId `json:"-" bson:"_id"`
-	Attr2  string `json:"attr2" bson:"attr2"`
+	ID    string        `json:"-"`
+	Id_   bson.ObjectId `json:"-" bson:"_id"`
+	Attr2 string        `json:"attr2" bson:"attr2"`
 }
 
 // GetID to satisfy jsonapi.MarshalIdentifier interface

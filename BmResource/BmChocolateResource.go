@@ -1,11 +1,11 @@
 package BmResource
 
 import (
-	"github.com/alfredyang1986/BmPods/BmDataStorage"
-	"github.com/manyminds/api2go"
 	"errors"
-	"net/http"
+	"github.com/alfredyang1986/BmPods/BmDataStorage"
 	"github.com/alfredyang1986/BmPods/BmModel"
+	"github.com/manyminds/api2go"
+	"net/http"
 	"reflect"
 )
 
@@ -25,7 +25,7 @@ func (c BmChocolateResource) NewChocolateResource(args []BmDataStorage.BmStorage
 			cs = arg.(*BmDataStorage.ChocolateStorage)
 		}
 	}
-	return BmChocolateResource { UserStorage:us, ChocStorage:cs }
+	return BmChocolateResource{UserStorage: us, ChocStorage: cs}
 }
 
 // FindAll chocolates

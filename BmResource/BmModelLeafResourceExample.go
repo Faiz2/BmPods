@@ -1,17 +1,17 @@
 package BmResource
 
 import (
-	"github.com/alfredyang1986/BmPods/BmDataStorage"
-	"github.com/manyminds/api2go"
 	"errors"
-	"net/http"
+	"github.com/alfredyang1986/BmPods/BmDataStorage"
 	"github.com/alfredyang1986/BmPods/BmModel"
+	"github.com/manyminds/api2go"
+	"net/http"
 	"reflect"
 )
 
 type BmModelLeafResourceExample struct {
 	BmModelLeafStorageExample *BmDataStorage.BmModelLeafStorageExample
-	BmModelStorageExample *BmDataStorage.BmModelStorageExample
+	BmModelStorageExample     *BmDataStorage.BmModelStorageExample
 }
 
 func (c BmModelLeafResourceExample) NewModelLeafResource(args []BmDataStorage.BmStorage) BmModelLeafResourceExample {
@@ -25,7 +25,7 @@ func (c BmModelLeafResourceExample) NewModelLeafResource(args []BmDataStorage.Bm
 			cs = arg.(*BmDataStorage.BmModelLeafStorageExample)
 		}
 	}
-	return BmModelLeafResourceExample { BmModelStorageExample:us, BmModelLeafStorageExample:cs }
+	return BmModelLeafResourceExample{BmModelStorageExample: us, BmModelLeafStorageExample: cs}
 }
 
 // FindAll modelleafs

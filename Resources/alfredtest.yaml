@@ -11,7 +11,35 @@ storages:
   method: NewApplyStorage
   daemons:
   - BmMongodbDaemon
+- name: BmCategoryStorage
+  method: NewCategoryStorage
+  daemons:
+  - BmMongodbDaemon
+- name: BmImageStorage
+  method: NewImageStorage
+  daemons:
+  - BmMongodbDaemon
+- name: BmSessioninfoStorage
+  method: NewSessioninfoStorage
+  daemons:
+  - BmMongodbDaemon
 resources:
+- name: BmSessioninfoResource
+  method: NewSessioninfoResource
+  storages:
+  - BmSessioninfoStorage
+  - BmCategoryStorage
+  - BmImageStorage
+- name: BmImageResource
+  method: NewImageResource
+  storages:
+  - BmImageStorage
+  - BmSessioninfoStorage
+- name: BmCategoryResource
+  method: NewCategoryResource
+  storages:
+  - BmCategoryStorage
+  - BmSessioninfoStorage
 - name: BmApplyResource
   method: NewApplyResource
   storages:
@@ -32,6 +60,8 @@ models:
 - BmKid
 - BmApply
 - BmApplicant
+- BmSessioninfo
+- BmCategory
 services:
 - name: bm-kid
   model: BmKid
@@ -42,6 +72,15 @@ services:
 - name: bm-apply
   model: BmApply
   resource: BmApplyResource
+- name: bm-sessioninfo
+  model: BmSessioninfo
+  resource: BmSessioninfoResource
+- name: bm-category
+  model: BmCategory
+  resource: BmCategoryResource
+- name: bm-image
+  model: BmImage
+  resource: BmImageResource
 daemons:
 - name: BmMongodbDaemon
   method: NewMongoDBDaemon

@@ -1,12 +1,12 @@
 package BmDataStorage
 
 import (
+	"errors"
 	"fmt"
-	"github.com/alfredyang1986/BmPods/BmModel"
 	"github.com/alfredyang1986/BmPods/BmDaemons"
 	"github.com/alfredyang1986/BmPods/BmDaemons/BmMongodb"
+	"github.com/alfredyang1986/BmPods/BmModel"
 	"github.com/manyminds/api2go"
-	"errors"
 	"net/http"
 )
 
@@ -58,8 +58,8 @@ func (s ChocolateStorage) GetAll() []BmModel.Chocolate {
 
 // GetOne tasty chocolate
 func (s ChocolateStorage) GetOne(id string) (BmModel.Chocolate, error) {
-	in := BmModel.Chocolate{ ID:id }
-	out := BmModel.Chocolate{ ID:id }
+	in := BmModel.Chocolate{ID: id}
+	out := BmModel.Chocolate{ID: id}
 	err := s.db.FindOne(&in, &out)
 	if err == nil {
 		return out, nil
@@ -80,7 +80,7 @@ func (s *ChocolateStorage) Insert(c BmModel.Chocolate) string {
 
 // Delete one :(
 func (s *ChocolateStorage) Delete(id string) error {
-	in := BmModel.Chocolate{ ID:id }
+	in := BmModel.Chocolate{ID: id}
 	err := s.db.Delete(&in)
 	if err != nil {
 		return fmt.Errorf("Chocolate with id %s does not exist", id)

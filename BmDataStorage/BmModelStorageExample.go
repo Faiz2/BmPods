@@ -5,15 +5,15 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/manyminds/api2go"
-	"github.com/alfredyang1986/BmPods/BmModel"
-	"github.com/alfredyang1986/BmPods/BmDaemons/BmMongodb"
 	"github.com/alfredyang1986/BmPods/BmDaemons"
+	"github.com/alfredyang1986/BmPods/BmDaemons/BmMongodb"
+	"github.com/alfredyang1986/BmPods/BmModel"
+	"github.com/manyminds/api2go"
 )
 
 // BmModelStorageExample stores all models
 type BmModelStorageExample struct {
-	models   map[string]*BmModel.ModelExample
+	models  map[string]*BmModel.ModelExample
 	idCount int
 
 	db *BmMongodb.BmMongodb
@@ -45,8 +45,8 @@ func (s BmModelStorageExample) GetAll(skip int, take int) []*BmModel.ModelExampl
 
 // GetOne model
 func (s BmModelStorageExample) GetOne(id string) (BmModel.ModelExample, error) {
-	in := BmModel.ModelExample{ ID:id }
-	out := BmModel.ModelExample{ ID:id }
+	in := BmModel.ModelExample{ID: id}
+	out := BmModel.ModelExample{ID: id}
 	err := s.db.FindOne(&in, &out)
 	if err == nil {
 		return out, nil
@@ -67,7 +67,7 @@ func (s *BmModelStorageExample) Insert(c BmModel.ModelExample) string {
 
 // Delete one :(
 func (s *BmModelStorageExample) Delete(id string) error {
-	in := BmModel.ModelExample{ ID:id }
+	in := BmModel.ModelExample{ID: id}
 	err := s.db.Delete(&in)
 	if err != nil {
 		return fmt.Errorf("ModelExample with id %s does not exist", id)

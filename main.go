@@ -2,16 +2,16 @@ package main
 
 import (
 	"fmt"
-	"github.com/alfredyang1986/BmPods/BmPodsDefine"
-	"github.com/manyminds/api2go"
-	"github.com/julienschmidt/httprouter"
-	"net/http"
 	"github.com/alfredyang1986/BmPods/BmApiResolver"
+	"github.com/alfredyang1986/BmPods/BmPodsDefine"
+	"github.com/julienschmidt/httprouter"
+	"github.com/manyminds/api2go"
+	"net/http"
 )
 
 func main() {
 	fmt.Println("pod archi begins")
-	var pod = BmPodsDefine.Pod{ Name: "alfred test" }
+	var pod = BmPodsDefine.Pod{Name: "alfred test"}
 	pod.RegisterSerFromYAML("Resources/alfredtest.yaml")
 
 	port := 31415

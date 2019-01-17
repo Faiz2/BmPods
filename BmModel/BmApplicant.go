@@ -26,4 +26,3 @@ func (u *Applicant) SetID(id string) error {
 	u.ID = id
 	return nil
 }
-

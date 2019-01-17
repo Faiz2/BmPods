@@ -2,38 +2,38 @@ package BmPodsDefine
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v2"
-	"io/ioutil"
-	"github.com/alfredyang1986/BmPods/BmPanic"
-	"github.com/manyminds/api2go"
-	"github.com/alfredyang1986/BmPods/BmFactory"
+	"github.com/alfredyang1986/BmPods/BmDaemons"
 	"github.com/alfredyang1986/BmPods/BmDataStorage"
+	"github.com/alfredyang1986/BmPods/BmFactory"
+	"github.com/alfredyang1986/BmPods/BmPanic"
 	"github.com/alfredyang1986/BmPods/BmResource"
 	"github.com/alfredyang1986/BmPods/BmSingleton"
+	"github.com/manyminds/api2go"
 	"github.com/manyminds/api2go/jsonapi"
-	"github.com/alfredyang1986/BmPods/BmDaemons"
+	"gopkg.in/yaml.v2"
+	"io/ioutil"
 )
 
 type Pod struct {
 	Name string
-	Res map[string]interface{}
+	Res  map[string]interface{}
 	conf Conf
 
-	Storages map[string]BmDataStorage.BmStorage
+	Storages  map[string]BmDataStorage.BmStorage
 	Resources map[string]BmResource.BmRes
-	Daemons map[string]BmDaemons.BmDaemon
+	Daemons   map[string]BmDaemons.BmDaemon
 }
 
 func (p *Pod) RegisterSerFromYAML(path string) {
 	data, err := ioutil.ReadFile(path)
-	if (err != nil) {
+	if err != nil {
 		fmt.Println("error")
 	}
 	//check(err)
 
 	p.conf = Conf{}
 	err = yaml.Unmarshal(data, &p.conf)
-	if (err != nil) {
+	if err != nil {
 		fmt.Println("error")
 		fmt.Println(err)
 		panic(BmPanic.ALFRED_TEST_ERROR)

@@ -1,13 +1,13 @@
 package BmResource
 
 import (
-	"github.com/alfredyang1986/BmPods/BmDataStorage"
-	"github.com/manyminds/api2go"
 	"errors"
-	"net/http"
-	"strconv"
+	"github.com/alfredyang1986/BmPods/BmDataStorage"
 	"github.com/alfredyang1986/BmPods/BmModel"
+	"github.com/manyminds/api2go"
+	"net/http"
 	"reflect"
+	"strconv"
 )
 
 type BmUserResource struct {
@@ -26,7 +26,7 @@ func (s BmUserResource) NewUserResource(args []BmDataStorage.BmStorage) BmUserRe
 			cs = arg.(*BmDataStorage.ChocolateStorage)
 		}
 	}
-	return BmUserResource{ UserStorage:us, ChocStorage:cs }
+	return BmUserResource{UserStorage: us, ChocStorage: cs}
 }
 
 // FindAll to satisfy api2go data source interface

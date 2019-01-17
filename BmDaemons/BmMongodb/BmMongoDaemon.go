@@ -1,13 +1,13 @@
 package BmMongodb
 
 import (
-	"gopkg.in/mgo.v2"
 	"errors"
-	"reflect"
-	"github.com/alfredyang1986/BmPods/BmModel"
-	"gopkg.in/mgo.v2/bson"
 	"fmt"
+	"github.com/alfredyang1986/BmPods/BmModel"
 	"github.com/alfredyang1986/blackmirror/bmmate"
+	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
+	"reflect"
 )
 
 const (
@@ -17,8 +17,8 @@ const (
 )
 
 type BmMongodb struct {
-	Host string
-	Port string
+	Host     string
+	Port     string
 	Database string
 }
 
@@ -27,9 +27,9 @@ type NoPtr struct {
 
 func (m BmMongodb) NewMongoDBDaemon(args map[string]string) *BmMongodb {
 	return &BmMongodb{
-		Host: args["host"],
-		Port: args["port"],
-		Database: args["database"] }
+		Host:     args["host"],
+		Port:     args["port"],
+		Database: args["database"]}
 }
 
 func (m *BmMongodb) InsertBmObject(ptr BmModel.BmModelBase) (string, error) {
@@ -65,7 +65,7 @@ func (m *BmMongodb) ExistsBmObject(ptr BmModel.BmModelBase, out BmModel.BmModelB
 	cn := v.Type().Name()
 	c := session.DB(m.Database).C(cn)
 
-	err = c.Find(bson.M{ "_id": oid }).One(out)
+	err = c.Find(bson.M{"_id": oid}).One(out)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -86,7 +86,7 @@ func (m *BmMongodb) FindOne(ptr BmModel.BmModelBase, out BmModel.BmModelBase) er
 	cn := v.Type().Name()
 	c := session.DB(m.Database).C(cn)
 
-	err = c.Find(bson.M{ "_id": oid }).One(out)
+	err = c.Find(bson.M{"_id": oid}).One(out)
 	if err != nil {
 		return errors.New("query error")
 	}
@@ -95,7 +95,7 @@ func (m *BmMongodb) FindOne(ptr BmModel.BmModelBase, out BmModel.BmModelBase) er
 	return nil
 }
 
-func (m *BmMongodb) FindMulti (ptr BmModel.BmModelBase, out interface{}, skip int, take int) error {
+func (m *BmMongodb) FindMulti(ptr BmModel.BmModelBase, out interface{}, skip int, take int) error {
 	session, err := mgo.Dial(m.Host + ":" + m.Port)
 	if err != nil {
 		return errors.New("dial db error")
@@ -119,7 +119,7 @@ func (m *BmMongodb) FindMulti (ptr BmModel.BmModelBase, out interface{}, skip in
 	return nil
 }
 
-func (m *BmMongodb) Delete (ptr BmModel.BmModelBase) error {
+func (m *BmMongodb) Delete(ptr BmModel.BmModelBase) error {
 	session, err := mgo.Dial(m.Host + ":" + m.Port)
 	if err != nil {
 		return errors.New("dial db error")
@@ -131,14 +131,14 @@ func (m *BmMongodb) Delete (ptr BmModel.BmModelBase) error {
 	cn := v.Type().Name()
 	c := session.DB(m.Database).C(cn)
 
-	err = c.Remove(bson.M{ "_id": oid})
+	err = c.Remove(bson.M{"_id": oid})
 	if err != nil {
 		return errors.New("error delete by id")
 	}
 	return nil
 }
 
-func (m *BmMongodb) Update (ptr BmModel.BmModelBase) error {
+func (m *BmMongodb) Update(ptr BmModel.BmModelBase) error {
 	session, err := mgo.Dial(m.Host + ":" + m.Port)
 	if err != nil {
 		return errors.New("dial db error")
@@ -152,7 +152,7 @@ func (m *BmMongodb) Update (ptr BmModel.BmModelBase) error {
 
 	rst, err := Struct2map(v)
 	rst["_id"] = oid
-	err = c.Update(bson.M{ "_id": oid }, rst)
+	err = c.Update(bson.M{"_id": oid}, rst)
 	if err != nil {
 		return errors.New("error update by id")
 	}
@@ -270,9 +270,9 @@ func Struct2map(v reflect.Value) (map[string]interface{}, error) {
 
 		//ja, ok := tag.Lookup(BMJsonAPI)
 		//if ok && ja == "relationships" {
-			//NOTE: relationships
-			//rst[name] = "TODO"
-			//continue
+		//NOTE: relationships
+		//rst[name] = "TODO"
+		//continue
 		//}
 
 		tmp, _ := AttrValue(fieldValue)

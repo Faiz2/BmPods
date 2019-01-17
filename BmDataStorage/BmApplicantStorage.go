@@ -1,12 +1,12 @@
 package BmDataStorage
 
 import (
-	"github.com/alfredyang1986/BmPods/BmModel"
-	"github.com/alfredyang1986/BmPods/BmDaemons/BmMongodb"
-	"github.com/alfredyang1986/BmPods/BmDaemons"
-	"fmt"
-	"github.com/manyminds/api2go"
 	"errors"
+	"fmt"
+	"github.com/alfredyang1986/BmPods/BmDaemons"
+	"github.com/alfredyang1986/BmPods/BmDaemons/BmMongodb"
+	"github.com/alfredyang1986/BmPods/BmModel"
+	"github.com/manyminds/api2go"
 	"net/http"
 )
 
@@ -41,8 +41,8 @@ func (s BmApplicantStorage) GetAll(skip int, take int) []*BmModel.Applicant {
 
 // GetOne user
 func (s BmApplicantStorage) GetOne(id string) (BmModel.Applicant, error) {
-	in := BmModel.Applicant{ ID:id }
-	out := BmModel.Applicant{ ID:id }
+	in := BmModel.Applicant{ID: id}
+	out := BmModel.Applicant{ID: id}
 	err := s.db.FindOne(&in, &out)
 	if err == nil {
 		return out, nil
@@ -63,7 +63,7 @@ func (s *BmApplicantStorage) Insert(c BmModel.Applicant) string {
 
 // Delete one :(
 func (s *BmApplicantStorage) Delete(id string) error {
-	in := BmModel.Applicant{ ID:id }
+	in := BmModel.Applicant{ID: id}
 	err := s.db.Delete(&in)
 	if err != nil {
 		return fmt.Errorf("Applicant with id %s does not exist", id)

@@ -8,7 +8,7 @@ import (
 
 // User is a generic database user
 type User struct {
-	ID string `json:"-"`
+	ID  string        `json:"-"`
 	Id_ bson.ObjectId `json:"-" bson:"_id"`
 
 	Username      string       `json:"user-name" bson:"username"`

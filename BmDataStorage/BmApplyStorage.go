@@ -5,21 +5,19 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/manyminds/api2go"
-	"github.com/alfredyang1986/BmPods/BmModel"
-	"github.com/alfredyang1986/BmPods/BmDaemons/BmMongodb"
 	"github.com/alfredyang1986/BmPods/BmDaemons"
+	"github.com/alfredyang1986/BmPods/BmDaemons/BmMongodb"
+	"github.com/alfredyang1986/BmPods/BmModel"
+	"github.com/manyminds/api2go"
 )
 
 // BmApplyStorage stores all applys
 type BmApplyStorage struct {
-	applys   map[string]*BmModel.Apply
+	applys  map[string]*BmModel.Apply
 	idCount int
 
 	db *BmMongodb.BmMongodb
 }
-
-var ApplyStorageName = "BmApplyStorage"
 
 func (s BmApplyStorage) NewApplyStorage(args []BmDaemons.BmDaemon) *BmApplyStorage {
 	mdb := args[0].(*BmMongodb.BmMongodb)
@@ -46,8 +44,8 @@ func (s BmApplyStorage) GetAll(skip int, take int) []*BmModel.Apply {
 
 // GetOne model
 func (s BmApplyStorage) GetOne(id string) (BmModel.Apply, error) {
-	in := BmModel.Apply{ ID:id }
-	out := BmModel.Apply{ ID:id }
+	in := BmModel.Apply{ID: id}
+	out := BmModel.Apply{ID: id}
 	err := s.db.FindOne(&in, &out)
 	if err == nil {
 		return out, nil
@@ -68,7 +66,7 @@ func (s *BmApplyStorage) Insert(c BmModel.Apply) string {
 
 // Delete one :(
 func (s *BmApplyStorage) Delete(id string) error {
-	in := BmModel.Apply{ ID:id }
+	in := BmModel.Apply{ID: id}
 	err := s.db.Delete(&in)
 	if err != nil {
 		return fmt.Errorf("Apply with id %s does not exist", id)

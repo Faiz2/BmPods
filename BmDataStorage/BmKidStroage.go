@@ -32,7 +32,7 @@ func (s BmKidStorage) GetAll() []BmModel.Kid {
 	if err == nil {
 		for i, iter := range out {
 			s.db.ResetIdWithId_(&iter)
-			out[i]= iter
+			out[i] = iter
 		}
 		return out
 	} else {

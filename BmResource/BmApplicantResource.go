@@ -1,11 +1,11 @@
 package BmResource
 
 import (
-	"net/http"
-	"github.com/manyminds/api2go"
-	"github.com/alfredyang1986/BmPods/BmModel"
 	"errors"
 	"github.com/alfredyang1986/BmPods/BmDataStorage"
+	"github.com/alfredyang1986/BmPods/BmModel"
+	"github.com/manyminds/api2go"
+	"net/http"
 	"reflect"
 )
 
@@ -21,7 +21,7 @@ func (c BmApplicantResource) NewApplicantResource(args []BmDataStorage.BmStorage
 			as = arg.(*BmDataStorage.BmApplicantStorage)
 		}
 	}
-	return BmApplicantResource{ ApplicantStorage: as }
+	return BmApplicantResource{ApplicantStorage: as}
 }
 
 // FindAll apeolates

@@ -1,18 +1,18 @@
 package BmResource
 
 import (
-	"github.com/alfredyang1986/BmPods/BmDataStorage"
-	"github.com/manyminds/api2go"
 	"errors"
-	"net/http"
-	"strconv"
+	"github.com/alfredyang1986/BmPods/BmDataStorage"
 	"github.com/alfredyang1986/BmPods/BmModel"
+	"github.com/manyminds/api2go"
+	"net/http"
 	"reflect"
+	"strconv"
 )
 
 type BmApplyResource struct {
-	BmKidStorage *BmDataStorage.BmKidStorage
-	BmApplyStorage *BmDataStorage.BmApplyStorage
+	BmKidStorage       *BmDataStorage.BmKidStorage
+	BmApplyStorage     *BmDataStorage.BmApplyStorage
 	BmApplicantStorage *BmDataStorage.BmApplicantStorage
 }
 
@@ -30,7 +30,7 @@ func (s BmApplyResource) NewApplyResource(args []BmDataStorage.BmStorage) BmAppl
 			ts = arg.(*BmDataStorage.BmApplicantStorage)
 		}
 	}
-	return BmApplyResource{ BmApplyStorage:us, BmKidStorage:cs, BmApplicantStorage:ts }
+	return BmApplyResource{BmApplyStorage: us, BmKidStorage: cs, BmApplicantStorage: ts}
 }
 
 // FindAll to satisfy api2go data source interface

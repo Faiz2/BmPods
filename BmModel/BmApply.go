@@ -11,26 +11,23 @@ type Apply struct {
 	ID  string        `json:"-"`
 	Id_ bson.ObjectId `json:"-" bson:"_id"`
 
-	Status       float64  `json:"status" bson:"status"` //0=未处理，1=已处理
-	ApplyTime    float64  `json:"apply-time" bson:"apply-time"`
-	ExceptTime   float64  `json:"except-time" bson:"except-time"`
-	CreateTime   float64  `json:"create-time" bson:"create-time"`
-	BrandId      string   `json:"brand-id" bson:"brand-id"`
-	ApplyFrom    string   `json:"apply-from" bson:"apply-from"`
-	CourseType   float64  `json:"course-type" bson:"course-type"` //0活动 1体验课 2普通课程 -1预注册
-	CourseName   string   `json:"course-name" bson:"course-name"`
-	Contact      string   `json:"contact" bson:"contact"`
-	ReservableId string   `json:"reservable-id" bson:"reservable-id"`
+	Status       float64 `json:"status" bson:"status"` //0=未处理，1=已处理
+	ApplyTime    float64 `json:"apply-time" bson:"apply-time"`
+	ExceptTime   float64 `json:"except-time" bson:"except-time"`
+	CreateTime   float64 `json:"create-time" bson:"create-time"`
+	BrandId      string  `json:"brand-id" bson:"brand-id"`
+	ApplyFrom    string  `json:"apply-from" bson:"apply-from"`
+	CourseType   float64 `json:"course-type" bson:"course-type"` //0活动 1体验课 2普通课程 -1预注册
+	CourseName   string  `json:"course-name" bson:"course-name"`
+	Contact      string  `json:"contact" bson:"contact"`
+	ReservableId string  `json:"reservable-id" bson:"reservable-id"`
 
-	Kids         []*Kid   `json:"-"`
-	KidsIDs      []string `json:"-" bson:"kidsIds"`
+	Kids    []*Kid   `json:"-"`
+	KidsIDs []string `json:"-" bson:"kidsIds"`
 
-	ApplicantID	 string    `json:"applicant-id" bson:"applicant-id"`
-	Applicant	 Applicant `json:"-"`
+	ApplicantID string    `json:"applicant-id" bson:"applicant-id"`
+	Applicant   Applicant `json:"-"`
 }
-
-//var ApplyName = strings.ToLower("Kid") + "s"
-//var ApplyName = "apply" + "s"
 
 // GetID to satisfy jsonapi.MarshalIdentifier interface
 func (u Apply) GetID() string {
@@ -70,7 +67,7 @@ func (u Apply) GetReferencedIDs() []jsonapi.ReferenceID {
 
 	if u.ApplicantID != "" {
 		result = append(result, jsonapi.ReferenceID{
-			ID: u.ApplicantID,
+			ID:   u.ApplicantID,
 			Type: "applicant",
 			Name: "applicant",
 		})
