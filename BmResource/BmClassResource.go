@@ -11,10 +11,11 @@ import (
 )
 
 type BmClassResource struct {
-	BmClassStorage       *BmDataStorage.BmClassStorage
-	BmStudentStorage     *BmDataStorage.BmStudentStorage
-	BmTeacherStorage     *BmDataStorage.BmTeacherStorage
-	BmYardStorage        *BmDataStorage.BmYardStorage
+	BmClassStorage          *BmDataStorage.BmClassStorage
+	BmStudentStorage        *BmDataStorage.BmStudentStorage
+	BmTeacherStorage        *BmDataStorage.BmTeacherStorage
+	BmUnitStorage           *BmDataStorage.BmUnitStorage
+	BmYardStorage           *BmDataStorage.BmYardStorage
 	BmReservableItemStorage *BmDataStorage.BmReservableItemStorage
 }
 
@@ -24,6 +25,7 @@ func (s BmClassResource) NewClassResource(args []BmDataStorage.BmStorage) BmClas
 	var ss *BmDataStorage.BmReservableItemStorage
 	var cs *BmDataStorage.BmStudentStorage
 	var ts *BmDataStorage.BmTeacherStorage
+	var ns *BmDataStorage.BmUnitStorage
 	for _, arg := range args {
 		tp := reflect.ValueOf(arg).Elem().Type()
 		if tp.Name() == "BmClassStorage" {
@@ -32,13 +34,15 @@ func (s BmClassResource) NewClassResource(args []BmDataStorage.BmStorage) BmClas
 			cs = arg.(*BmDataStorage.BmStudentStorage)
 		} else if tp.Name() == "BmTeacherStorage" {
 			ts = arg.(*BmDataStorage.BmTeacherStorage)
+		} else if tp.Name() == "BmUnitStorage" {
+			ns = arg.(*BmDataStorage.BmUnitStorage)
 		} else if tp.Name() == "BmYardStorage" {
 			ys = arg.(*BmDataStorage.BmYardStorage)
 		} else if tp.Name() == "BmReservableItemStorage" {
 			ss = arg.(*BmDataStorage.BmReservableItemStorage)
 		}
 	}
-	return BmClassResource{BmClassStorage: us, BmYardStorage: ys, BmReservableItemStorage: ss, BmStudentStorage: cs, BmTeacherStorage: ts}
+	return BmClassResource{BmClassStorage: us, BmYardStorage: ys, BmReservableItemStorage: ss, BmStudentStorage: cs, BmTeacherStorage: ts, BmUnitStorage: ns}
 }
 
 // FindAll to satisfy api2go data source interface
@@ -63,6 +67,14 @@ func (s BmClassResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 				return &Response{}, err
 			}
 			model.Teachers = append(model.Teachers, &choc)
+		}
+		model.Units = []*BmModel.Unit{}
+		for _, tmpID := range model.UnitsIDs {
+			choc, err := s.BmUnitStorage.GetOne(tmpID)
+			if err != nil {
+				return &Response{}, err
+			}
+			model.Units = append(model.Units, &choc)
 		}
 
 		if model.YardID != "" {
@@ -171,6 +183,14 @@ func (s BmClassResource) FindOne(ID string, r api2go.Request) (api2go.Responder,
 			return &Response{}, err
 		}
 		model.Teachers = append(model.Teachers, &choc)
+	}
+	model.Units = []*BmModel.Unit{}
+	for _, tmpID := range model.UnitsIDs {
+		choc, err := s.BmUnitStorage.GetOne(tmpID)
+		if err != nil {
+			return &Response{}, err
+		}
+		model.Units = append(model.Units, &choc)
 	}
 
 	if model.YardID != "" {

@@ -10,7 +10,7 @@ import (
 )
 
 type BmImageResource struct {
-	BmImageStorage   *BmDataStorage.BmImageStorage
+	BmImageStorage       *BmDataStorage.BmImageStorage
 	BmSessioninfoStorage *BmDataStorage.BmSessioninfoStorage
 }
 

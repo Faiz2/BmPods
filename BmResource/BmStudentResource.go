@@ -1,19 +1,19 @@
 package BmResource
 
 import (
-	"github.com/manyminds/api2go"
-	"github.com/alfredyang1986/BmPods/BmModel"
 	"errors"
-	"net/http"
 	"github.com/alfredyang1986/BmPods/BmDataStorage"
+	"github.com/alfredyang1986/BmPods/BmModel"
+	"github.com/manyminds/api2go"
+	"net/http"
 	"reflect"
 	"strconv"
 )
 
 type BmStudentResource struct {
-	BmStudentStorage *BmDataStorage.BmStudentStorage
-	BmKidStorage *BmDataStorage.BmKidStorage
-	BmTeacherStorage *BmDataStorage.BmTeacherStorage
+	BmStudentStorage  *BmDataStorage.BmStudentStorage
+	BmKidStorage      *BmDataStorage.BmKidStorage
+	BmTeacherStorage  *BmDataStorage.BmTeacherStorage
 	BmGuardianStorage *BmDataStorage.BmGuardianStorage
 }
 

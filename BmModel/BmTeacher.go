@@ -10,27 +10,27 @@ type Teacher struct {
 
 	BrandId string `json:"brand-id" bson:"brand-id"`
 
-	Name        string  `json:"name" bson:"name"`
-	Nickname    string  `json:"nickname" bson:"nickname"`
-	Icon        string  `json:"icon" bson:"icon"`
-	Dob         float64 `json:"dob" bson:"dob"`
-	Gender      float64 `json:"gender" bson:"gender"`
-	RegDate     float64 `json:"reg-date" bson:"reg-date"`
-	Contact     string  `json:"contact" bson:"contact"`
-	WeChat      string  `json:"wechat" bson:"wechat"`
-	JobTitle    string  `json:"job-title" bson:"job-title"`
-	JobType     float64 `json:"job-type" bson:"job-type"` //0-兼职, 1-全职
-	IdCardNo    string  `json:"id-card-no" bson:"id-card-no"`
-	Major       string  `json:"major" bson:"major"`
-	TeachYears  float64 `json:"teach-years" bson:"teach-years"`
+	Name       string  `json:"name" bson:"name"`
+	Nickname   string  `json:"nickname" bson:"nickname"`
+	Icon       string  `json:"icon" bson:"icon"`
+	Dob        float64 `json:"dob" bson:"dob"`
+	Gender     float64 `json:"gender" bson:"gender"`
+	RegDate    float64 `json:"reg-date" bson:"reg-date"`
+	Contact    string  `json:"contact" bson:"contact"`
+	WeChat     string  `json:"wechat" bson:"wechat"`
+	JobTitle   string  `json:"job-title" bson:"job-title"`
+	JobType    float64 `json:"job-type" bson:"job-type"` //0-兼职, 1-全职
+	IdCardNo   string  `json:"id-card-no" bson:"id-card-no"`
+	Major      string  `json:"major" bson:"major"`
+	TeachYears float64 `json:"teach-years" bson:"teach-years"`
 
-	Province    string  `json:"province" bson:"province"`
-	City        string  `json:"city" bson:"city"`
-	District    string  `json:"district" bson:"district"`
-	Address     string  `json:"address" bson:"address"`
-	NativePlace string  `json:"nativePlace" bson:"nativePlace"`
+	Province    string `json:"province" bson:"province"`
+	City        string `json:"city" bson:"city"`
+	District    string `json:"district" bson:"district"`
+	Address     string `json:"address" bson:"address"`
+	NativePlace string `json:"nativePlace" bson:"nativePlace"`
 
-	CreateTime  float64 `json:"create_time" bson:"create_time"`
+	CreateTime float64 `json:"create_time" bson:"create_time"`
 }
 
 // GetID to satisfy jsonapi.MarshalIdentifier interface

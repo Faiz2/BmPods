@@ -15,9 +15,9 @@ type ReservableItem struct {
 	Status     float64 `json:"status" bson:"status"` //0活动 1体验课 2普通课程
 	StartDate  float64 `json:"start-date" bson:"start-date"`
 	EndDate    float64 `json:"end-date" bson:"end-date"`
-	CreateTime float64   `json:"create-time" bson:"create-time"`
+	CreateTime float64 `json:"create-time" bson:"create-time"`
 
-	SessioninfoID string    `json:"sessioninfo-id" bson:"sessioninfo-id"`
+	SessioninfoID string      `json:"sessioninfo-id" bson:"sessioninfo-id"`
 	Sessioninfo   Sessioninfo `json:"-"`
 }
 

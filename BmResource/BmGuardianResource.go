@@ -10,7 +10,7 @@ import (
 )
 
 type BmGuardianResource struct {
-	BmGuardianStorage   *BmDataStorage.BmGuardianStorage
+	BmGuardianStorage *BmDataStorage.BmGuardianStorage
 }
 
 func (c BmGuardianResource) NewGuardianResource(args []BmDataStorage.BmStorage) BmGuardianResource {

@@ -1,18 +1,18 @@
 package BmResource
 
 import (
-	"github.com/manyminds/api2go"
-	"github.com/alfredyang1986/BmPods/BmModel"
 	"errors"
-	"net/http"
 	"github.com/alfredyang1986/BmPods/BmDataStorage"
+	"github.com/alfredyang1986/BmPods/BmModel"
+	"github.com/manyminds/api2go"
+	"net/http"
 	"reflect"
 	"strconv"
 )
 
 type BmBrandResource struct {
-	BmBrandStorage *BmDataStorage.BmBrandStorage
-	BmImageStorage *BmDataStorage.BmImageStorage
+	BmBrandStorage    *BmDataStorage.BmBrandStorage
+	BmImageStorage    *BmDataStorage.BmImageStorage
 	BmCategoryStorage *BmDataStorage.BmCategoryStorage
 }
 
@@ -133,7 +133,7 @@ func (s BmBrandResource) FindOne(ID string, r api2go.Request) (api2go.Responder,
 		return &Response{}, api2go.NewHTTPError(err, err.Error(), http.StatusNotFound)
 	}
 
-	model.Imgs= []*BmModel.Image{}
+	model.Imgs = []*BmModel.Image{}
 	for _, kID := range model.ImagesIDs {
 		choc, err := s.BmImageStorage.GetOne(kID)
 		if err != nil {

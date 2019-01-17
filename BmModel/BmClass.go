@@ -23,14 +23,14 @@ type Class struct {
 	Students    []*Student `json:"-"`
 	StudentsIDs []string   `json:"-" bson:"studentsIds"`
 	Teachers    []*Teacher `json:"-"`
-	TeachersIDs []string  `json:"-" bson:"teachersIds"`
+	TeachersIDs []string   `json:"-" bson:"teachersIds"`
+	Units       []*Unit    `json:"-"`
+	UnitsIDs    []string   `json:"-" bson:"unitsIds"`
 
-	YardID        string      `json:"yard-id" bson:"yard-id"`
-	Yard          Yard        `json:"-"`
-	ReservableItemID string      `json:"reservable-item-id" bson:"reservable-item-id"`
+	YardID           string         `json:"yard-id" bson:"yard-id"`
+	Yard             Yard           `json:"-"`
+	ReservableItemID string         `json:"reservable-item-id" bson:"reservable-item-id"`
 	ReservableItem   ReservableItem `json:"-"`
-	//TODO: BindManyUnit
-
 }
 
 // GetID to satisfy jsonapi.MarshalIdentifier interface
@@ -63,6 +63,10 @@ func (u Class) GetReferences() []jsonapi.Reference {
 			Type: "Teacher",
 			Name: "teachers",
 		},
+		{
+			Type: "Unit",
+			Name: "units",
+		},
 	}
 }
 
@@ -81,6 +85,13 @@ func (u Class) GetReferencedIDs() []jsonapi.ReferenceID {
 			ID:   tmpID,
 			Type: "teacher",
 			Name: "teachers",
+		})
+	}
+	for _, tmpID := range u.UnitsIDs {
+		result = append(result, jsonapi.ReferenceID{
+			ID:   tmpID,
+			Type: "unit",
+			Name: "uints",
 		})
 	}
 
@@ -110,6 +121,9 @@ func (u Class) GetReferencedStructs() []jsonapi.MarshalIdentifier {
 	}
 	for key := range u.Teachers {
 		result = append(result, u.Teachers[key])
+	}
+	for key := range u.Units {
+		result = append(result, u.Units[key])
 	}
 
 	if u.YardID != "" {
@@ -145,6 +159,10 @@ func (u *Class) SetToManyReferenceIDs(name string, IDs []string) error {
 		u.TeachersIDs = IDs
 		return nil
 	}
+	if name == "uints" {
+		u.UnitsIDs = IDs
+		return nil
+	}
 
 	return errors.New("There is no to-many relationship with the name " + name)
 }
@@ -157,6 +175,10 @@ func (u *Class) AddToManyIDs(name string, IDs []string) error {
 	}
 	if name == "teachers" {
 		u.TeachersIDs = append(u.TeachersIDs, IDs...)
+		return nil
+	}
+	if name == "uints" {
+		u.UnitsIDs = append(u.UnitsIDs, IDs...)
 		return nil
 	}
 
@@ -181,6 +203,16 @@ func (u *Class) DeleteToManyIDs(name string, IDs []string) error {
 				if ID == oldID {
 					// match, this ID must be removed
 					u.TeachersIDs = append(u.TeachersIDs[:pos], u.TeachersIDs[pos+1:]...)
+				}
+			}
+		}
+	}
+	if name == "uints" {
+		for _, ID := range IDs {
+			for pos, oldID := range u.UnitsIDs {
+				if ID == oldID {
+					// match, this ID must be removed
+					u.UnitsIDs = append(u.UnitsIDs[:pos], u.UnitsIDs[pos+1:]...)
 				}
 			}
 		}

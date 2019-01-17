@@ -13,8 +13,8 @@ import (
 
 // BmReservableItemStorage stores all reservableItems
 type BmReservableItemStorage struct {
-	reservableItems  map[string]*BmModel.ReservableItem
-	idCount int
+	reservableItems map[string]*BmModel.ReservableItem
+	idCount         int
 
 	db *BmMongodb.BmMongodb
 }

@@ -1,28 +1,29 @@
 package BmModel
 
 import (
-	"gopkg.in/mgo.v2/bson"
 	"errors"
 	"github.com/manyminds/api2go/jsonapi"
+	"gopkg.in/mgo.v2/bson"
 )
 
 type Unit struct {
 	ID  string        `json:"-"`
 	Id_ bson.ObjectId `json:"-" bson:"_id"`
 
-	Status        float64                   `json:"status" bson:"status"`
-	StartDate     float64                   `json:"start-date" bson:"start-date"`
-	EndDate       float64                   `json:"end-date" bson:"end-date"`
-	CourseTime    float64                   `json:"course-time" bson:"course-time"`		//课时
+	Status     float64 `json:"status" bson:"status"`
+	StartDate  float64 `json:"start-date" bson:"start-date"`
+	EndDate    float64 `json:"end-date" bson:"end-date"`
+	CourseTime float64 `json:"course-time" bson:"course-time"` //课时
 
 	//SessionableId string                    `json:"sessionableId" bson:"sessionableId"`
 	//Sessionable   sessionable.BmSessionable `json:"Sessionable" jsonapi:"relationships"`
 
-	TeacherID	string `json:'-' bson:"teacher-id"`
-	Teacher       *Teacher `json:"-"`
-
-	RoomID	string `json:"-" bson:"room-id"`
-	Room 	*Room	`json:"-"`
+	TeacherID string   `json:'-' bson:"teacher-id"`
+	Teacher   *Teacher `json:"-"`
+	ClassID   string   `json:'-' bson:"class-id"`
+	Class     *Class   `json:"-"`
+	RoomID    string   `json:"-" bson:"room-id"`
+	Room      *Room    `json:"-"`
 }
 
 // GetID to satisfy jsonapi.MarshalIdentifier interface
@@ -44,6 +45,10 @@ func (u Unit) GetReferences() []jsonapi.Reference {
 			Name: "teacher",
 		},
 		{
+			Type: "Class",
+			Name: "class",
+		},
+		{
 			Type: "Room",
 			Name: "room",
 		},
@@ -61,10 +66,17 @@ func (u Unit) GetReferencedIDs() []jsonapi.ReferenceID {
 			Name: "teacher",
 		})
 	}
+	if u.ClassID != "" {
+		result = append(result, jsonapi.ReferenceID{
+			ID:   u.ClassID,
+			Type: "Class",
+			Name: "class",
+		})
+	}
 
 	if u.RoomID != "" {
 		result = append(result, jsonapi.ReferenceID{
-			ID: u.RoomID,
+			ID:   u.RoomID,
 			Type: "Room",
 			Name: "room",
 		})
@@ -82,8 +94,11 @@ func (u Unit) GetReferencedStructs() []jsonapi.MarshalIdentifier {
 	if u.TeacherID != "" {
 		result = append(result, u.Teacher)
 	}
+	if u.ClassID != "" {
+		result = append(result, u.Class)
+	}
 
-	if u.RoomID  != "" {
+	if u.RoomID != "" {
 		result = append(result, u.Room)
 	}
 
@@ -95,6 +110,10 @@ func (u Unit) GetReferencedStructs() []jsonapi.MarshalIdentifier {
 func (u *Unit) SetToOneReferenceID(name, ID string) error {
 	if name == "teacher" {
 		u.TeacherID = ID
+		return nil
+	}
+	if name == "class" {
+		u.ClassID = ID
 		return nil
 	}
 

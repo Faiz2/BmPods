@@ -12,8 +12,8 @@ import (
 
 type BmSessioninfoResource struct {
 	BmImageStorage       *BmDataStorage.BmImageStorage
-	BmSessioninfoStorage     *BmDataStorage.BmSessioninfoStorage
-	BmCategoryStorage *BmDataStorage.BmCategoryStorage
+	BmSessioninfoStorage *BmDataStorage.BmSessioninfoStorage
+	BmCategoryStorage    *BmDataStorage.BmCategoryStorage
 }
 
 func (s BmSessioninfoResource) NewSessioninfoResource(args []BmDataStorage.BmStorage) BmSessioninfoResource {

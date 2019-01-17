@@ -1,25 +1,27 @@
 package BmResource
 
 import (
-	"github.com/alfredyang1986/BmPods/BmDataStorage"
-	"reflect"
-	"github.com/manyminds/api2go"
-	"github.com/alfredyang1986/BmPods/BmModel"
-	"strconv"
-	"net/http"
 	"errors"
+	"github.com/alfredyang1986/BmPods/BmDataStorage"
+	"github.com/alfredyang1986/BmPods/BmModel"
+	"github.com/manyminds/api2go"
+	"net/http"
+	"reflect"
+	"strconv"
 )
 
 type BmUnitResource struct {
-	BmUnitStorage *BmDataStorage.BmUnitStorage
-	BmRoomStorage *BmDataStorage.BmRoomStorage
+	BmUnitStorage    *BmDataStorage.BmUnitStorage
+	BmRoomStorage    *BmDataStorage.BmRoomStorage
 	BmTeacherStorage *BmDataStorage.BmTeacherStorage
+	BmClassStorage   *BmDataStorage.BmClassStorage
 }
 
 func (s BmUnitResource) NewUnitResource(args []BmDataStorage.BmStorage) BmUnitResource {
 	var us *BmDataStorage.BmUnitStorage
 	var rs *BmDataStorage.BmRoomStorage
 	var ts *BmDataStorage.BmTeacherStorage
+	var cs *BmDataStorage.BmClassStorage
 	for _, arg := range args {
 		tp := reflect.ValueOf(arg).Elem().Type()
 		if tp.Name() == "BmBmUnitStorage" {
@@ -28,9 +30,11 @@ func (s BmUnitResource) NewUnitResource(args []BmDataStorage.BmStorage) BmUnitRe
 			rs = arg.(*BmDataStorage.BmRoomStorage)
 		} else if tp.Name() == "BmTeacherStorage" {
 			ts = arg.(*BmDataStorage.BmTeacherStorage)
+		} else if tp.Name() == "BmClassStorage" {
+			cs = arg.(*BmDataStorage.BmClassStorage)
 		}
 	}
-	return BmUnitResource{BmUnitStorage: us, BmRoomStorage: rs, BmTeacherStorage: ts}
+	return BmUnitResource{BmUnitStorage: us, BmRoomStorage: rs, BmTeacherStorage: ts, BmClassStorage: cs}
 }
 
 // FindAll to satisfy api2go data source interface
@@ -55,6 +59,13 @@ func (s BmUnitResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 				return &Response{}, errors.New("error")
 			}
 			user.Teacher = &r
+		}
+		if user.ClassID != "" {
+			r, err := s.BmClassStorage.GetOne(user.ClassID)
+			if err != nil {
+				return &Response{}, errors.New("error")
+			}
+			user.Class = &r
 		}
 
 		result = append(result, *user)
@@ -147,6 +158,13 @@ func (s BmUnitResource) FindOne(ID string, r api2go.Request) (api2go.Responder, 
 			return &Response{}, errors.New("error")
 		}
 		user.Teacher = &r
+	}
+	if user.ClassID != "" {
+		r, err := s.BmClassStorage.GetOne(user.ClassID)
+		if err != nil {
+			return &Response{}, errors.New("error")
+		}
+		user.Class = &r
 	}
 
 	return &Response{Res: user}, nil

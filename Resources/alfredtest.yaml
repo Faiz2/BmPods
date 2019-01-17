@@ -136,10 +136,13 @@ resources:
   - BmYardStorage
   - BmStudentStorage
   - BmTeacherStorage
+  - BmUnitStorage
 - name: BmUnitResource
   method: NewUnitResource
   storages:
+  - BmUnitStorage
   - BmTeacherStorage
+  - BmClassStorage
   - BmRoomStorage
 
 models:

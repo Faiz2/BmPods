@@ -1,52 +1,52 @@
 package BmModel
 
 import (
-	"gopkg.in/mgo.v2/bson"
-	"github.com/manyminds/api2go/jsonapi"
 	"errors"
+	"github.com/manyminds/api2go/jsonapi"
+	"gopkg.in/mgo.v2/bson"
 )
 
 type Student struct {
 	ID  string        `json:"id"`
 	Id_ bson.ObjectId `json:"-" bson:"_id"`
 
-	StudentId     string `json:"brand-id" bson:"brand-id"`
+	StudentId string `json:"brand-id" bson:"brand-id"`
 
 	// 顾问， 关联关系 teacher
 	//TeacherId   string `json:"teacher-id" bson:"teacher-id"`
 	//TeacherName string `json:"teacher-name" bson:"teacher-name"`
 
-	SourceWay   string `json:"source-way" bson:"source-way"`	// 来源于
+	SourceWay string `json:"source-way" bson:"source-way"` // 来源于
 
 	Intro       string  `json:"intro" bson:"intro"`
 	Status      string  `json:"status" bson:"status"` //未付款-candidate, 已付款-stud
 	LessonCount float64 `json:"lesson-count" bson:"lesson-count"`
 
-	Name        string  `json:"name" bson:"name"`
-	Nickname    string  `json:"nickname" bson:"nickname"`
-	Icon        string  `json:"icon" bson:"icon"`
-	Dob         float64 `json:"dob" bson:"dob"`
-	Gender      float64 `json:"gender" bson:"gender"`
-	RegDate     float64 `json:"reg-date" bson:"reg-date"`
-	CreateTime  float64 `json:"create-time" bson:"create-time"`
-	Contact     string  `json:"contact" bson:"contact"`
-	WeChat      string  `json:"wechat" bson:"wechat"`
+	Name       string  `json:"name" bson:"name"`
+	Nickname   string  `json:"nickname" bson:"nickname"`
+	Icon       string  `json:"icon" bson:"icon"`
+	Dob        float64 `json:"dob" bson:"dob"`
+	Gender     float64 `json:"gender" bson:"gender"`
+	RegDate    float64 `json:"reg-date" bson:"reg-date"`
+	CreateTime float64 `json:"create-time" bson:"create-time"`
+	Contact    string  `json:"contact" bson:"contact"`
+	WeChat     string  `json:"wechat" bson:"wechat"`
 
-	Province    string  `json:"province" bson:"province"`
-	City        string  `json:"city" bson:"city"`
-	District    string  `json:"district" bson:"district"`
-	Address     string  `json:"address" bson:"address"`
-	School      string  `json:"school" bson:"school"`
-	IdCardNo    string  `json:"id-card-no" bson:"id-card-no"`
+	Province string `json:"province" bson:"province"`
+	City     string `json:"city" bson:"city"`
+	District string `json:"district" bson:"district"`
+	Address  string `json:"address" bson:"address"`
+	School   string `json:"school" bson:"school"`
+	IdCardNo string `json:"id-card-no" bson:"id-card-no"`
 
 	KidID string `json:"-" bson:"kid-id"`
-	Kid *Kid `json:"-"`
+	Kid   *Kid   `json:"-"`
 
-	Teacher *Teacher `json:"-"`
-	TeacherID string `json:"-" bson:"teacher-id"`
+	Teacher   *Teacher `json:"-"`
+	TeacherID string   `json:"-" bson:"teacher-id"`
 
-	Guardians []*Guardian `json:"-"`
-	GuardiansIDs []string `json:"-" bson:"guardians-ids"`
+	Guardians    []*Guardian `json:"-"`
+	GuardiansIDs []string    `json:"-" bson:"guardians-ids"`
 }
 
 // GetID to satisfy jsonapi.MarshalIdentifier interface
@@ -99,7 +99,7 @@ func (u Student) GetReferencedIDs() []jsonapi.ReferenceID {
 
 	if u.KidID != "" {
 		result = append(result, jsonapi.ReferenceID{
-			ID: u.KidID,
+			ID:   u.KidID,
 			Type: "Kid",
 			Name: "kid",
 		})

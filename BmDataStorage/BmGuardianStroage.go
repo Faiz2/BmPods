@@ -13,8 +13,8 @@ import (
 // BmGuardianStorage stores all of the tasty modelleaf, needs to be injected into
 // User and Guardian Resource. In the real world, you would use a database for that.
 type BmGuardianStorage struct {
-	guardians    map[string]*BmModel.Guardian
-	idCount int
+	guardians map[string]*BmModel.Guardian
+	idCount   int
 
 	db *BmMongodb.BmMongodb
 }

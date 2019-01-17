@@ -13,7 +13,7 @@ import (
 // BmImageStorage stores all of the tasty modelleaf, needs to be injected into
 // User and Image Resource. In the real world, you would use a database for that.
 type BmImageStorage struct {
-	images    map[string]*BmModel.Image
+	images  map[string]*BmModel.Image
 	idCount int
 
 	db *BmMongodb.BmMongodb

@@ -13,8 +13,8 @@ import (
 
 // BmSessioninfoStorage stores all sessioninfos
 type BmSessioninfoStorage struct {
-	sessioninfos  map[string]*BmModel.Sessioninfo
-	idCount int
+	sessioninfos map[string]*BmModel.Sessioninfo
+	idCount      int
 
 	db *BmMongodb.BmMongodb
 }
