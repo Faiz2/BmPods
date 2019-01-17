@@ -27,7 +27,7 @@ func (c BmApplicantResource) NewApplicantResource(args []BmDataStorage.BmStorage
 // FindAll apeolates
 func (c BmApplicantResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 	//usersID, ok := r.QueryParams["usersID"]
-	sweets := c.ApplicantStorage.GetAll(-1, -1)
+	result := c.ApplicantStorage.GetAll(-1, -1)
 	//if ok {
 	//	// this means that we want to show all sweets of a user, this is the route
 	//	// /v0/users/1/sweets
@@ -48,7 +48,7 @@ func (c BmApplicantResource) FindAll(r api2go.Request) (api2go.Responder, error)
 	//
 	//	return &Response{Res: filteredSweets}, nil
 	//}
-	return &Response{Res: sweets}, nil
+	return &Response{Res: result}, nil
 }
 
 func (s BmApplicantResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Responder, error) {

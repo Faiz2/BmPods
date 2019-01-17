@@ -37,8 +37,8 @@ func (s BmApplyResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 	for _, model := range models {
 		// get all sweets for the model
 		model.Kids = []*BmModel.Kid{}
-		for _, modelLeafID := range model.KidsIDs {
-			choc, err := s.BmKidStorage.GetOne(modelLeafID)
+		for _, kID := range model.KidsIDs {
+			choc, err := s.BmKidStorage.GetOne(kID)
 			if err != nil {
 				return &Response{}, err
 			}
@@ -121,8 +121,8 @@ func (s BmApplyResource) FindOne(ID string, r api2go.Request) (api2go.Responder,
 	}
 
 	model.Kids = []*BmModel.Kid{}
-	for _, modelLeafID := range model.KidsIDs {
-		choc, err := s.BmKidStorage.GetOne(modelLeafID)
+	for _, kID := range model.KidsIDs {
+		choc, err := s.BmKidStorage.GetOne(kID)
 		if err != nil {
 			return &Response{}, err
 		}

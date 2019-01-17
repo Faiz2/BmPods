@@ -34,10 +34,10 @@ func (s BmApplyStorage) GetAll(skip int, take int) []*BmModel.Apply {
 	if err == nil {
 		var tmp []*BmModel.Apply
 		//tmp := make(map[string]*BmModel.Apply)
-		for _, iter := range out {
-			s.db.ResetIdWithId_(&iter)
-			tmp = append(tmp, &iter)
-			//tmp[iter.ID] = &iter
+		for i := 0; i < len(out); i++ {
+			ptr := out[i]
+			s.db.ResetIdWithId_(&ptr)
+			tmp = append(tmp, &ptr)
 		}
 		return tmp
 	} else {
