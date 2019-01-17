@@ -8,27 +8,18 @@ import (
 )
 
 var BLACKMIRROR_MODEL_FACTORY = map[string]interface{}{
-	"BmUser":           BmModel.User{},
-	"BmChocolate":      BmModel.Chocolate{},
-	"BmModelExample":     BmModel.ModelExample{},
-	"BmModelLeafExample": BmModel.ModelLeafExample{},
-	"Kid": BmModel.Kid{},
+	"BmKid": BmModel.Kid{},
+	"BmApplyee": BmModel.Applyee{},
 }
 
 var BLACKMIRROR_RESOURCE_FACTORY = map[string]interface{}{
-	"BmUserResource":             BmResource.BmUserResource{},
-	"BmChocolateResource":        BmResource.BmChocolateResource{},
-	"BmModelResourceExample":     BmResource.BmModelResourceExample{},
-	"BmModelLeafResourceExample": BmResource.BmModelLeafResourceExample{},
 	"BmKidResource": BmResource.BmKidResource{},
+	"BmApplyeeResource": BmResource.BmKidResource{},
 }
 
 var BLACKMIRROR_STORAGE_FACTORY = map[string]interface{}{
-	"BmUserStorage":             BmDataStorage.UserStorage{},
-	"BmChocolateStorage":        BmDataStorage.ChocolateStorage{},
-	"BmModelStorageExample":     BmDataStorage.BmModelStorageExample{},
-	"BmModelLeafStorageExample": BmDataStorage.BmModelLeafStorageExample{},
 	"BmKidStorage": BmDataStorage.BmKidStorage{},
+	"BmApplyeeStorage": BmDataStorage.BmApplyeeStorage{},
 }
 
 var BLACKMIRROR_DAEMON_FACTORY = map[string]interface{}{

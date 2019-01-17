@@ -1,18 +1,6 @@
 storages:
-- name: BmUserStorage
-  method: NewUserStorage
-  daemons:
-  - BmMongodbDaemon
-- name: BmChocolateStorage
-  method: NewChocolateStorage
-  daemons:
-  - BmMongodbDaemon
-- name: BmModelStorageExample
-  method: NewModelStorage
-  daemons:
-  - BmMongodbDaemon
-- name: BmModelLeafStorageExample
-  method: NewModelLeafStorage
+- name: BmApplyeeStorage
+  method: NewApplyeeStorage
   daemons:
   - BmMongodbDaemon
 - name: BmKidStorage
@@ -20,53 +8,24 @@ storages:
   daemons:
   - BmMongodbDaemon
 resources:
-- name: BmUserResource
-  method: NewUserResource
-  storages:
-  - BmUserStorage
-  - BmChocolateStorage
-- name: BmChocolateResource
-  method: NewChocolateResource
-  storages:
-  - BmUserStorage
-  - BmChocolateStorage
-- name: BmModelResourceExample
-  method: NewModelResource
-  storages:
-  - BmModelStorageExample
-  - BmModelLeafStorageExample
-- name: BmModelLeafResourceExample
-  method: NewModelLeafResource
-  storages:
-  - BmModelStorageExample
-  - BmModelLeafStorageExample
 - name: BmKidResource
   method: NewKidResource
   storages:
-#  - BmModelStorageExample
   - BmKidStorage
+- name: BmApplyeeResource
+  method: NewApplyeeResource
+  storages:
+  - BmApplyeeStorage
 models:
-- BmUser
-- BmChocolate
-- BmModelExample
-- BmModelLeafExample
 - BmKid
+- BmApplyeeStorage
 services:
-- name: bm-user
-  model: BmUser
-  resource: BmUserResource
-- name: bm-chocolate
-  model: BmChocolate
-  resource: BmChocolateResource
-- name: bm-model-example
-  model: BmModelExample
-  resource: BmModelResourceExample
-- name: bm-model-leaf-example
-  model: BmModelLeafExample
-  resource: BmModelLeafResourceExample
 - name: bm-kid
   model: BmKid
   resource: BmKidResource
+- name: bm-applyee
+  model: BmApplyee
+  resource: BmApplyeeResource
 daemons:
 - name: BmMongodbDaemon
   method: NewMongoDBDaemon

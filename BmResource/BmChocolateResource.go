@@ -55,6 +55,11 @@ func (c BmChocolateResource) FindAll(r api2go.Request) (api2go.Responder, error)
 	return &Response{Res: sweets}, nil
 }
 
+func (s BmChocolateResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Responder, error) {
+	result := []BmModel.Chocolate{}
+	return 100, &Response{Res: result}, nil
+}
+
 // FindOne choc
 func (c BmChocolateResource) FindOne(ID string, r api2go.Request) (api2go.Responder, error) {
 	res, err := c.ChocStorage.GetOne(ID)
