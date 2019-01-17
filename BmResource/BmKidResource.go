@@ -1,16 +1,16 @@
 package BmResource
 
 import (
-	"github.com/alfredyang1986/BmPods/BmDataStorage"
-	"github.com/manyminds/api2go"
 	"errors"
-	"net/http"
+	"github.com/alfredyang1986/BmPods/BmDataStorage"
 	"github.com/alfredyang1986/BmPods/BmModel"
+	"github.com/manyminds/api2go"
+	"net/http"
 	"reflect"
 )
 
 type BmKidResource struct {
-	BmKidStorage *BmDataStorage.BmKidStorage
+	BmKidStorage   *BmDataStorage.BmKidStorage
 	BmApplyStorage *BmDataStorage.BmApplyStorage
 }
 
@@ -19,13 +19,13 @@ func (c BmKidResource) NewKidResource(args []BmDataStorage.BmStorage) BmKidResou
 	var cs *BmDataStorage.BmKidStorage
 	for _, arg := range args {
 		tp := reflect.ValueOf(arg).Elem().Type()
-		if tp.Name() == BmDataStorage.ModelStorageName {
+		if tp.Name() == "BmApplyStorage" {
 			us = arg.(*BmDataStorage.BmApplyStorage)
-		} else if tp.Name() == BmDataStorage.ModelLeafStorageName {
+		} else if tp.Name() == "BmKidStorage" {
 			cs = arg.(*BmDataStorage.BmKidStorage)
 		}
 	}
-	return BmKidResource { BmApplyStorage:us, BmKidStorage:cs }
+	return BmKidResource{BmApplyStorage: us, BmKidStorage: cs}
 }
 
 // FindAll kids

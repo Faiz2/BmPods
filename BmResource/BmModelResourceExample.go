@@ -20,9 +20,9 @@ func (s BmModelResourceExample) NewModelResource(args []BmDataStorage.BmStorage)
 	var cs *BmDataStorage.BmModelLeafStorageExample
 	for _, arg := range args {
 		tp := reflect.ValueOf(arg).Elem().Type()
-		if tp.Name() == BmDataStorage.ModelStorageName {
+		if tp.Name() == "BmModelStorageExample" {
 			us = arg.(*BmDataStorage.BmModelStorageExample)
-		} else if tp.Name() == BmDataStorage.ModelLeafStorageName {
+		} else if tp.Name() == "BmModelLeafStorageExample" {
 			cs = arg.(*BmDataStorage.BmModelLeafStorageExample)
 		}
 	}

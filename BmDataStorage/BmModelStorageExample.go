@@ -19,8 +19,6 @@ type BmModelStorageExample struct {
 	db *BmMongodb.BmMongodb
 }
 
-var ModelStorageName = "BmModelStorageExample"
-
 func (s BmModelStorageExample) NewModelStorage(args []BmDaemons.BmDaemon) *BmModelStorageExample {
 	mdb := args[0].(*BmMongodb.BmMongodb)
 	return &BmModelStorageExample{make(map[string]*BmModel.ModelExample), 1, mdb}
