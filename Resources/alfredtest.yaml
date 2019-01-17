@@ -43,6 +43,14 @@ storages:
   method: NewTeacherStorage
   daemons:
   - BmMongodbDaemon
+- name: BmRoomStorage
+  method: NewRoomStorage
+  daemons:
+  - BmMongodbDaemon
+- name: BmYardStorage
+  method: NewYardStorage
+  daemons:
+  - BmMongodbDaemon
 
 resources:
 - name: BmSessioninfoResource
@@ -101,6 +109,17 @@ resources:
   method: NewTeacherResource
   storages:
   - BmTeacherStorage
+- name: BmRoomResource
+  method: NewRoomResource
+  storages:
+  - BmRoomStorage
+  - BmYardStorage
+- name: BmYardResource
+  method: NewYardResource
+  storages:
+  - BmYardStorage
+  - BmImageStorage
+  - BmRoomStorage
 
 models:
 - BmKid
@@ -113,6 +132,8 @@ models:
 - BmStudent
 - BmGuardian
 - BmTeacher
+- BmRoom
+- BmYard
 
 services:
 - name: bm-kid
@@ -148,6 +169,13 @@ services:
 - name: bm-teacher
   model: BmTeacher
   resource: BmTeacherResource
+- name: bm-room
+  model: BmRoom
+  resource: BmRoomResource
+- name: bm-yard
+  model: BmYard
+  resource: BmYardResource
+
 
 daemons:
 - name: BmMongodbDaemon
