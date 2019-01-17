@@ -23,6 +23,10 @@ storages:
   method: NewSessioninfoStorage
   daemons:
   - BmMongodbDaemon
+- name: BmReservableItemStorage
+  method: NewReservableItemStorage
+  daemons:
+  - BmMongodbDaemon
 - name: BmBrandStorage
   method: NewBrandStorage
   daemons:
@@ -35,6 +39,11 @@ resources:
   - BmSessioninfoStorage
   - BmCategoryStorage
   - BmImageStorage
+- name: BmReservableItemResource
+  method: NewReservableItemResource
+  storages:
+  - BmSessioninfoStorage
+  - BmReservableItemStorage
 - name: BmImageResource
   method: NewImageResource
   storages:
@@ -74,6 +83,7 @@ models:
 - BmApply
 - BmApplicant
 - BmSessioninfo
+- BmReservableItem
 - BmCategory
 - BmBrand
 
@@ -91,6 +101,9 @@ services:
 - name: bm-sessioninfo
   model: BmSessioninfo
   resource: BmSessioninfoResource
+- name: bm-reservable-item
+  model: BmReservableItem
+  resource: BmReservableItemResource
 - name: bm-category
   model: BmCategory
   resource: BmCategoryResource
@@ -101,7 +114,7 @@ services:
   model: BmBrand
   resource: BmBrandResource
 
-  
+
 daemons:
 - name: BmMongodbDaemon
   method: NewMongoDBDaemon
