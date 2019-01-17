@@ -15,6 +15,10 @@ storages:
   method: NewModelLeafStorage
   daemons:
   - BmMongodbDaemon
+- name: BmKidStorage
+  method: NewKidStorage
+  daemons:
+  - BmMongodbDaemon
 resources:
 - name: BmUserResource
   method: NewUserResource
@@ -36,11 +40,17 @@ resources:
   storages:
   - BmModelStorageExample
   - BmModelLeafStorageExample
+- name: BmKidResource
+  method: NewKidResource
+  storages:
+#  - BmModelStorageExample
+  - BmKidStorage
 models:
 - BmUser
 - BmChocolate
 - BmModelExample
 - BmModelLeafExample
+- BmKid
 services:
 - name: bm-user
   model: BmUser
@@ -54,6 +64,9 @@ services:
 - name: bm-model-leaf-example
   model: BmModelLeafExample
   resource: BmModelLeafResourceExample
+- name: bm-kid
+  model: BmKid
+  resource: BmKidResource
 daemons:
 - name: BmMongodbDaemon
   method: NewMongoDBDaemon

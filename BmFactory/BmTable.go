@@ -12,6 +12,7 @@ var BLACKMIRROR_MODEL_FACTORY = map[string]interface{}{
 	"BmChocolate":      BmModel.Chocolate{},
 	"BmModelExample":     BmModel.ModelExample{},
 	"BmModelLeafExample": BmModel.ModelLeafExample{},
+	"Kid": BmModel.Kid{},
 }
 
 var BLACKMIRROR_RESOURCE_FACTORY = map[string]interface{}{
@@ -19,6 +20,7 @@ var BLACKMIRROR_RESOURCE_FACTORY = map[string]interface{}{
 	"BmChocolateResource":        BmResource.BmChocolateResource{},
 	"BmModelResourceExample":     BmResource.BmModelResourceExample{},
 	"BmModelLeafResourceExample": BmResource.BmModelLeafResourceExample{},
+	"BmKidResource": BmResource.BmKidResource{},
 }
 
 var BLACKMIRROR_STORAGE_FACTORY = map[string]interface{}{
@@ -26,6 +28,7 @@ var BLACKMIRROR_STORAGE_FACTORY = map[string]interface{}{
 	"BmChocolateStorage":        BmDataStorage.ChocolateStorage{},
 	"BmModelStorageExample":     BmDataStorage.BmModelStorageExample{},
 	"BmModelLeafStorageExample": BmDataStorage.BmModelLeafStorageExample{},
+	"BmKidStorage": BmDataStorage.BmKidStorage{},
 }
 
 var BLACKMIRROR_DAEMON_FACTORY = map[string]interface{}{
