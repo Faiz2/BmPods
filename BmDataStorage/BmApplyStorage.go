@@ -13,15 +13,12 @@ import (
 
 // BmApplyStorage stores all applys
 type BmApplyStorage struct {
-	applys  map[string]*BmModel.Apply
-	idCount int
-
 	db *BmMongodb.BmMongodb
 }
 
 func (s BmApplyStorage) NewApplyStorage(args []BmDaemons.BmDaemon) *BmApplyStorage {
 	mdb := args[0].(*BmMongodb.BmMongodb)
-	return &BmApplyStorage{make(map[string]*BmModel.Apply), 1, mdb}
+	return &BmApplyStorage{mdb}
 }
 
 // GetAll returns the model map (because we need the ID as key too)

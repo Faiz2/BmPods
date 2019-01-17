@@ -14,6 +14,7 @@ var BLACKMIRROR_MODEL_FACTORY = map[string]interface{}{
 	"BmCategory":    BmModel.Category{},
 	"BmImage":       BmModel.Image{},
 	"BmSessioninfo": BmModel.Sessioninfo{},
+	"BmBrand": BmModel.Brand{},
 }
 
 var BLACKMIRROR_RESOURCE_FACTORY = map[string]interface{}{
@@ -23,6 +24,7 @@ var BLACKMIRROR_RESOURCE_FACTORY = map[string]interface{}{
 	"BmCategoryResource":    BmResource.BmCategoryResource{},
 	"BmImageResource":       BmResource.BmImageResource{},
 	"BmSessioninfoResource": BmResource.BmSessioninfoResource{},
+	"BmBrandResource": BmResource.BmBrandResource{},
 }
 
 var BLACKMIRROR_STORAGE_FACTORY = map[string]interface{}{
@@ -32,6 +34,7 @@ var BLACKMIRROR_STORAGE_FACTORY = map[string]interface{}{
 	"BmCategoryStorage":    BmDataStorage.BmCategoryStorage{},
 	"BmImageStorage":       BmDataStorage.BmImageStorage{},
 	"BmSessioninfoStorage": BmDataStorage.BmSessioninfoStorage{},
+	"BmBrandStorage": BmDataStorage.BmBrandStorage{},
 }
 
 var BLACKMIRROR_DAEMON_FACTORY = map[string]interface{}{
