@@ -23,6 +23,8 @@ storages:
   method: NewSessioninfoStorage
   daemons:
   - BmMongodbDaemon
+
+
 resources:
 - name: BmSessioninfoResource
   method: NewSessioninfoResource
@@ -56,12 +58,16 @@ resources:
   storages:
   - BmApplicantStorage
   - BmApplyStorage
+
+
 models:
 - BmKid
 - BmApply
 - BmApplicant
 - BmSessioninfo
 - BmCategory
+
+
 services:
 - name: bm-kid
   model: BmKid
@@ -81,6 +87,8 @@ services:
 - name: bm-image
   model: BmImage
   resource: BmImageResource
+
+  
 daemons:
 - name: BmMongodbDaemon
   method: NewMongoDBDaemon
