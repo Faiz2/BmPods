@@ -16,7 +16,6 @@ type Apply struct {
 	ExceptTime   float64  `json:"except-time" bson:"except-time"`
 	CreateTime   float64  `json:"create-time" bson:"create-time"`
 	BrandId      string   `json:"brand-id" bson:"brand-id"`
-	ApcantId     string    `json:"applicant-id" bson:"applicant-id"`
 	ApplyFrom    string   `json:"apply-from" bson:"apply-from"`
 	CourseType   float64  `json:"course-type" bson:"course-type"` //0活动 1体验课 2普通课程 -1预注册
 	CourseName   string   `json:"course-name" bson:"course-name"`
@@ -26,7 +25,7 @@ type Apply struct {
 	Kids         []*Kid   `json:"-"`
 	KidsIDs      []string `json:"-" bson:"kidsIds"`
 
-	ApplicantID	 string 	`json:"-"`
+	ApplicantID	 string    `json:"applicant-id" bson:"applicant-id"`
 	Applicant	 Applicant `json:"-"`
 }
 
@@ -69,11 +68,13 @@ func (u Apply) GetReferencedIDs() []jsonapi.ReferenceID {
 		})
 	}
 
-	result = append(result, jsonapi.ReferenceID{
-		ID: u.ApplicantID,
-		Type: "applicant",
-		Name: "applicant",
-	})
+	if u.ApplicantID != "" {
+		result = append(result, jsonapi.ReferenceID{
+			ID: u.ApplicantID,
+			Type: "applicant",
+			Name: "applicant",
+		})
+	}
 
 	return result
 }
