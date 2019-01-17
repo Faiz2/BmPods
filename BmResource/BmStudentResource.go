@@ -17,13 +17,16 @@ type BmStudentResource struct {
 
 func (s BmStudentResource) NewStudentResource(args []BmDataStorage.BmStorage) BmStudentResource {
 	var ss *BmDataStorage.BmStudentStorage
+	var ks *BmDataStorage.BmKidStorage
 	for _, arg := range args {
 		tp := reflect.ValueOf(arg).Elem().Type()
 		if tp.Name() == "BmStudentStorage" {
 			ss = arg.(*BmDataStorage.BmStudentStorage)
+		} else if tp.Name() == "BmKidStorage" {
+			ks = arg.(*BmDataStorage.BmKidStorage)
 		}
 	}
-	return BmStudentResource{BmStudentStorage: ss}
+	return BmStudentResource{BmStudentStorage: ss, BmKidStorage: ks}
 }
 
 // FindAll to satisfy api2go data source interface
