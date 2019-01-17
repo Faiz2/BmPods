@@ -9,16 +9,19 @@ import (
 
 var BLACKMIRROR_MODEL_FACTORY = map[string]interface{}{
 	"BmKid": BmModel.Kid{},
+	"BmApply": BmModel.Apply{},
 	"BmApplyee": BmModel.Applyee{},
 }
 
 var BLACKMIRROR_RESOURCE_FACTORY = map[string]interface{}{
 	"BmKidResource": BmResource.BmKidResource{},
-	"BmApplyeeResource": BmResource.BmKidResource{},
+	"BmApplyResource": BmResource.BmApplyResource{},
+	"BmApplyeeResource": BmResource.BmApplyeeResource{},
 }
 
 var BLACKMIRROR_STORAGE_FACTORY = map[string]interface{}{
 	"BmKidStorage": BmDataStorage.BmKidStorage{},
+	"BmApplyStorage": BmDataStorage.BmApplyStorage{},
 	"BmApplyeeStorage": BmDataStorage.BmApplyeeStorage{},
 }
 

@@ -11,22 +11,21 @@ import (
 
 type BmKidResource struct {
 	BmKidStorage *BmDataStorage.BmKidStorage
-	//TODO:Replace Apply
-	BmModelStorageExample *BmDataStorage.BmModelStorageExample
+	BmApplyStorage *BmDataStorage.BmApplyStorage
 }
 
 func (c BmKidResource) NewKidResource(args []BmDataStorage.BmStorage) BmKidResource {
-	var us *BmDataStorage.BmModelStorageExample
+	var us *BmDataStorage.BmApplyStorage
 	var cs *BmDataStorage.BmKidStorage
 	for _, arg := range args {
 		tp := reflect.ValueOf(arg).Elem().Type()
 		if tp.Name() == BmDataStorage.ModelStorageName {
-			us = arg.(*BmDataStorage.BmModelStorageExample)
+			us = arg.(*BmDataStorage.BmApplyStorage)
 		} else if tp.Name() == BmDataStorage.ModelLeafStorageName {
 			cs = arg.(*BmDataStorage.BmKidStorage)
 		}
 	}
-	return BmKidResource { BmModelStorageExample:us, BmKidStorage:cs }
+	return BmKidResource { BmApplyStorage:us, BmKidStorage:cs }
 }
 
 // FindAll kids
@@ -39,11 +38,11 @@ func (c BmKidResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 		modelID := kidsID[0]
 		// filter out kids with modelID, in real world, you would just run a different database query
 		filteredLeafs := []BmModel.Kid{}
-		model, err := c.BmModelStorageExample.GetOne(modelID)
+		model, err := c.BmApplyStorage.GetOne(modelID)
 		if err != nil {
 			return &Response{}, err
 		}
-		for _, modelLeafID := range model.ModelLeafsIDs {
+		for _, modelLeafID := range model.KidsIDs {
 			sweet, err := c.BmKidStorage.GetOne(modelLeafID)
 			if err != nil {
 				return &Response{}, err

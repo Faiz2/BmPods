@@ -7,18 +7,30 @@ storages:
   method: NewKidStorage
   daemons:
   - BmMongodbDaemon
+- name: BmApplyStorage
+  method: NewApplyStorage
+  daemons:
+  - BmMongodbDaemon
 resources:
+- name: BmApplyResource
+  method: NewApplyResource
+  storages:
+  - BmKidStorage
+  - BmApplyStorage
 - name: BmKidResource
   method: NewKidResource
   storages:
   - BmKidStorage
+  - BmApplyStorage
 - name: BmApplyeeResource
   method: NewApplyeeResource
   storages:
   - BmApplyeeStorage
+  - BmApplyStorage
 models:
 - BmKid
-- BmApplyeeStorage
+- BmApply
+- BmApplyee
 services:
 - name: bm-kid
   model: BmKid
@@ -26,10 +38,13 @@ services:
 - name: bm-applyee
   model: BmApplyee
   resource: BmApplyeeResource
+- name: bm-apply
+  model: BmApply
+  resource: BmApplyResource
 daemons:
 - name: BmMongodbDaemon
   method: NewMongoDBDaemon
   args:
     host: localhost
     port: 27017
-    database: ddsaas
+    database: test
