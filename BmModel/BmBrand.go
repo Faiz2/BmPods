@@ -20,9 +20,9 @@ type Brand struct {
 	EduIdea    string   `json:"edu-idea" bson:"edu-idea"`     //教育理念
 	AboutUs    string   `json:"about-us" bson:"about-us"`     //团队
 
-	CategoryID string   `json:"-" bson:category-id`
+	CategoryID string   `json:"-" bson:"category-id"`
 	Cat        *Category `json:"-"`
-	ImagesIDs  []string `json:"-" bson:image-ids`
+	ImagesIDs  []string `json:"-" bson:"image-ids"`
 	Imgs       []*Image    `json:"-"`
 }
 
