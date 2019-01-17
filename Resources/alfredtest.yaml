@@ -51,6 +51,10 @@ storages:
   method: NewYardStorage
   daemons:
   - BmMongodbDaemon
+- name: BmUnitStorage
+  method: NewUnitStorage
+  daemons:
+  - BmMongodbDaemon
 
 resources:
 - name: BmSessioninfoResource
@@ -119,6 +123,11 @@ resources:
   storages:
   - BmYardStorage
   - BmImageStorage
+  - BmRoomStorage
+- name: BmUnitResource
+  method: NewUnitResource
+  storages:
+  - BmTeacherStorage
   - BmRoomStorage
 
 models:
