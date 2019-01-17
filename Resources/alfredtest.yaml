@@ -204,9 +204,9 @@ services:
 - name: bm-class
   model: BmClass
   resource: BmClassResource
-- name: bm-uint
+- name: bm-unit
   model: BmUnit
-  resource: BmUintResource
+  resource: BmUnitResource
 
 
 daemons:
