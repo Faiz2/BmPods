@@ -14,6 +14,7 @@ type Unit struct {
 	StartDate  float64 `json:"start-date" bson:"start-date"`
 	EndDate    float64 `json:"end-date" bson:"end-date"`
 	CourseTime float64 `json:"course-time" bson:"course-time"` //课时
+	BrandId    string  `json:"brand-id" bson:"brand-id"`
 
 	//SessionableId string                    `json:"sessionableId" bson:"sessionableId"`
 	//Sessionable   sessionable.BmSessionable `json:"Sessionable" jsonapi:"relationships"`
