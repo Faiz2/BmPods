@@ -12,21 +12,17 @@ import (
 
 type BmTeacherResource struct {
 	BmTeacherStorage *BmDataStorage.BmTeacherStorage
-	BmKidStorage *BmDataStorage.BmKidStorage
 }
 
 func (s BmTeacherResource) NewTeacherResource(args []BmDataStorage.BmStorage) BmTeacherResource {
 	var ss *BmDataStorage.BmTeacherStorage
-	var ks *BmDataStorage.BmKidStorage
 	for _, arg := range args {
 		tp := reflect.ValueOf(arg).Elem().Type()
 		if tp.Name() == "BmTeacherStorage" {
 			ss = arg.(*BmDataStorage.BmTeacherStorage)
-		} else if tp.Name() == "BmKidStorage" {
-			ks = arg.(*BmDataStorage.BmKidStorage)
 		}
 	}
-	return BmTeacherResource{BmTeacherStorage: ss, BmKidStorage: ks}
+	return BmTeacherResource{BmTeacherStorage: ss}
 }
 
 // FindAll to satisfy api2go data source interface

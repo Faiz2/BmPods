@@ -16,7 +16,7 @@ type BmTeacherStorage struct {
 	db *BmMongodb.BmMongodb
 }
 
-func (s BmTeacherStorage) NewBmTeacherStorage(args []BmDaemons.BmDaemon) *BmTeacherStorage {
+func (s BmTeacherStorage) NewTeacherStorage(args []BmDaemons.BmDaemon) *BmTeacherStorage {
 	mdb := args[0].(*BmMongodb.BmMongodb)
 	return &BmTeacherStorage{mdb}
 }
