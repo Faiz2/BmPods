@@ -24,7 +24,7 @@ type Sessioninfo struct {
 	Accompany    float64  `json:"accompany" bson:"accompany"`
 	Status       float64  `json:"status" bson:"status"` //0活动 1体验课 2普通课程
 	Acquisition  []string `json:"acquisition" bson:"acquisition"`
-	Including    []string `json:"inc" bson:"including"`
+	Including    []string `json:"including" bson:"including"`
 	Carrying     []string `json:"carrying" bson:"carrying"`
 	Notice       string   `json:"notice" bson:"notice"`
 	PlayChildren string   `json:"play-children" bson:"play-children"`
