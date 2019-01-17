@@ -24,7 +24,7 @@ func (s BmUnitResource) NewUnitResource(args []BmDataStorage.BmStorage) BmUnitRe
 	var cs *BmDataStorage.BmClassStorage
 	for _, arg := range args {
 		tp := reflect.ValueOf(arg).Elem().Type()
-		if tp.Name() == "BmBmUnitStorage" {
+		if tp.Name() == "BmUnitStorage" {
 			us = arg.(*BmDataStorage.BmUnitStorage)
 		} else if tp.Name() == "BmRoomStorage" {
 			rs = arg.(*BmDataStorage.BmRoomStorage)

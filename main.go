@@ -19,12 +19,9 @@ func main() {
 	pod.RegisterAllResource(api)
 
 	fmt.Printf("Listening on :%d", port)
-	handler := api.Handler().(*httprouter.Router)
-	// It is also possible to get the instance of julienschmidt/httprouter and add more custom routes!
-	handler.GET("/hello-world", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-		fmt.Fprint(w, "Hello World!\n")
-	})
+	pod.RegisterAllFunctions(api)
 
+	handler := api.Handler().(*httprouter.Router)
 	http.ListenAndServe(fmt.Sprintf(":%d", port), handler)
 
 	fmt.Println("pod archi ends")

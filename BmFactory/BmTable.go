@@ -5,6 +5,7 @@ import (
 	"github.com/alfredyang1986/BmPods/BmDataStorage"
 	"github.com/alfredyang1986/BmPods/BmModel"
 	"github.com/alfredyang1986/BmPods/BmResource"
+	"github.com/alfredyang1986/BmPods/BmHandler"
 )
 
 var BLACKMIRROR_MODEL_FACTORY = map[string]interface{}{
@@ -64,6 +65,9 @@ var BLACKMIRROR_STORAGE_FACTORY = map[string]interface{}{
 var BLACKMIRROR_DAEMON_FACTORY = map[string]interface{}{
 	"BmMongodbDaemon": BmMongodb.BmMongodb{}}
 
+var BLACKMIRROR_FUNCTION_FACTORY = map[string]interface{}{
+	"BmHelloWorld": BmHandler.HelloWorld{}}
+
 func GetModelByName(name string) interface{} {
 	return BLACKMIRROR_MODEL_FACTORY[name]
 }
@@ -78,4 +82,8 @@ func GetStorageByName(name string) interface{} {
 
 func GetDaemonByName(name string) interface{} {
 	return BLACKMIRROR_DAEMON_FACTORY[name]
+}
+
+func GetFunctionByName(name string) interface{} {
+	return BLACKMIRROR_FUNCTION_FACTORY[name]
 }

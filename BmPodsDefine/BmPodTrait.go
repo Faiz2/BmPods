@@ -12,6 +12,9 @@ import (
 	"github.com/manyminds/api2go/jsonapi"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
+	"github.com/alfredyang1986/BmPods/BmHandler"
+	"github.com/julienschmidt/httprouter"
+	"net/http"
 )
 
 type Pod struct {
@@ -22,6 +25,7 @@ type Pod struct {
 	Storages  map[string]BmDataStorage.BmStorage
 	Resources map[string]BmResource.BmRes
 	Daemons   map[string]BmDaemons.BmDaemon
+	Handler   map[string]BmHandler.BmHandler
 }
 
 func (p *Pod) RegisterSerFromYAML(path string) {
@@ -42,6 +46,7 @@ func (p *Pod) RegisterSerFromYAML(path string) {
 	p.CreateDaemonInstances()
 	p.CreateStorageInstances()
 	p.CreateResourceInstances()
+	p.CreateFunctionInstances()
 }
 
 func (p *Pod) CreateDaemonInstances() {
@@ -97,10 +102,46 @@ func (p *Pod) CreateResourceInstances() {
 	}
 }
 
+func (p *Pod) CreateFunctionInstances() {
+	if p.Handler == nil {
+		p.Handler = make(map[string]BmHandler.BmHandler)
+	}
+
+	for _, r := range p.conf.Functions {
+		any := BmFactory.GetFunctionByName(r.Name)
+		constuctor := r.Create
+		var args []BmDaemons.BmDaemon
+		for _, d := range r.Daemons {
+			tmp := p.Daemons[d]
+			args = append(args, tmp)
+		}
+
+		inc, _ := BmSingleton.GetFactoryInstance().ReflectFunctionCall(any, constuctor, args, r.Method, r.Http, r.Args)
+		p.Handler[r.Name] = inc.Interface().(BmHandler.BmHandler)
+	}
+}
+
 func (p Pod) RegisterAllResource(api *api2go.API) {
 	for _, ser := range p.conf.Services {
 		md := BmFactory.GetModelByName(ser.Model)
 		res := p.Resources[ser.Resource]
 		api.AddResource(md.(jsonapi.MarshalIdentifier), res)
 	}
+}
+
+func (p Pod) RegisterAllFunctions(api *api2go.API) {
+	handler := api.Handler().(*httprouter.Router)
+
+	for _, ifunc := range p.Handler {
+		if ifunc.GetHttpMethod() == "POST" {
+			handler.POST("/" + ifunc.GetHandlerMethod(), func(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+				BmSingleton.GetFactoryInstance().ReflectFunctionCall(ifunc, ifunc.GetHandlerMethod(), writer, request, params)
+			})
+		} else {
+			handler.GET("/" + ifunc.GetHandlerMethod(), func(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+				BmSingleton.GetFactoryInstance().ReflectFunctionCall(ifunc, ifunc.GetHandlerMethod(), writer, request, params)
+			})
+		}
+	}
+
 }

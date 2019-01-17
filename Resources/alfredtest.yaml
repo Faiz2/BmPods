@@ -204,10 +204,9 @@ services:
 - name: bm-class
   model: BmClass
   resource: BmClassResource
-- name: bm-uint
+- name: bm-unit
   model: BmUnit
-  resource: BmUintResource
-
+  resource: BmUnitResource
 
 daemons:
 - name: BmMongodbDaemon
@@ -215,4 +214,14 @@ daemons:
   args:
     host: localhost
     port: 27017
-    database: test
+    database: ddsaas
+
+functions:
+- name: BmHelloWorld
+  create: NewHelloWorld
+  daemons:
+  - BmMongodbDaemon
+  method: HelloWorldHandler
+  http: POST
+  args:
+  - name
