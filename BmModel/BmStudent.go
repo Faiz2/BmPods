@@ -42,8 +42,11 @@ type Student struct {
 	KidID string `json:"-" bson:"kid-id"`
 	Kid *Kid `json:"-"`
 
-	//Guardians []guardian.BmGuardian `json:"-"`
-	//Applyees  []applyee.BmApplyee   `json:"Applyees"`
+	Teacher *Teacher `json:"-"`
+	TeacherID string `json:"-" bson:"teacher-id"`
+
+	Guardians []*Guardian `json:"-"`
+	GuardiansIDs []string `json:"-" bson:"guardians-ids"`
 }
 
 // GetID to satisfy jsonapi.MarshalIdentifier interface
@@ -64,35 +67,35 @@ func (u Student) GetReferences() []jsonapi.Reference {
 			Type: "Kid",
 			Name: "kid",
 		},
-		//{
-		//	Type: "Teacher",
-		//	Name: "teacher",
-		//},
-		//{
-		//	Type: "Guardian",
-		//	Name: "guardians",
-		//},
+		{
+			Type: "Teacher",
+			Name: "teacher",
+		},
+		{
+			Type: "Guardian",
+			Name: "guardians",
+		},
 	}
 }
 
 // GetReferencedIDs to satisfy the jsonapi.MarshalLinkedRelations interface
 func (u Student) GetReferencedIDs() []jsonapi.ReferenceID {
 	result := []jsonapi.ReferenceID{}
-	//for _, kID := range u.GuardiansIDs {
-	//	result = append(result, jsonapi.ReferenceID{
-	//		ID:   kID,
-	//		Type: "Guardian",
-	//		Name: "guardian",
-	//	})
-	//}
+	for _, kID := range u.GuardiansIDs {
+		result = append(result, jsonapi.ReferenceID{
+			ID:   kID,
+			Type: "Guardian",
+			Name: "guardian",
+		})
+	}
 
-	//if u.TeacherID != "" {
-	//	result = append(result, jsonapi.ReferenceID{
-	//		ID:   u.TeacherID,
-	//		Type: "Teacher",
-	//		Name: "teacher",
-	//	})
-	//}
+	if u.TeacherID != "" {
+		result = append(result, jsonapi.ReferenceID{
+			ID:   u.TeacherID,
+			Type: "Teacher",
+			Name: "teacher",
+		})
+	}
 
 	if u.KidID != "" {
 		result = append(result, jsonapi.ReferenceID{
@@ -108,13 +111,13 @@ func (u Student) GetReferencedIDs() []jsonapi.ReferenceID {
 // GetReferencedStructs to satisfy the jsonapi.MarhsalIncludedRelations interface
 func (u Student) GetReferencedStructs() []jsonapi.MarshalIdentifier {
 	result := []jsonapi.MarshalIdentifier{}
-	//for key := range u.Guardians {
-	//	result = append(result, u.Guardians[key])
-	//}
+	for key := range u.Guardians {
+		result = append(result, u.Guardians[key])
+	}
 
-	//if u.TeacherID != "" {
-	//	result = append(result, u.Teacher)
-	//}
+	if u.TeacherID != "" {
+		result = append(result, u.Teacher)
+	}
 
 	if u.KidID != "" {
 		result = append(result, u.Kid)
@@ -128,46 +131,46 @@ func (u *Student) SetToOneReferenceID(name, ID string) error {
 		return nil
 	}
 
-	//if name == "teacher" {
-	//	u.TeacherID = ID
-	//	return nil
-	//}
+	if name == "teacher" {
+		u.TeacherID = ID
+		return nil
+	}
 
 	return errors.New("There is no to-one relationship with the name " + name)
 }
 
 // SetToManyReferenceIDs sets the leafs reference IDs and satisfies the jsonapi.UnmarshalToManyRelations interface
 func (u *Student) SetToManyReferenceIDs(name string, IDs []string) error {
-	//if name == "guardians" {
-	//	u.GuardiansIDs = IDs
-	//	return nil
-	//}
+	if name == "guardians" {
+		u.GuardiansIDs = IDs
+		return nil
+	}
 
 	return errors.New("There is no to-many relationship with the name " + name)
 }
 
 // AddToManyIDs adds some new leafs that a users loves so much
 func (u *Student) AddToManyIDs(name string, IDs []string) error {
-	//if name == "guardians" {
-	//	u.GuardiansIDs = append(u.GuardiansIDs, IDs...)
-	//	return nil
-	//}
+	if name == "guardians" {
+		u.GuardiansIDs = append(u.GuardiansIDs, IDs...)
+		return nil
+	}
 
 	return errors.New("There is no to-many relationship with the name " + name)
 }
 
 // DeleteToManyIDs removes some leafs from a users because they made him very sick
 func (u *Student) DeleteToManyIDs(name string, IDs []string) error {
-	//if name == "guardians" {
-	//	for _, ID := range IDs {
-	//		for pos, oldID := range u.GuardiansIDs {
-	//			if ID == oldID {
-	//				// match, this ID must be removed
-	//				u.GuardiansIDs = append(u.GuardiansIDs[:pos], u.GuardiansIDs[pos+1:]...)
-	//			}
-	//		}
-	//	}
-	//}
+	if name == "guardians" {
+		for _, ID := range IDs {
+			for pos, oldID := range u.GuardiansIDs {
+				if ID == oldID {
+					// match, this ID must be removed
+					u.GuardiansIDs = append(u.GuardiansIDs[:pos], u.GuardiansIDs[pos+1:]...)
+				}
+			}
+		}
+	}
 
 	return errors.New("There is no to-many relationship with the name " + name)
 }
