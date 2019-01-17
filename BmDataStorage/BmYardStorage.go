@@ -26,7 +26,7 @@ func (s BmYardStorage) GetAll(skip, take int) []*BmModel.Yard {
 
 	var out []BmModel.Yard
 	err := s.db.FindMulti(&in, &out, skip, take)
-	if err != nil {
+	if err == nil {
 		var tmp []*BmModel.Yard
 		for i := 0; i < len(out); i++ {
 			ptr := out[i]
