@@ -23,8 +23,8 @@ storages:
   method: NewSessioninfoStorage
   daemons:
   - BmMongodbDaemon
-- name: BmReservableItemStorage
-  method: NewReservableItemStorage
+- name: BmReservableitemStorage
+  method: NewReservableitemStorage
   daemons:
   - BmMongodbDaemon
 - name: BmBrandStorage
@@ -67,11 +67,11 @@ resources:
   - BmSessioninfoStorage
   - BmCategoryStorage
   - BmImageStorage
-- name: BmReservableItemResource
-  method: NewReservableItemResource
+- name: BmReservableitemResource
+  method: NewReservableitemResource
   storages:
   - BmSessioninfoStorage
-  - BmReservableItemStorage
+  - BmReservableitemStorage
 - name: BmImageResource
   method: NewImageResource
   storages:
@@ -134,7 +134,7 @@ resources:
   method: NewClassResource
   storages:
   - BmClassStorage
-  - BmReservableItemStorage
+  - BmReservableitemStorage
   - BmYardStorage
   - BmStudentStorage
   - BmTeacherStorage
@@ -152,7 +152,7 @@ models:
 - BmApply
 - BmApplicant
 - BmSessioninfo
-- BmReservableItem
+- BmReservableitem
 - BmCategory
 - BmBrand
 - BmStudent
@@ -177,8 +177,8 @@ services:
   model: BmSessioninfo
   resource: BmSessioninfoResource
 - name: bm-reservable-item
-  model: BmReservableItem
-  resource: BmReservableItemResource
+  model: BmReservableitem
+  resource: BmReservableitemResource
 - name: bm-category
   model: BmCategory
   resource: BmCategoryResource
@@ -241,5 +241,13 @@ functions:
   - BmMongodbDaemon
   method: AllDistricts
   http: GET
+  args:
+  - name
+- name: BmUploadToOssHandler
+  create: NewUploadToOssHandler
+  daemons:
+  - BmMongodbDaemon
+  method: UploadToOss
+  http: POST
   args:
   - name

@@ -10,29 +10,29 @@ import (
 	"strconv"
 )
 
-type BmReservableItemResource struct {
-	BmReservableItemStorage *BmDataStorage.BmReservableItemStorage
+type BmReservableitemResource struct {
+	BmReservableitemStorage *BmDataStorage.BmReservableitemStorage
 	BmSessioninfoStorage    *BmDataStorage.BmSessioninfoStorage
 }
 
-func (s BmReservableItemResource) NewReservableItemResource(args []BmDataStorage.BmStorage) BmReservableItemResource {
-	var us *BmDataStorage.BmReservableItemStorage
+func (s BmReservableitemResource) NewReservableitemResource(args []BmDataStorage.BmStorage) BmReservableitemResource {
+	var us *BmDataStorage.BmReservableitemStorage
 	var ts *BmDataStorage.BmSessioninfoStorage
 	for _, arg := range args {
 		tp := reflect.ValueOf(arg).Elem().Type()
-		if tp.Name() == "BmReservableItemStorage" {
-			us = arg.(*BmDataStorage.BmReservableItemStorage)
+		if tp.Name() == "BmReservableitemStorage" {
+			us = arg.(*BmDataStorage.BmReservableitemStorage)
 		} else if tp.Name() == "BmSessioninfoStorage" {
 			ts = arg.(*BmDataStorage.BmSessioninfoStorage)
 		}
 	}
-	return BmReservableItemResource{BmReservableItemStorage: us, BmSessioninfoStorage: ts}
+	return BmReservableitemResource{BmReservableitemStorage: us, BmSessioninfoStorage: ts}
 }
 
 // FindAll to satisfy api2go data source interface
-func (s BmReservableItemResource) FindAll(r api2go.Request) (api2go.Responder, error) {
-	var result []BmModel.ReservableItem
-	models := s.BmReservableItemStorage.GetAll(-1, -1)
+func (s BmReservableitemResource) FindAll(r api2go.Request) (api2go.Responder, error) {
+	var result []BmModel.Reservableitem
+	models := s.BmReservableitemStorage.GetAll(-1, -1)
 
 	for _, model := range models {
 
@@ -51,9 +51,9 @@ func (s BmReservableItemResource) FindAll(r api2go.Request) (api2go.Responder, e
 }
 
 // PaginatedFindAll can be used to load models in chunks
-func (s BmReservableItemResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Responder, error) {
+func (s BmReservableitemResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Responder, error) {
 	var (
-		result                      []BmModel.ReservableItem
+		result                      []BmModel.Reservableitem
 		number, size, offset, limit string
 	)
 
@@ -86,7 +86,7 @@ func (s BmReservableItemResource) PaginatedFindAll(r api2go.Request) (uint, api2
 		}
 
 		start := sizeI * (numberI - 1)
-		for _, iter := range s.BmReservableItemStorage.GetAll(int(start), int(sizeI)) {
+		for _, iter := range s.BmReservableitemStorage.GetAll(int(start), int(sizeI)) {
 			result = append(result, *iter)
 		}
 
@@ -101,54 +101,61 @@ func (s BmReservableItemResource) PaginatedFindAll(r api2go.Request) (uint, api2
 			return 0, &Response{}, err
 		}
 
-		for _, iter := range s.BmReservableItemStorage.GetAll(int(offsetI), int(limitI)) {
+		for _, iter := range s.BmReservableitemStorage.GetAll(int(offsetI), int(limitI)) {
 			result = append(result, *iter)
 		}
 	}
 
-	in := BmModel.ReservableItem{}
-	count := s.BmReservableItemStorage.Count(in)
+	in := BmModel.Reservableitem{}
+	count := s.BmReservableitemStorage.Count(in)
 
 	return uint(count), &Response{Res: result}, nil
 }
 
 // FindOne to satisfy `api2go.DataSource` interface
 // this method should return the model with the given ID, otherwise an error
-func (s BmReservableItemResource) FindOne(ID string, r api2go.Request) (api2go.Responder, error) {
-	model, err := s.BmReservableItemStorage.GetOne(ID)
+func (s BmReservableitemResource) FindOne(ID string, r api2go.Request) (api2go.Responder, error) {
+	model, err := s.BmReservableitemStorage.GetOne(ID)
 	if err != nil {
 		return &Response{}, api2go.NewHTTPError(err, err.Error(), http.StatusNotFound)
+	}
+	if model.SessioninfoID != "" {
+		sessioninfo, err := s.BmSessioninfoStorage.GetOne(model.SessioninfoID)
+		if err != nil {
+			return &Response{}, err
+		}
+		model.Sessioninfo = sessioninfo
 	}
 
 	return &Response{Res: model}, nil
 }
 
 // Create method to satisfy `api2go.DataSource` interface
-func (s BmReservableItemResource) Create(obj interface{}, r api2go.Request) (api2go.Responder, error) {
-	model, ok := obj.(BmModel.ReservableItem)
+func (s BmReservableitemResource) Create(obj interface{}, r api2go.Request) (api2go.Responder, error) {
+	model, ok := obj.(BmModel.Reservableitem)
 	if !ok {
 		return &Response{}, api2go.NewHTTPError(errors.New("Invalid instance given"), "Invalid instance given", http.StatusBadRequest)
 	}
 
-	id := s.BmReservableItemStorage.Insert(model)
+	id := s.BmReservableitemStorage.Insert(model)
 	model.ID = id
 
 	return &Response{Res: model, Code: http.StatusCreated}, nil
 }
 
 // Delete to satisfy `api2go.DataSource` interface
-func (s BmReservableItemResource) Delete(id string, r api2go.Request) (api2go.Responder, error) {
-	err := s.BmReservableItemStorage.Delete(id)
+func (s BmReservableitemResource) Delete(id string, r api2go.Request) (api2go.Responder, error) {
+	err := s.BmReservableitemStorage.Delete(id)
 	return &Response{Code: http.StatusNoContent}, err
 }
 
 //Update stores all changes on the model
-func (s BmReservableItemResource) Update(obj interface{}, r api2go.Request) (api2go.Responder, error) {
-	model, ok := obj.(BmModel.ReservableItem)
+func (s BmReservableitemResource) Update(obj interface{}, r api2go.Request) (api2go.Responder, error) {
+	model, ok := obj.(BmModel.Reservableitem)
 	if !ok {
 		return &Response{}, api2go.NewHTTPError(errors.New("Invalid instance given"), "Invalid instance given", http.StatusBadRequest)
 	}
 
-	err := s.BmReservableItemStorage.Update(model)
+	err := s.BmReservableitemStorage.Update(model)
 	return &Response{Res: model, Code: http.StatusNoContent}, err
 }

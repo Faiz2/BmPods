@@ -11,26 +11,26 @@ import (
 	"github.com/manyminds/api2go"
 )
 
-// BmReservableItemStorage stores all reservableItems
-type BmReservableItemStorage struct {
-	reservableItems map[string]*BmModel.ReservableItem
+// BmReservableitemStorage stores all reservableitems
+type BmReservableitemStorage struct {
+	reservableitems map[string]*BmModel.Reservableitem
 	idCount         int
 
 	db *BmMongodb.BmMongodb
 }
 
-func (s BmReservableItemStorage) NewReservableItemStorage(args []BmDaemons.BmDaemon) *BmReservableItemStorage {
+func (s BmReservableitemStorage) NewReservableitemStorage(args []BmDaemons.BmDaemon) *BmReservableitemStorage {
 	mdb := args[0].(*BmMongodb.BmMongodb)
-	return &BmReservableItemStorage{make(map[string]*BmModel.ReservableItem), 1, mdb}
+	return &BmReservableitemStorage{make(map[string]*BmModel.Reservableitem), 1, mdb}
 }
 
 // GetAll returns the model map (because we need the ID as key too)
-func (s BmReservableItemStorage) GetAll(skip int, take int) []*BmModel.ReservableItem {
-	in := BmModel.ReservableItem{}
-	var out []BmModel.ReservableItem
+func (s BmReservableitemStorage) GetAll(skip int, take int) []*BmModel.Reservableitem {
+	in := BmModel.Reservableitem{}
+	var out []BmModel.Reservableitem
 	err := s.db.FindMulti(&in, &out, skip, take)
 	if err == nil {
-		var tmp []*BmModel.ReservableItem
+		var tmp []*BmModel.Reservableitem
 		for i := 0; i < len(out); i++ {
 			ptr := out[i]
 			s.db.ResetIdWithId_(&ptr)
@@ -38,24 +38,24 @@ func (s BmReservableItemStorage) GetAll(skip int, take int) []*BmModel.Reservabl
 		}
 		return tmp
 	} else {
-		return nil //make(map[string]*BmModel.ReservableItem)
+		return nil //make(map[string]*BmModel.Reservableitem)
 	}
 }
 
 // GetOne model
-func (s BmReservableItemStorage) GetOne(id string) (BmModel.ReservableItem, error) {
-	in := BmModel.ReservableItem{ID: id}
-	out := BmModel.ReservableItem{ID: id}
+func (s BmReservableitemStorage) GetOne(id string) (BmModel.Reservableitem, error) {
+	in := BmModel.Reservableitem{ID: id}
+	out := BmModel.Reservableitem{ID: id}
 	err := s.db.FindOne(&in, &out)
 	if err == nil {
 		return out, nil
 	}
-	errMessage := fmt.Sprintf("ReservableItem for id %s not found", id)
-	return BmModel.ReservableItem{}, api2go.NewHTTPError(errors.New(errMessage), errMessage, http.StatusNotFound)
+	errMessage := fmt.Sprintf("Reservableitem for id %s not found", id)
+	return BmModel.Reservableitem{}, api2go.NewHTTPError(errors.New(errMessage), errMessage, http.StatusNotFound)
 }
 
 // Insert a model
-func (s *BmReservableItemStorage) Insert(c BmModel.ReservableItem) string {
+func (s *BmReservableitemStorage) Insert(c BmModel.Reservableitem) string {
 	tmp, err := s.db.InsertBmObject(&c)
 	if err != nil {
 		fmt.Println(err)
@@ -65,27 +65,27 @@ func (s *BmReservableItemStorage) Insert(c BmModel.ReservableItem) string {
 }
 
 // Delete one :(
-func (s *BmReservableItemStorage) Delete(id string) error {
-	in := BmModel.ReservableItem{ID: id}
+func (s *BmReservableitemStorage) Delete(id string) error {
+	in := BmModel.Reservableitem{ID: id}
 	err := s.db.Delete(&in)
 	if err != nil {
-		return fmt.Errorf("ReservableItem with id %s does not exist", id)
+		return fmt.Errorf("Reservableitem with id %s does not exist", id)
 	}
 
 	return nil
 }
 
 // Update a model
-func (s *BmReservableItemStorage) Update(c BmModel.ReservableItem) error {
+func (s *BmReservableitemStorage) Update(c BmModel.Reservableitem) error {
 	err := s.db.Update(&c)
 	if err != nil {
-		return fmt.Errorf("ReservableItem with id does not exist")
+		return fmt.Errorf("Reservableitem with id does not exist")
 	}
 
 	return nil
 }
 
-func (s *BmReservableItemStorage) Count(c BmModel.ReservableItem) int {
+func (s *BmReservableitemStorage) Count(c BmModel.Reservableitem) int {
 	r, _ := s.db.Count(&c)
 	return r
 }

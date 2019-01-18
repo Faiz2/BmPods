@@ -12,7 +12,7 @@ type Brand struct {
 
 	Title      string   `json:"title" bson:"title"`
 	SubTitle   string   `json:"sub-title" bson:"sub-title"`
-	Found      float64  `json:"found"`
+	Found      float64  `json:"found" bson:"found"`
 	FoundStory string   `json:"found-story" bson:"found-story"`
 	Logo       string   `json:"logo" bson:"logo"`             //品牌logo
 	Slogan     string   `json:"slogan" bson:"slogan"`         //一句话介绍

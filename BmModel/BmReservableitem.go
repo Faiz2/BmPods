@@ -6,12 +6,12 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-// ReservableItem is a generic database ReservableItem
-type ReservableItem struct {
+// Reservableitem is a generic database Reservableitem
+type Reservableitem struct {
 	ID  string        `json:"-"`
 	Id_ bson.ObjectId `json:"-" bson:"_id"`
 
-	BrandId    string  `json:"brandId" bson:"brandId"`
+	BrandId    string  `json:"brand-id" bson:"brand-id"`
 	Status     float64 `json:"status" bson:"status"` //0活动 1体验课 2普通课程
 	StartDate  float64 `json:"start-date" bson:"start-date"`
 	EndDate    float64 `json:"end-date" bson:"end-date"`
@@ -22,18 +22,18 @@ type ReservableItem struct {
 }
 
 // GetID to satisfy jsonapi.MarshalIdentifier interface
-func (u ReservableItem) GetID() string {
+func (u Reservableitem) GetID() string {
 	return u.ID
 }
 
 // SetID to satisfy jsonapi.UnmarshalIdentifier interface
-func (u *ReservableItem) SetID(id string) error {
+func (u *Reservableitem) SetID(id string) error {
 	u.ID = id
 	return nil
 }
 
 // GetReferences to satisfy the jsonapi.MarshalReferences interface
-func (u ReservableItem) GetReferences() []jsonapi.Reference {
+func (u Reservableitem) GetReferences() []jsonapi.Reference {
 	return []jsonapi.Reference{
 		{
 			Type: "Sessioninfo",
@@ -43,7 +43,7 @@ func (u ReservableItem) GetReferences() []jsonapi.Reference {
 }
 
 // GetReferencedIDs to satisfy the jsonapi.MarshalLinkedRelations interface
-func (u ReservableItem) GetReferencedIDs() []jsonapi.ReferenceID {
+func (u Reservableitem) GetReferencedIDs() []jsonapi.ReferenceID {
 	result := []jsonapi.ReferenceID{}
 
 	if u.SessioninfoID != "" {
@@ -58,7 +58,7 @@ func (u ReservableItem) GetReferencedIDs() []jsonapi.ReferenceID {
 }
 
 // GetReferencedStructs to satisfy the jsonapi.MarhsalIncludedRelations interface
-func (u ReservableItem) GetReferencedStructs() []jsonapi.MarshalIdentifier {
+func (u Reservableitem) GetReferencedStructs() []jsonapi.MarshalIdentifier {
 	result := []jsonapi.MarshalIdentifier{}
 
 	if u.SessioninfoID != "" {
@@ -68,7 +68,7 @@ func (u ReservableItem) GetReferencedStructs() []jsonapi.MarshalIdentifier {
 	return result
 }
 
-func (u *ReservableItem) SetToOneReferenceID(name, ID string) error {
+func (u *Reservableitem) SetToOneReferenceID(name, ID string) error {
 	if name == "sessioninfo" {
 		u.SessioninfoID = ID
 		return nil

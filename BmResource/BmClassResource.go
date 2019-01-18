@@ -16,13 +16,13 @@ type BmClassResource struct {
 	BmTeacherStorage        *BmDataStorage.BmTeacherStorage
 	BmUnitStorage           *BmDataStorage.BmUnitStorage
 	BmYardStorage           *BmDataStorage.BmYardStorage
-	BmReservableItemStorage *BmDataStorage.BmReservableItemStorage
+	BmReservableitemStorage *BmDataStorage.BmReservableitemStorage
 }
 
 func (s BmClassResource) NewClassResource(args []BmDataStorage.BmStorage) BmClassResource {
 	var us *BmDataStorage.BmClassStorage
 	var ys *BmDataStorage.BmYardStorage
-	var ss *BmDataStorage.BmReservableItemStorage
+	var ss *BmDataStorage.BmReservableitemStorage
 	var cs *BmDataStorage.BmStudentStorage
 	var ts *BmDataStorage.BmTeacherStorage
 	var ns *BmDataStorage.BmUnitStorage
@@ -38,11 +38,11 @@ func (s BmClassResource) NewClassResource(args []BmDataStorage.BmStorage) BmClas
 			ns = arg.(*BmDataStorage.BmUnitStorage)
 		} else if tp.Name() == "BmYardStorage" {
 			ys = arg.(*BmDataStorage.BmYardStorage)
-		} else if tp.Name() == "BmReservableItemStorage" {
-			ss = arg.(*BmDataStorage.BmReservableItemStorage)
+		} else if tp.Name() == "BmReservableitemStorage" {
+			ss = arg.(*BmDataStorage.BmReservableitemStorage)
 		}
 	}
-	return BmClassResource{BmClassStorage: us, BmYardStorage: ys, BmReservableItemStorage: ss, BmStudentStorage: cs, BmTeacherStorage: ts, BmUnitStorage: ns}
+	return BmClassResource{BmClassStorage: us, BmYardStorage: ys, BmReservableitemStorage: ss, BmStudentStorage: cs, BmTeacherStorage: ts, BmUnitStorage: ns}
 }
 
 // FindAll to satisfy api2go data source interface
@@ -84,12 +84,12 @@ func (s BmClassResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 			}
 			model.Yard = yard
 		}
-		if model.ReservableItemID != "" {
-			item, err := s.BmReservableItemStorage.GetOne(model.ReservableItemID)
+		if model.ReservableitemID != "" {
+			item, err := s.BmReservableitemStorage.GetOne(model.ReservableitemID)
 			if err != nil {
 				return &Response{}, err
 			}
-			model.ReservableItem = item
+			model.Reservableitem = item
 		}
 
 		result = append(result, *model)
@@ -200,12 +200,12 @@ func (s BmClassResource) FindOne(ID string, r api2go.Request) (api2go.Responder,
 		}
 		model.Yard = yard
 	}
-	if model.ReservableItemID != "" {
-		item, err := s.BmReservableItemStorage.GetOne(model.ReservableItemID)
+	if model.ReservableitemID != "" {
+		item, err := s.BmReservableitemStorage.GetOne(model.ReservableitemID)
 		if err != nil {
 			return &Response{}, err
 		}
-		model.ReservableItem = item
+		model.Reservableitem = item
 	}
 
 	return &Response{Res: model}, nil

@@ -16,7 +16,7 @@ var BLACKMIRROR_MODEL_FACTORY = map[string]interface{}{
 	"BmImage":          BmModel.Image{},
 	"BmSessioninfo":    BmModel.Sessioninfo{},
 	"BmBrand":          BmModel.Brand{},
-	"BmReservableItem": BmModel.ReservableItem{},
+	"BmReservableitem": BmModel.Reservableitem{},
 	"BmStudent":        BmModel.Student{},
 	"BmGuardian":       BmModel.Guardian{},
 	"BmTeacher":        BmModel.Teacher{},
@@ -33,7 +33,7 @@ var BLACKMIRROR_RESOURCE_FACTORY = map[string]interface{}{
 	"BmCategoryResource":       BmResource.BmCategoryResource{},
 	"BmImageResource":          BmResource.BmImageResource{},
 	"BmSessioninfoResource":    BmResource.BmSessioninfoResource{},
-	"BmReservableItemResource": BmResource.BmReservableItemResource{},
+	"BmReservableitemResource": BmResource.BmReservableitemResource{},
 	"BmBrandResource":          BmResource.BmBrandResource{},
 	"BmStudentResource":        BmResource.BmStudentResource{},
 	"BmGuardianResource":       BmResource.BmGuardianResource{},
@@ -51,7 +51,7 @@ var BLACKMIRROR_STORAGE_FACTORY = map[string]interface{}{
 	"BmCategoryStorage":       BmDataStorage.BmCategoryStorage{},
 	"BmImageStorage":          BmDataStorage.BmImageStorage{},
 	"BmSessioninfoStorage":    BmDataStorage.BmSessioninfoStorage{},
-	"BmReservableItemStorage": BmDataStorage.BmReservableItemStorage{},
+	"BmReservableitemStorage": BmDataStorage.BmReservableitemStorage{},
 	"BmBrandStorage":          BmDataStorage.BmBrandStorage{},
 	"BmStudentStorage":        BmDataStorage.BmStudentStorage{},
 	"BmGuardianStorage":       BmDataStorage.BmGuardianStorage{},
@@ -69,6 +69,7 @@ var BLACKMIRROR_FUNCTION_FACTORY = map[string]interface{}{
 	"BmProvinceHandler": BmHandler.ProvinceHandler{},
 	"BmCityHandler":     BmHandler.CityHandler{},
 	"BmDistrictHandler": BmHandler.DistrictHandler{},
+	"BmUploadToOssHandler": BmHandler.UploadToOssHandler{},
 }
 
 func GetModelByName(name string) interface{} {
