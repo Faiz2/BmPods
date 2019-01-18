@@ -19,7 +19,7 @@ func main() {
 	pod.RegisterAllResource(api)
 
 	fmt.Printf("Listening on :%d", port)
-	pod.RegisterAllFunctions(api)
+	pod.RegisterAllFunctions("v0", api)
 
 	handler := api.Handler().(*httprouter.Router)
 	http.ListenAndServe(fmt.Sprintf(":%d", port), handler)

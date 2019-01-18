@@ -45,7 +45,7 @@ func (u Brand) GetReferences() []jsonapi.Reference {
 			Name: "images",
 		},
 		{
-			Type: "Category",
+			Type: "category",
 			Name: "category",
 		},
 	}
@@ -65,7 +65,7 @@ func (u Brand) GetReferencedIDs() []jsonapi.ReferenceID {
 	if u.CategoryID != "" {
 		result = append(result, jsonapi.ReferenceID{
 			ID:   u.CategoryID,
-			Type: "Category",
+			Type: "category",
 			Name: "category",
 		})
 	}

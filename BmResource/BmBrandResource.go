@@ -141,6 +141,15 @@ func (s BmBrandResource) FindOne(ID string, r api2go.Request) (api2go.Responder,
 		}
 		model.Imgs = append(model.Imgs, &choc)
 	}
+
+	if model.CategoryID != "" {
+		cat, err := s.BmCategoryStorage.GetOne(model.CategoryID)
+		if err != nil {
+			return &Response{}, err
+		}
+		model.Cat = &cat
+	}
+
 	return &Response{Res: model}, nil
 }
 

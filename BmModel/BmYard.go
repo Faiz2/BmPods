@@ -25,7 +25,7 @@ type Yard struct {
 	City           string   `json:"city" bson:"city"`
 	District       string   `json:"district" bson:"district"`
 	Address        string   `json:"address" bson:"address"`
-	TrafficInfo    string   `json:"traffic_info" bson:"traffic_info"`
+	TrafficInfo    string   `json:"traffic-info" bson:"traffic-info"`
 	Attribute      string   `json:"attribute" bson:"attribute"`
 	Scenario       string   `json:"scenario" bson:"scenario"`
 	OpenTime       string   `json:"openTime" bson:"openTime"`

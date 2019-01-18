@@ -15,6 +15,7 @@ import (
 	"github.com/alfredyang1986/BmPods/BmHandler"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
+	"strings"
 )
 
 type Pod struct {
@@ -129,16 +130,24 @@ func (p Pod) RegisterAllResource(api *api2go.API) {
 	}
 }
 
-func (p Pod) RegisterAllFunctions(api *api2go.API) {
+func (p Pod) RegisterAllFunctions(prefix string, api *api2go.API) {
 	handler := api.Handler().(*httprouter.Router)
+
+	// Add initial and trailing slash to prefix
+	prefixSlashes := strings.Trim(prefix, "/")
+	if len(prefixSlashes) > 0 {
+		prefixSlashes = "/" + prefixSlashes + "/"
+	} else {
+		prefixSlashes = "/"
+	}
 
 	for _, ifunc := range p.Handler {
 		if ifunc.GetHttpMethod() == "POST" {
-			handler.POST("/" + ifunc.GetHandlerMethod(), func(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+			handler.POST(prefixSlashes + ifunc.GetHandlerMethod(), func(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 				BmSingleton.GetFactoryInstance().ReflectFunctionCall(ifunc, ifunc.GetHandlerMethod(), writer, request, params)
 			})
 		} else {
-			handler.GET("/" + ifunc.GetHandlerMethod(), func(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+			handler.GET(prefixSlashes + ifunc.GetHandlerMethod(), func(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 				BmSingleton.GetFactoryInstance().ReflectFunctionCall(ifunc, ifunc.GetHandlerMethod(), writer, request, params)
 			})
 		}
