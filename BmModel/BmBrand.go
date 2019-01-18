@@ -11,7 +11,7 @@ type Brand struct {
 	Id_ bson.ObjectId `json:"-" bson:"_id"`
 
 	Title      string   `json:"title" bson:"title"`
-	Subtitle   string   `json:"sub-title" bson:"sub-title"`
+	SubTitle   string   `json:"sub-title" bson:"sub-title"`
 	Found      float64  `json:"found"`
 	FoundStory string   `json:"found-story" bson:"found-story"`
 	Logo       string   `json:"logo" bson:"logo"`             //品牌logo

@@ -85,7 +85,7 @@ func (u Student) GetReferencedIDs() []jsonapi.ReferenceID {
 		result = append(result, jsonapi.ReferenceID{
 			ID:   kID,
 			Type: "Guardian",
-			Name: "guardian",
+			Name: "guardians",
 		})
 	}
 

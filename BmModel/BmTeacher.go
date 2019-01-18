@@ -28,7 +28,7 @@ type Teacher struct {
 	City        string `json:"city" bson:"city"`
 	District    string `json:"district" bson:"district"`
 	Address     string `json:"address" bson:"address"`
-	NativePlace string `json:"native-lace" bson:"native-lace"`
+	NativePlace string `json:"native-place" bson:"native-place"`
 
 	CreateTime float64 `bson:"create-time"`
 }
