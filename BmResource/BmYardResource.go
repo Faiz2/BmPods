@@ -42,7 +42,6 @@ func (s BmYardResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 	for _, model := range models {
 		// get all sweets for the model
 		model.Images = []*BmModel.Image{}
-		model.Rooms = []*BmModel.Room{}
 		for _, kID := range model.ImagesIDs {
 			choc, err := s.BmImageStorage.GetOne(kID)
 			if err != nil {
@@ -51,6 +50,7 @@ func (s BmYardResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 			model.Images = append(model.Images, &choc)
 		}
 
+		model.Rooms = []*BmModel.Room{}
 		for _, kID := range model.RoomsIDs {
 			choc, err := s.BmRoomStorage.GetOne(kID)
 			if err != nil {
@@ -143,6 +143,16 @@ func (s BmYardResource) FindOne(ID string, r api2go.Request) (api2go.Responder, 
 		}
 		model.Images = append(model.Images, &choc)
 	}
+
+	model.Rooms = []*BmModel.Room{}
+	for _, kID := range model.RoomsIDs {
+		choc, err := s.BmRoomStorage.GetOne(kID)
+		if err != nil {
+			return &Response{}, err
+		}
+		model.Rooms = append(model.Rooms, &choc)
+	}
+
 	return &Response{Res: model}, nil
 }
 

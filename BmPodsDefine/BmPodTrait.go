@@ -5,15 +5,15 @@ import (
 	"github.com/alfredyang1986/BmPods/BmDaemons"
 	"github.com/alfredyang1986/BmPods/BmDataStorage"
 	"github.com/alfredyang1986/BmPods/BmFactory"
+	"github.com/alfredyang1986/BmPods/BmHandler"
 	"github.com/alfredyang1986/BmPods/BmPanic"
 	"github.com/alfredyang1986/BmPods/BmResource"
 	"github.com/alfredyang1986/BmPods/BmSingleton"
+	"github.com/julienschmidt/httprouter"
 	"github.com/manyminds/api2go"
 	"github.com/manyminds/api2go/jsonapi"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
-	"github.com/alfredyang1986/BmPods/BmHandler"
-	"github.com/julienschmidt/httprouter"
 	"net/http"
 	"strings"
 )
@@ -141,7 +141,8 @@ func (p Pod) RegisterAllFunctions(prefix string, api *api2go.API) {
 		prefixSlashes = "/"
 	}
 
-	for _, ifunc := range p.Handler {
+	for i, _ := range p.Handler {
+		ifunc := p.Handler[i]
 		if ifunc.GetHttpMethod() == "POST" {
 			handler.POST(prefixSlashes + ifunc.GetHandlerMethod(), func(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 				BmSingleton.GetFactoryInstance().ReflectFunctionCall(ifunc, ifunc.GetHandlerMethod(), writer, request, params)

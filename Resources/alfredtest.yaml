@@ -219,11 +219,27 @@ daemons:
     database: ddsaas
 
 functions:
-- name: BmHelloWorld
-  create: NewHelloWorld
+- name: BmProvinceHandler
+  create: NewProvinceHandler
   daemons:
   - BmMongodbDaemon
-  method: HelloWorldHandler
-  http: POST
+  method: AllProvinces
+  http: GET
+  args:
+  - name
+- name: BmCityHandler
+  create: NewCityHandler
+  daemons:
+  - BmMongodbDaemon
+  method: AllCities
+  http: GET
+  args:
+  - name
+- name: BmDistrictHandler
+  create: NewDistrictHandler
+  daemons:
+  - BmMongodbDaemon
+  method: AllDistricts
+  http: GET
   args:
   - name

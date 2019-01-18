@@ -1,7 +1,7 @@
 package BmHandler
 
 import (
-	"fmt"
+	"encoding/json"
 	"github.com/alfredyang1986/BmPods/BmDaemons"
 	"github.com/alfredyang1986/BmPods/BmDaemons/BmMongodb"
 	"github.com/julienschmidt/httprouter"
@@ -9,14 +9,14 @@ import (
 	"reflect"
 )
 
-type HelloWorld struct {
+type ProvinceHandler struct {
 	Method string
 	HttpMethod string
 	Args []string
 	db *BmMongodb.BmMongodb
 }
 
-func (h HelloWorld) NewHelloWorld(args ...interface{}) HelloWorld {
+func (h ProvinceHandler) NewProvinceHandler(args ...interface{}) ProvinceHandler {
 	var m *BmMongodb.BmMongodb
 	var hm string
 	var md string
@@ -42,18 +42,23 @@ func (h HelloWorld) NewHelloWorld(args ...interface{}) HelloWorld {
 			}
 		} else {}
 	}
-	return HelloWorld{Method:md, HttpMethod:hm, Args:ag, db:m}
+	return ProvinceHandler{Method:md, HttpMethod:hm, Args:ag, db:m}
 }
 
-func (h HelloWorld) HelloWorldHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) int {
-	fmt.Fprintf(w, "hello-world")
+//TODO: load files
+func (h ProvinceHandler) AllProvinces(w http.ResponseWriter, r *http.Request, _ httprouter.Params) int {
+	data := []string{
+		"北京",
+	}
+	enc := json.NewEncoder(w)
+	enc.Encode(data)
 	return 0
 }
 
-func (h HelloWorld) GetHttpMethod() string {
+func (h ProvinceHandler) GetHttpMethod() string {
 	return h.HttpMethod
 }
 
-func (h HelloWorld) GetHandlerMethod() string {
+func (h ProvinceHandler) GetHandlerMethod() string {
 	return h.Method
 }

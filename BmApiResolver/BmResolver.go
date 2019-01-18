@@ -24,5 +24,6 @@ func (m RequestURL) GetBaseURL() string {
 		return uri
 	}
 
-	return fmt.Sprintf("http://localhost:%d", m.Port)
+	//TODO: ip配置文件化
+	return fmt.Sprintf("http://192.168.100.174:%d", m.Port)
 }

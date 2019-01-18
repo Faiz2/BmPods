@@ -3,9 +3,9 @@ package BmFactory
 import (
 	"github.com/alfredyang1986/BmPods/BmDaemons/BmMongodb"
 	"github.com/alfredyang1986/BmPods/BmDataStorage"
+	"github.com/alfredyang1986/BmPods/BmHandler"
 	"github.com/alfredyang1986/BmPods/BmModel"
 	"github.com/alfredyang1986/BmPods/BmResource"
-	"github.com/alfredyang1986/BmPods/BmHandler"
 )
 
 var BLACKMIRROR_MODEL_FACTORY = map[string]interface{}{
@@ -66,7 +66,10 @@ var BLACKMIRROR_DAEMON_FACTORY = map[string]interface{}{
 	"BmMongodbDaemon": BmMongodb.BmMongodb{}}
 
 var BLACKMIRROR_FUNCTION_FACTORY = map[string]interface{}{
-	"BmHelloWorld": BmHandler.HelloWorld{}}
+	"BmProvinceHandler": BmHandler.ProvinceHandler{},
+	"BmCityHandler":     BmHandler.CityHandler{},
+	"BmDistrictHandler": BmHandler.DistrictHandler{},
+}
 
 func GetModelByName(name string) interface{} {
 	return BLACKMIRROR_MODEL_FACTORY[name]
