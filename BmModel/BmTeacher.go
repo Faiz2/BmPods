@@ -28,9 +28,9 @@ type Teacher struct {
 	City        string `json:"city" bson:"city"`
 	District    string `json:"district" bson:"district"`
 	Address     string `json:"address" bson:"address"`
-	NativePlace string `json:"nativePlace" bson:"nativePlace"`
+	NativePlace string `json:"native-lace" bson:"native-lace"`
 
-	CreateTime float64 `json:"create_time" bson:"create_time"`
+	CreateTime float64 `bson:"create-time"`
 }
 
 // GetID to satisfy jsonapi.MarshalIdentifier interface

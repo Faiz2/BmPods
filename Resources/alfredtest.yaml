@@ -109,6 +109,8 @@ resources:
   storages:
   - BmStudentStorage
   - BmKidStorage
+  - BmGuardianStorage
+  - BmTeacherStorage
 - name: BmGuardianResource
   method: NewGuardianResource
   storages:

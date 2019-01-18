@@ -10,7 +10,7 @@ type Student struct {
 	ID  string        `json:"id"`
 	Id_ bson.ObjectId `json:"-" bson:"_id"`
 
-	StudentId string `json:"brand-id" bson:"brand-id"`
+	BrandId string `json:"brand-id" bson:"brand-id"`
 
 	// 顾问， 关联关系 teacher
 	//TeacherId   string `json:"teacher-id" bson:"teacher-id"`

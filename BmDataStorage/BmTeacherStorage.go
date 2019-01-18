@@ -27,10 +27,9 @@ func (s BmTeacherStorage) GetAll(skip int, take int) []BmModel.Teacher {
 	out := []BmModel.Teacher{}
 	err := s.db.FindMulti(&in, &out, skip, take)
 	if err == nil {
-		//tmp := make([]*BmModel.User, 10)
-		for _, iter := range out {
+		for i, iter := range out {
 			s.db.ResetIdWithId_(&iter)
-			//tmp = append(tmp, &iter)
+			out[i] = iter
 		}
 		return out
 	} else {
