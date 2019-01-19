@@ -10,7 +10,7 @@ import (
 //this should not be done in production applications
 type RequestURL struct {
 	r    http.Request
-	Port int
+	Addr string
 }
 
 //SetRequest to implement `RequestAwareResolverInterface`
@@ -24,6 +24,5 @@ func (m RequestURL) GetBaseURL() string {
 		return uri
 	}
 
-	//TODO: ip配置文件化
-	return fmt.Sprintf("http://192.168.100.174:%d", m.Port)
+	return fmt.Sprintf("http://%s", m.Addr)
 }

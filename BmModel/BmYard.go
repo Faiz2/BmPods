@@ -28,7 +28,7 @@ type Yard struct {
 	TrafficInfo    string   `json:"traffic-info" bson:"traffic-info"`
 	Attribute      string   `json:"attribute" bson:"attribute"`
 	Scenario       string   `json:"scenario" bson:"scenario"`
-	OpenTime       float64   `json:"open-time" bson:"open-time"`
+	OpenTime       string   `json:"open-time" bson:"open-time"`
 	ServiceContact string   `json:"service-contact" bson:"service-contact"`
 	Facilities     []string `json:"facilities" bson:"facilities"`
 	//Friendly       []string                   `json:"friendly" bson:"friendly"`

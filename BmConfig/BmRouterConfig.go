@@ -9,8 +9,7 @@ type BmRouterConfig struct {
 }
 
 func (br *BmRouterConfig) GenerateConfig() {
-	//TODO: 配置文件路径 待 用脚本指定dev路径和deploy路径
-	configPath := "Resource/routerconfig.json"
+	configPath := "Resources/routerconfig.json"
 	profileItems := bmconfig.BMGetConfigMap(configPath)
 
 	br.Host = profileItems["Host"].(string)
