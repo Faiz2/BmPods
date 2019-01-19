@@ -23,3 +23,7 @@ func (c *Kid) SetID(id string) error {
 	c.ID = id
 	return nil
 }
+
+func (u *Kid) GetConditionsBsonM(parameters map[string][]string) bson.M {
+	return bson.M{}
+}

@@ -134,3 +134,7 @@ func (u *Apply) DeleteToManyIDs(name string, IDs []string) error {
 
 	return errors.New("There is no to-many relationship with the name " + name)
 }
+
+func (u *Apply) GetConditionsBsonM(parameters map[string][]string) bson.M {
+	return bson.M{}
+}

@@ -21,10 +21,10 @@ func (s BmApplicantStorage) NewApplicantStorage(args []BmDaemons.BmDaemon) *BmAp
 }
 
 // GetAll returns the user map (because we need the ID as key too)
-func (s BmApplicantStorage) GetAll(skip int, take int) []*BmModel.Applicant {
+func (s BmApplicantStorage) GetAll(r api2go.Request, skip int, take int) []*BmModel.Applicant {
 	in := BmModel.Applicant{}
 	var out []BmModel.Applicant
-	err := s.db.FindMulti(&in, &out, skip, take)
+	err := s.db.FindMulti(r, &in, &out, skip, take)
 	if err == nil {
 		var tmp []*BmModel.Applicant
 		//tmp := make(map[string]*BmModel.Applicant)

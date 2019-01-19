@@ -25,10 +25,10 @@ func (s BmGuardianStorage) NewGuardianStorage(args []BmDaemons.BmDaemon) *BmGuar
 }
 
 // GetAll of the modelleaf
-func (s BmGuardianStorage) GetAll() []BmModel.Guardian {
+func (s BmGuardianStorage) GetAll(r api2go.Request) []BmModel.Guardian {
 	in := BmModel.Guardian{}
 	out := []BmModel.Guardian{}
-	err := s.db.FindMulti(&in, &out, -1, -1)
+	err := s.db.FindMulti(r, &in, &out, -1, -1)
 	if err == nil {
 		for i, iter := range out {
 			s.db.ResetIdWithId_(&iter)

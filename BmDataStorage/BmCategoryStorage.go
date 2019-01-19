@@ -21,10 +21,10 @@ func (s BmCategoryStorage) NewCategoryStorage(args []BmDaemons.BmDaemon) *BmCate
 }
 
 // GetAll returns the user map (because we need the ID as key too)
-func (s BmCategoryStorage) GetAll(skip int, take int) []*BmModel.Category {
+func (s BmCategoryStorage) GetAll(r api2go.Request, skip int, take int) []*BmModel.Category {
 	in := BmModel.Category{}
 	var out []BmModel.Category
-	err := s.db.FindMulti(&in, &out, skip, take)
+	err := s.db.FindMulti(r, &in, &out, skip, take)
 	if err == nil {
 		var tmp []*BmModel.Category
 		//tmp := make(map[string]*BmModel.Category)

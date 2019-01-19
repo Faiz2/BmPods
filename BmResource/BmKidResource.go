@@ -31,7 +31,7 @@ func (c BmKidResource) NewKidResource(args []BmDataStorage.BmStorage) BmKidResou
 // FindAll kids
 func (c BmKidResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 	kidsID, ok := r.QueryParams["kidsID"]
-	kids := c.BmKidStorage.GetAll()
+	kids := c.BmKidStorage.GetAll(r)
 	if ok {
 		// this means that we want to show all kids of a model, this is the route
 		// /v0/models/1/kids

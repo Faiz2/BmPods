@@ -27,7 +27,7 @@ func (c BmApplicantResource) NewApplicantResource(args []BmDataStorage.BmStorage
 // FindAll apeolates
 func (c BmApplicantResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 	//usersID, ok := r.QueryParams["usersID"]
-	result := c.ApplicantStorage.GetAll(-1, -1)
+	result := c.ApplicantStorage.GetAll(r, -1, -1)
 	//if ok {
 	//	// this means that we want to show all sweets of a user, this is the route
 	//	// /v0/users/1/sweets

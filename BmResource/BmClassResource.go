@@ -48,7 +48,7 @@ func (s BmClassResource) NewClassResource(args []BmDataStorage.BmStorage) BmClas
 // FindAll to satisfy api2go data source interface
 func (s BmClassResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 	var result []BmModel.Class
-	models := s.BmClassStorage.GetAll(-1, -1)
+	models := s.BmClassStorage.GetAll(r, -1, -1)
 
 	for _, model := range models {
 		// get all sweets for the model
@@ -134,7 +134,7 @@ func (s BmClassResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respon
 		}
 
 		start := sizeI * (numberI - 1)
-		for _, iter := range s.BmClassStorage.GetAll(int(start), int(sizeI)) {
+		for _, iter := range s.BmClassStorage.GetAll(r, int(start), int(sizeI)) {
 			result = append(result, *iter)
 		}
 
@@ -149,7 +149,7 @@ func (s BmClassResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respon
 			return 0, &Response{}, err
 		}
 
-		for _, iter := range s.BmClassStorage.GetAll(int(offsetI), int(limitI)) {
+		for _, iter := range s.BmClassStorage.GetAll(r, int(offsetI), int(limitI)) {
 			result = append(result, *iter)
 		}
 	}

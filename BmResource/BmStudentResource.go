@@ -40,7 +40,7 @@ func (s BmStudentResource) NewStudentResource(args []BmDataStorage.BmStorage) Bm
 // FindAll to satisfy api2go data source interface
 func (s BmStudentResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 	var result []BmModel.Student
-	studs := s.BmStudentStorage.GetAll(-1, -1)
+	studs := s.BmStudentStorage.GetAll(r, -1, -1)
 
 	for _, user := range studs {
 		user.Guardians = []*BmModel.Guardian{}
@@ -110,7 +110,7 @@ func (s BmStudentResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Resp
 		}
 
 		start := sizeI * (numberI - 1)
-		for _, iter := range s.BmStudentStorage.GetAll(int(start), int(sizeI)) {
+		for _, iter := range s.BmStudentStorage.GetAll(r, int(start), int(sizeI)) {
 			result = append(result, *iter)
 		}
 
@@ -125,7 +125,7 @@ func (s BmStudentResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Resp
 			return 0, &Response{}, err
 		}
 
-		for _, iter := range s.BmStudentStorage.GetAll(int(offsetI), int(limitI)) {
+		for _, iter := range s.BmStudentStorage.GetAll(r, int(offsetI), int(limitI)) {
 			result = append(result, *iter)
 		}
 	}

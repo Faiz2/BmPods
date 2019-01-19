@@ -37,7 +37,7 @@ func (s BmYardResource) NewYardResource(args []BmDataStorage.BmStorage) BmYardRe
 // FindAll to satisfy api2go data source interface
 func (s BmYardResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 	var result []BmModel.Yard
-	models := s.BmYardStorage.GetAll(-1, -1)
+	models := s.BmYardStorage.GetAll(r, -1, -1)
 
 	for _, model := range models {
 		// get all sweets for the model
@@ -101,7 +101,7 @@ func (s BmYardResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respond
 		}
 
 		start := sizeI * (numberI - 1)
-		for _, iter := range s.BmYardStorage.GetAll(int(start), int(sizeI)) {
+		for _, iter := range s.BmYardStorage.GetAll(r, int(start), int(sizeI)) {
 			result = append(result, *iter)
 		}
 
@@ -116,7 +116,7 @@ func (s BmYardResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respond
 			return 0, &Response{}, err
 		}
 
-		for _, iter := range s.BmYardStorage.GetAll(int(offsetI), int(limitI)) {
+		for _, iter := range s.BmYardStorage.GetAll(r, int(offsetI), int(limitI)) {
 			result = append(result, *iter)
 		}
 	}

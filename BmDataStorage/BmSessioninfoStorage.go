@@ -25,10 +25,10 @@ func (s BmSessioninfoStorage) NewSessioninfoStorage(args []BmDaemons.BmDaemon) *
 }
 
 // GetAll returns the model map (because we need the ID as key too)
-func (s BmSessioninfoStorage) GetAll(skip int, take int) []*BmModel.Sessioninfo {
+func (s BmSessioninfoStorage) GetAll(r api2go.Request, skip int, take int) []*BmModel.Sessioninfo {
 	in := BmModel.Sessioninfo{}
 	var out []BmModel.Sessioninfo
-	err := s.db.FindMulti(&in, &out, skip, take)
+	err := s.db.FindMulti(r, &in, &out, skip, take)
 	if err == nil {
 		var tmp []*BmModel.Sessioninfo
 		for i := 0; i < len(out); i++ {

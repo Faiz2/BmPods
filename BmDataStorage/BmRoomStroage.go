@@ -24,10 +24,10 @@ func (s BmRoomStorage) NewRoomStorage(args []BmDaemons.BmDaemon) *BmRoomStorage 
 }
 
 // GetAll of the modelleaf
-func (s BmRoomStorage) GetAll() []BmModel.Room {
+func (s BmRoomStorage) GetAll(r api2go.Request) []BmModel.Room {
 	in := BmModel.Room{}
 	out := []BmModel.Room{}
-	err := s.db.FindMulti(&in, &out, -1, -1)
+	err := s.db.FindMulti(r, &in, &out, -1, -1)
 	if err == nil {
 		for i, iter := range out {
 			s.db.ResetIdWithId_(&iter)

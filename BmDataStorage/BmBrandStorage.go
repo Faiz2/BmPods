@@ -21,10 +21,10 @@ func (s BmBrandStorage) NewBrandStorage(args []BmDaemons.BmDaemon) *BmBrandStora
 }
 
 // GetAll returns the model map (because we need the ID as key too)
-func (s BmBrandStorage) GetAll(skip int, take int) []*BmModel.Brand {
+func (s BmBrandStorage) GetAll(r api2go.Request, skip int, take int) []*BmModel.Brand {
 	in := BmModel.Brand{}
 	var out []BmModel.Brand
-	err := s.db.FindMulti(&in, &out, skip, take)
+	err := s.db.FindMulti(r, &in, &out, skip, take)
 	if err == nil {
 		var tmp []*BmModel.Brand
 		for i := 0; i < len(out); i++ {

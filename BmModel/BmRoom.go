@@ -22,3 +22,7 @@ func (r *Room) SetID(id string) error {
 	r.ID = id
 	return nil
 }
+
+func (u *Room) GetConditionsBsonM(parameters map[string][]string) bson.M {
+	return bson.M{}
+}

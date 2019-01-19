@@ -31,7 +31,7 @@ func (c BmChocolateResource) NewChocolateResource(args []BmDataStorage.BmStorage
 // FindAll chocolates
 func (c BmChocolateResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 	usersID, ok := r.QueryParams["usersID"]
-	sweets := c.ChocStorage.GetAll()
+	sweets := c.ChocStorage.GetAll(r)
 	if ok {
 		// this means that we want to show all sweets of a user, this is the route
 		// /v0/users/1/sweets

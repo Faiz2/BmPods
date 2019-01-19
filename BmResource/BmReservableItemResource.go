@@ -32,7 +32,7 @@ func (s BmReservableitemResource) NewReservableitemResource(args []BmDataStorage
 // FindAll to satisfy api2go data source interface
 func (s BmReservableitemResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 	var result []BmModel.Reservableitem
-	models := s.BmReservableitemStorage.GetAll(-1, -1)
+	models := s.BmReservableitemStorage.GetAll(r, -1, -1)
 
 	for _, model := range models {
 
@@ -86,7 +86,7 @@ func (s BmReservableitemResource) PaginatedFindAll(r api2go.Request) (uint, api2
 		}
 
 		start := sizeI * (numberI - 1)
-		for _, iter := range s.BmReservableitemStorage.GetAll(int(start), int(sizeI)) {
+		for _, iter := range s.BmReservableitemStorage.GetAll(r, int(start), int(sizeI)) {
 			result = append(result, *iter)
 		}
 
@@ -101,7 +101,7 @@ func (s BmReservableitemResource) PaginatedFindAll(r api2go.Request) (uint, api2
 			return 0, &Response{}, err
 		}
 
-		for _, iter := range s.BmReservableitemStorage.GetAll(int(offsetI), int(limitI)) {
+		for _, iter := range s.BmReservableitemStorage.GetAll(r, int(offsetI), int(limitI)) {
 			result = append(result, *iter)
 		}
 	}

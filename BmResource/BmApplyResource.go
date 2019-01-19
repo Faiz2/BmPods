@@ -36,7 +36,7 @@ func (s BmApplyResource) NewApplyResource(args []BmDataStorage.BmStorage) BmAppl
 // FindAll to satisfy api2go data source interface
 func (s BmApplyResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 	var result []BmModel.Apply
-	models := s.BmApplyStorage.GetAll(-1, -1)
+	models := s.BmApplyStorage.GetAll(r, -1, -1)
 
 	for _, model := range models {
 		// get all sweets for the model
@@ -87,8 +87,8 @@ func (s BmApplyResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respon
 		limit = limitQuery[0]
 	}
 
+	sizeI, err := strconv.ParseInt(size, 10, 64)
 	if size != "" {
-		sizeI, err := strconv.ParseInt(size, 10, 64)
 		if err != nil {
 			return 0, &Response{}, err
 		}
@@ -99,7 +99,7 @@ func (s BmApplyResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respon
 		}
 
 		start := sizeI * (numberI - 1)
-		for _, model := range s.BmApplyStorage.GetAll(int(start), int(sizeI)) {
+		for _, model := range s.BmApplyStorage.GetAll(r, int(start), int(sizeI)) {
 
 			model.Kids = []*BmModel.Kid{}
 			for _, kID := range model.KidsIDs {
@@ -132,7 +132,7 @@ func (s BmApplyResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respon
 			return 0, &Response{}, err
 		}
 
-		for _, model := range s.BmApplyStorage.GetAll(int(offsetI), int(limitI)) {
+		for _, model := range s.BmApplyStorage.GetAll(r, int(offsetI), int(limitI)) {
 
 			model.Kids = []*BmModel.Kid{}
 			for _, kID := range model.KidsIDs {
@@ -157,7 +157,7 @@ func (s BmApplyResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respon
 
 	in := BmModel.Apply{}
 	count := s.BmApplyStorage.Count(in)
-	pages := 1 + int(count / 20) // TODO: 取一页的大小，交给你了 @张弛
+	pages := 1 + int(count / int(sizeI)) // TODO: 取一页的大小，交给你了 @张弛
 
 	return uint(count), &Response{Res: result, QueryRes:"applies", TotalPage:pages}, nil
 }

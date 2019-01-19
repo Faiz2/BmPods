@@ -22,10 +22,10 @@ func (s BmUnitStorage) NewUnitStorage(args []BmDaemons.BmDaemon) *BmUnitStorage 
 }
 
 // GetAll of the chocolate
-func (s BmUnitStorage) GetAll(skip int, take int) []*BmModel.Unit {
+func (s BmUnitStorage) GetAll(r api2go.Request, skip int, take int) []*BmModel.Unit {
 	in := BmModel.Unit{}
 	var out []BmModel.Unit
-	err := s.db.FindMulti(&in, &out, skip, take)
+	err := s.db.FindMulti(r, &in, &out, skip, take)
 	if err == nil {
 		var tmp []*BmModel.Unit
 		for i := 0; i < len(out); i++ {

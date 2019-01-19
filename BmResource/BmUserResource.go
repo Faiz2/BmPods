@@ -32,7 +32,7 @@ func (s BmUserResource) NewUserResource(args []BmDataStorage.BmStorage) BmUserRe
 // FindAll to satisfy api2go data source interface
 func (s BmUserResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 	var result []BmModel.User
-	users := s.UserStorage.GetAll(-1, -1)
+	users := s.UserStorage.GetAll(r, -1, -1)
 
 	for _, user := range users {
 		// get all sweets for the user
@@ -86,7 +86,7 @@ func (s BmUserResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respond
 		}
 
 		start := sizeI * (numberI - 1)
-		for _, iter := range s.UserStorage.GetAll(int(start), int(sizeI)) {
+		for _, iter := range s.UserStorage.GetAll(r, int(start), int(sizeI)) {
 			result = append(result, *iter)
 		}
 
@@ -101,7 +101,7 @@ func (s BmUserResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respond
 			return 0, &Response{}, err
 		}
 
-		for _, iter := range s.UserStorage.GetAll(int(offsetI), int(limitI)) {
+		for _, iter := range s.UserStorage.GetAll(r, int(offsetI), int(limitI)) {
 			result = append(result, *iter)
 		}
 	}

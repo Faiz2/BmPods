@@ -21,10 +21,10 @@ func (s BmStudentStorage) NewStudentStorage(args []BmDaemons.BmDaemon) *BmStuden
 }
 
 // GetAll returns the model map (because we need the ID as key too)
-func (s BmStudentStorage) GetAll(skip int, take int) []*BmModel.Student {
+func (s BmStudentStorage) GetAll(r api2go.Request, skip int, take int) []*BmModel.Student {
 	in := BmModel.Student{}
 	var out []BmModel.Student
-	err := s.db.FindMulti(&in, &out, skip, take)
+	err := s.db.FindMulti(r, &in, &out, skip, take)
 	if err == nil {
 		var tmp []*BmModel.Student
 		for i := 0; i < len(out); i++ {

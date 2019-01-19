@@ -36,7 +36,7 @@ func (s BmSessioninfoResource) NewSessioninfoResource(args []BmDataStorage.BmSto
 // FindAll to satisfy api2go data source interface
 func (s BmSessioninfoResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 	var result []BmModel.Sessioninfo
-	models := s.BmSessioninfoStorage.GetAll(-1, -1)
+	models := s.BmSessioninfoStorage.GetAll(r, -1, -1)
 
 	for _, model := range models {
 		// get all sweets for the model
@@ -99,7 +99,7 @@ func (s BmSessioninfoResource) PaginatedFindAll(r api2go.Request) (uint, api2go.
 		}
 
 		start := sizeI * (numberI - 1)
-		for _, iter := range s.BmSessioninfoStorage.GetAll(int(start), int(sizeI)) {
+		for _, iter := range s.BmSessioninfoStorage.GetAll(r, int(start), int(sizeI)) {
 			result = append(result, *iter)
 		}
 
@@ -114,7 +114,7 @@ func (s BmSessioninfoResource) PaginatedFindAll(r api2go.Request) (uint, api2go.
 			return 0, &Response{}, err
 		}
 
-		for _, iter := range s.BmSessioninfoStorage.GetAll(int(offsetI), int(limitI)) {
+		for _, iter := range s.BmSessioninfoStorage.GetAll(r, int(offsetI), int(limitI)) {
 			result = append(result, *iter)
 		}
 	}

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/alfredyang1986/BmPods/BmModel"
 	"github.com/alfredyang1986/blackmirror/bmmate"
+	"github.com/manyminds/api2go"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"reflect"
@@ -95,7 +96,7 @@ func (m *BmMongodb) FindOne(ptr BmModel.BmModelBase, out BmModel.BmModelBase) er
 	return nil
 }
 
-func (m *BmMongodb) FindMulti(ptr BmModel.BmModelBase, out interface{}, skip int, take int) error {
+func (m *BmMongodb) FindMulti(r api2go.Request, ptr BmModel.BmModelBase, out interface{}, skip int, take int) error {
 	session, err := mgo.Dial(m.Host + ":" + m.Port)
 	if err != nil {
 		return errors.New("dial db error")
@@ -106,10 +107,13 @@ func (m *BmMongodb) FindMulti(ptr BmModel.BmModelBase, out interface{}, skip int
 	cn := v.Type().Name()
 	c := session.DB(m.Database).C(cn)
 
+	cond := ptr.GetConditionsBsonM(r.QueryParams)
+	fmt.Println(cond)
+
 	if skip < 0 && take < 0 {
-		err = c.Find(bson.M{}).All(out)
+		err = c.Find(cond).All(out)
 	} else {
-		err = c.Find(bson.M{}).Skip(skip).Limit(take).All(out)
+		err = c.Find(cond).Skip(skip).Limit(take).All(out)
 	}
 
 	if err != nil {

@@ -40,7 +40,7 @@ func (s BmUnitResource) NewUnitResource(args []BmDataStorage.BmStorage) BmUnitRe
 // FindAll to satisfy api2go data source interface
 func (s BmUnitResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 	var result []BmModel.Unit
-	users := s.BmUnitStorage.GetAll(-1, -1)
+	users := s.BmUnitStorage.GetAll(r, -1, -1)
 
 	for _, user := range users {
 		// get all sweets for the user
@@ -110,7 +110,7 @@ func (s BmUnitResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respond
 		}
 
 		start := sizeI * (numberI - 1)
-		for _, iter := range s.BmUnitStorage.GetAll(int(start), int(sizeI)) {
+		for _, iter := range s.BmUnitStorage.GetAll(r, int(start), int(sizeI)) {
 			result = append(result, *iter)
 		}
 
@@ -125,7 +125,7 @@ func (s BmUnitResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respond
 			return 0, &Response{}, err
 		}
 
-		for _, iter := range s.BmUnitStorage.GetAll(int(offsetI), int(limitI)) {
+		for _, iter := range s.BmUnitStorage.GetAll(r, int(offsetI), int(limitI)) {
 			result = append(result, *iter)
 		}
 	}

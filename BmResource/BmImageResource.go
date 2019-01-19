@@ -31,7 +31,7 @@ func (c BmImageResource) NewImageResource(args []BmDataStorage.BmStorage) BmImag
 // FindAll images
 func (c BmImageResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 	imagesID, ok := r.QueryParams["imagesID"]
-	images := c.BmImageStorage.GetAll()
+	images := c.BmImageStorage.GetAll(r)
 	if ok {
 		// this means that we want to show all images of a model, this is the route
 		// /v0/models/1/images

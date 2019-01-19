@@ -125,3 +125,7 @@ func (u *Unit) SetToOneReferenceID(name, ID string) error {
 
 	return errors.New("There is no to-one relationship with the name " + name)
 }
+
+func (u *Unit) GetConditionsBsonM(parameters map[string][]string) bson.M {
+	return bson.M{}
+}

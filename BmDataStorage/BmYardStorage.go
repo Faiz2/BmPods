@@ -21,11 +21,11 @@ func (s BmYardStorage) NewYardStorage(args []BmDaemons.BmDaemon) *BmYardStorage 
 	return &BmYardStorage{mdb}
 }
 
-func (s BmYardStorage) GetAll(skip, take int) []*BmModel.Yard {
+func (s BmYardStorage) GetAll(r api2go.Request, skip, take int) []*BmModel.Yard {
 	in := BmModel.Yard{}
 
 	var out []BmModel.Yard
-	err := s.db.FindMulti(&in, &out, skip, take)
+	err := s.db.FindMulti(r, &in, &out, skip, take)
 	if err == nil {
 		var tmp []*BmModel.Yard
 		for i := 0; i < len(out); i++ {

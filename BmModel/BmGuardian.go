@@ -31,3 +31,7 @@ func (c *Guardian) SetID(id string) error {
 	c.ID = id
 	return nil
 }
+
+func (u *Guardian) GetConditionsBsonM(parameters map[string][]string) bson.M {
+	return bson.M{}
+}

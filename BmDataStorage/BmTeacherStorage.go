@@ -22,10 +22,10 @@ func (s BmTeacherStorage) NewTeacherStorage(args []BmDaemons.BmDaemon) *BmTeache
 }
 
 // GetAll of the chocolate
-func (s BmTeacherStorage) GetAll(skip int, take int) []BmModel.Teacher {
+func (s BmTeacherStorage) GetAll(r api2go.Request, skip int, take int) []BmModel.Teacher {
 	in := BmModel.Teacher{}
 	out := []BmModel.Teacher{}
-	err := s.db.FindMulti(&in, &out, skip, take)
+	err := s.db.FindMulti(r, &in, &out, skip, take)
 	if err == nil {
 		for i, iter := range out {
 			s.db.ResetIdWithId_(&iter)

@@ -27,7 +27,7 @@ func (c BmGuardianResource) NewGuardianResource(args []BmDataStorage.BmStorage) 
 // FindAll guardians
 func (c BmGuardianResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 	//guardiansID, ok := r.QueryParams["guardiansID"]
-	guardians := c.BmGuardianStorage.GetAll()
+	guardians := c.BmGuardianStorage.GetAll(r)
 	//if ok {
 	//	// this means that we want to show all guardians of a model, this is the route
 	//	// /v0/models/1/guardians

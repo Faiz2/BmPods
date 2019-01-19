@@ -22,10 +22,10 @@ func (s BmApplyStorage) NewApplyStorage(args []BmDaemons.BmDaemon) *BmApplyStora
 }
 
 // GetAll returns the model map (because we need the ID as key too)
-func (s BmApplyStorage) GetAll(skip int, take int) []*BmModel.Apply {
+func (s BmApplyStorage) GetAll(r api2go.Request, skip int, take int) []*BmModel.Apply {
 	in := BmModel.Apply{}
 	var out []BmModel.Apply
-	err := s.db.FindMulti(&in, &out, skip, take)
+	err := s.db.FindMulti(r, &in, &out, skip, take)
 	if err == nil {
 		var tmp []*BmModel.Apply
 		for i := 0; i < len(out); i++ {

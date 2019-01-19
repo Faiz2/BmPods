@@ -25,10 +25,10 @@ func (s BmReservableitemStorage) NewReservableitemStorage(args []BmDaemons.BmDae
 }
 
 // GetAll returns the model map (because we need the ID as key too)
-func (s BmReservableitemStorage) GetAll(skip int, take int) []*BmModel.Reservableitem {
+func (s BmReservableitemStorage) GetAll(r api2go.Request, skip int, take int) []*BmModel.Reservableitem {
 	in := BmModel.Reservableitem{}
 	var out []BmModel.Reservableitem
-	err := s.db.FindMulti(&in, &out, skip, take)
+	err := s.db.FindMulti(r, &in, &out, skip, take)
 	if err == nil {
 		var tmp []*BmModel.Reservableitem
 		for i := 0; i < len(out); i++ {

@@ -26,3 +26,7 @@ func (u *Applicant) SetID(id string) error {
 	u.ID = id
 	return nil
 }
+
+func (u *Applicant) GetConditionsBsonM(parameters map[string][]string) bson.M {
+	return bson.M{}
+}

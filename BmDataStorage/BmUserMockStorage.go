@@ -25,10 +25,10 @@ func (s UserStorage) NewUserStorage(args []BmDaemons.BmDaemon) *UserStorage {
 }
 
 // GetAll returns the user map (because we need the ID as key too)
-func (s UserStorage) GetAll(skip int, take int) []*BmModel.User {
+func (s UserStorage) GetAll(r api2go.Request, skip int, take int) []*BmModel.User {
 	in := BmModel.User{}
 	var out []BmModel.User
-	err := s.db.FindMulti(&in, &out, skip, take)
+	err := s.db.FindMulti(r, &in, &out, skip, take)
 	if err == nil {
 		var tmp []*BmModel.User
 		//tmp := make(map[string]*BmModel.User)

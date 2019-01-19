@@ -22,10 +22,10 @@ func (s BmClassStorage) NewClassStorage(args []BmDaemons.BmDaemon) *BmClassStora
 }
 
 // GetAll returns the model map (because we need the ID as key too)
-func (s BmClassStorage) GetAll(skip int, take int) []*BmModel.Class {
+func (s BmClassStorage) GetAll(r api2go.Request, skip int, take int) []*BmModel.Class {
 	in := BmModel.Class{}
 	var out []BmModel.Class
-	err := s.db.FindMulti(&in, &out, skip, take)
+	err := s.db.FindMulti(r, &in, &out, skip, take)
 	if err == nil {
 		var tmp []*BmModel.Class
 		for i := 0; i < len(out); i++ {

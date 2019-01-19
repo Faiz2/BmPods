@@ -36,7 +36,7 @@ func (s BmBrandResource) NewBrandResource(args []BmDataStorage.BmStorage) BmBran
 // FindAll to satisfy api2go data source interface
 func (s BmBrandResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 	var result []BmModel.Brand
-	models := s.BmBrandStorage.GetAll(-1, -1)
+	models := s.BmBrandStorage.GetAll(r,-1, -1)
 
 	for _, model := range models {
 		// get all sweets for the model
@@ -99,7 +99,7 @@ func (s BmBrandResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respon
 		}
 
 		start := sizeI * (numberI - 1)
-		for _, iter := range s.BmBrandStorage.GetAll(int(start), int(sizeI)) {
+		for _, iter := range s.BmBrandStorage.GetAll(r, int(start), int(sizeI)) {
 			result = append(result, *iter)
 		}
 
@@ -114,7 +114,7 @@ func (s BmBrandResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respon
 			return 0, &Response{}, err
 		}
 
-		for _, iter := range s.BmBrandStorage.GetAll(int(offsetI), int(limitI)) {
+		for _, iter := range s.BmBrandStorage.GetAll(r, int(offsetI), int(limitI)) {
 			result = append(result, *iter)
 		}
 	}

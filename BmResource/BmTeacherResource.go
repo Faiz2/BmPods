@@ -27,7 +27,7 @@ func (s BmTeacherResource) NewTeacherResource(args []BmDataStorage.BmStorage) Bm
 
 // FindAll to satisfy api2go data source interface
 func (s BmTeacherResource) FindAll(r api2go.Request) (api2go.Responder, error) {
-	result := s.BmTeacherStorage.GetAll(-1, -1)
+	result := s.BmTeacherStorage.GetAll(r, -1, -1)
 	return &Response{Res: result}, nil
 }
 
@@ -67,7 +67,7 @@ func (s BmTeacherResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Resp
 		}
 
 		start := sizeI * (numberI - 1)
-		for _, iter := range s.BmTeacherStorage.GetAll(int(start), int(sizeI)) {
+		for _, iter := range s.BmTeacherStorage.GetAll(r, int(start), int(sizeI)) {
 			result = append(result, iter)
 		}
 
@@ -82,7 +82,7 @@ func (s BmTeacherResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Resp
 			return 0, &Response{}, err
 		}
 
-		for _, iter := range s.BmTeacherStorage.GetAll(int(offsetI), int(limitI)) {
+		for _, iter := range s.BmTeacherStorage.GetAll(r, int(offsetI), int(limitI)) {
 			result = append(result, iter)
 		}
 	}

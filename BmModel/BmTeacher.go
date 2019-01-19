@@ -43,3 +43,7 @@ func (c *Teacher) SetID(id string) error {
 	c.ID = id
 	return nil
 }
+
+func (u *Teacher) GetConditionsBsonM(parameters map[string][]string) bson.M {
+	return bson.M{}
+}

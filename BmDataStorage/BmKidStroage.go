@@ -25,10 +25,10 @@ func (s BmKidStorage) NewKidStorage(args []BmDaemons.BmDaemon) *BmKidStorage {
 }
 
 // GetAll of the modelleaf
-func (s BmKidStorage) GetAll() []BmModel.Kid {
+func (s BmKidStorage) GetAll(r api2go.Request) []BmModel.Kid {
 	in := BmModel.Kid{}
 	out := []BmModel.Kid{}
-	err := s.db.FindMulti(&in, &out, -1, -1)
+	err := s.db.FindMulti(r, &in, &out, -1, -1)
 	if err == nil {
 		for i, iter := range out {
 			s.db.ResetIdWithId_(&iter)
