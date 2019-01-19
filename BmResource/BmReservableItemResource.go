@@ -13,20 +13,24 @@ import (
 type BmReservableitemResource struct {
 	BmReservableitemStorage *BmDataStorage.BmReservableitemStorage
 	BmSessioninfoStorage    *BmDataStorage.BmSessioninfoStorage
+	BmClassStorage    *BmDataStorage.BmClassStorage
 }
 
 func (s BmReservableitemResource) NewReservableitemResource(args []BmDataStorage.BmStorage) BmReservableitemResource {
 	var us *BmDataStorage.BmReservableitemStorage
 	var ts *BmDataStorage.BmSessioninfoStorage
+	var cs *BmDataStorage.BmClassStorage
 	for _, arg := range args {
 		tp := reflect.ValueOf(arg).Elem().Type()
 		if tp.Name() == "BmReservableitemStorage" {
 			us = arg.(*BmDataStorage.BmReservableitemStorage)
 		} else if tp.Name() == "BmSessioninfoStorage" {
 			ts = arg.(*BmDataStorage.BmSessioninfoStorage)
+		} else if tp.Name() == "BmClassStorage" {
+			cs = arg.(*BmDataStorage.BmClassStorage)
 		}
 	}
-	return BmReservableitemResource{BmReservableitemStorage: us, BmSessioninfoStorage: ts}
+	return BmReservableitemResource{BmReservableitemStorage: us, BmSessioninfoStorage: ts, BmClassStorage: cs}
 }
 
 // FindAll to satisfy api2go data source interface
@@ -42,6 +46,15 @@ func (s BmReservableitemResource) FindAll(r api2go.Request) (api2go.Responder, e
 				return &Response{}, err
 			}
 			model.Sessioninfo = sessioninfo
+		}
+
+		model.Classes = []*BmModel.Class{}
+		for _, tmpID := range model.ClassesIDs {
+			choc, err := s.BmClassStorage.GetOne(tmpID)
+			if err != nil {
+				return &Response{}, err
+			}
+			model.Classes = append(model.Classes, &choc)
 		}
 
 		result = append(result, *model)
@@ -125,6 +138,14 @@ func (s BmReservableitemResource) FindOne(ID string, r api2go.Request) (api2go.R
 			return &Response{}, err
 		}
 		model.Sessioninfo = sessioninfo
+	}
+	model.Classes = []*BmModel.Class{}
+	for _, tmpID := range model.ClassesIDs {
+		choc, err := s.BmClassStorage.GetOne(tmpID)
+		if err != nil {
+			return &Response{}, err
+		}
+		model.Classes = append(model.Classes, &choc)
 	}
 
 	return &Response{Res: model}, nil
