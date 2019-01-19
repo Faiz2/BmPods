@@ -214,7 +214,7 @@ daemons:
 - name: BmMongodbDaemon
   method: NewMongoDBDaemon
   args:
-    host: 192.168.100.174
+    host: 127.0.0.1
     port: 27017
     database: test
 
@@ -248,6 +248,14 @@ functions:
   daemons:
   - BmMongodbDaemon
   method: UploadToOss
+  http: POST
+  args:
+  - name
+- name: BmAuthHandler
+  create: NewAuthHandler
+  daemons:
+  - BmMongodbDaemon
+  method: Validation
   http: POST
   args:
   - name

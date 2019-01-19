@@ -2,6 +2,7 @@ package BmModel
 
 import (
 	"errors"
+
 	"github.com/manyminds/api2go/jsonapi"
 	"gopkg.in/mgo.v2/bson"
 )

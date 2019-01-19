@@ -3,25 +3,26 @@ package BmHandler
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/alfredyang1986/BmPods/BmConfig"
-	"github.com/alfredyang1986/BmPods/BmDaemons"
-	"github.com/alfredyang1986/BmPods/BmDaemons/BmMongodb"
-	"github.com/alfredyang1986/blackmirror/bmalioss"
-	"github.com/alfredyang1986/blackmirror/jsonapi/jsonapiobj"
-	"github.com/hashicorp/go-uuid"
-	"github.com/julienschmidt/httprouter"
 	"io"
 	"net/http"
 	"os"
 	"reflect"
 	"strings"
+
+	"github.com/alfredyang1986/BmPods/BmConfig"
+	"github.com/alfredyang1986/BmPods/BmDaemons"
+	"github.com/alfredyang1986/BmPods/BmDaemons/BmMongodb"
+	"github.com/alfredyang1986/blackmirror/bmalioss"
+	"github.com/alfredyang1986/blackmirror/jsonapi/jsonapiobj"
+	uuid "github.com/hashicorp/go-uuid"
+	"github.com/julienschmidt/httprouter"
 )
 
 type UploadToOssHandler struct {
-	Method string
+	Method     string
 	HttpMethod string
-	Args []string
-	db *BmMongodb.BmMongodb
+	Args       []string
+	db         *BmMongodb.BmMongodb
 }
 
 func (h UploadToOssHandler) NewUploadToOssHandler(args ...interface{}) UploadToOssHandler {
@@ -48,9 +49,10 @@ func (h UploadToOssHandler) NewUploadToOssHandler(args ...interface{}) UploadToO
 			for _, str := range lst {
 				ag = append(ag, str)
 			}
-		} else {}
+		} else {
+		}
 	}
-	return UploadToOssHandler{Method:md, HttpMethod:hm, Args:ag, db:m}
+	return UploadToOssHandler{Method: md, HttpMethod: hm, Args: ag, db: m}
 }
 
 func (h UploadToOssHandler) UploadToOss(w http.ResponseWriter, r *http.Request, _ httprouter.Params) int {
@@ -77,7 +79,7 @@ func (h UploadToOssHandler) UploadToOss(w http.ResponseWriter, r *http.Request, 
 
 		fn, err := uuid.GenerateUUID()
 		lsttmp := strings.Split(handler.Filename, ".")
-		exname := lsttmp[len(lsttmp) - 1]
+		exname := lsttmp[len(lsttmp)-1]
 
 		localDir := bmRouter.TmpDir + "/" + fn + "." + exname // handler.Filename
 		f, err := os.OpenFile(localDir, os.O_WRONLY|os.O_CREATE, 0666)

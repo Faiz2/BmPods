@@ -66,10 +66,11 @@ var BLACKMIRROR_DAEMON_FACTORY = map[string]interface{}{
 	"BmMongodbDaemon": BmMongodb.BmMongodb{}}
 
 var BLACKMIRROR_FUNCTION_FACTORY = map[string]interface{}{
-	"BmProvinceHandler": BmHandler.ProvinceHandler{},
-	"BmCityHandler":     BmHandler.CityHandler{},
-	"BmDistrictHandler": BmHandler.DistrictHandler{},
+	"BmProvinceHandler":    BmHandler.ProvinceHandler{},
+	"BmCityHandler":        BmHandler.CityHandler{},
+	"BmDistrictHandler":    BmHandler.DistrictHandler{},
 	"BmUploadToOssHandler": BmHandler.UploadToOssHandler{},
+	"BmAuthHandler":        BmHandler.AuthHandler{},
 }
 
 func GetModelByName(name string) interface{} {
