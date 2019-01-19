@@ -4,15 +4,25 @@ package BmResource
 type Response struct {
 	Res  interface{}
 	Code int
+	QueryRes string
+	TotalPage int
 }
 
 // Metadata returns additional meta data
 func (r Response) Metadata() map[string]interface{} {
-	return map[string]interface{}{
+	var meta = map[string]interface{}{
 		"author":      "Blackmirror Inc. AlfredYang",
 		"license":     "blackmirror.tech",
 		"license-url": "http://www.dongdakid.com",
 	}
+
+
+	if r.QueryRes != "" && r.TotalPage > 0 {
+		meta["query-res"] = r.QueryRes
+		meta["total-page"] = r.TotalPage
+	}
+
+	return meta
 }
 
 // Result returns the actual payload

@@ -157,8 +157,9 @@ func (s BmApplyResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respon
 
 	in := BmModel.Apply{}
 	count := s.BmApplyStorage.Count(in)
+	pages := 1 + int(count / 20) // TODO: 取一页的大小，交给你了 @张弛
 
-	return uint(count), &Response{Res: result}, nil
+	return uint(count), &Response{Res: result, QueryRes:"applies", TotalPage:pages}, nil
 }
 
 // FindOne to satisfy `api2go.DataSource` interface
