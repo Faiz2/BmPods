@@ -3,12 +3,13 @@ package BmMongodb
 import (
 	"errors"
 	"fmt"
+	"reflect"
+
 	"github.com/alfredyang1986/BmPods/BmModel"
 	"github.com/alfredyang1986/blackmirror/bmmate"
 	"github.com/manyminds/api2go"
-	"gopkg.in/mgo.v2"
+	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
-	"reflect"
 )
 
 const (
@@ -286,8 +287,8 @@ func Struct2map(v reflect.Value) (map[string]interface{}, error) {
 	return rst, nil
 }
 
-// TODO 临时，马上重写
-func (m *BmMongodb) FindAccont(ptr BmModel.BmModelBase, out BmModel.BmModelBase, cond bson.M) error {
+// FindOneByCondition TODO 临时，稍后与老铁一起重写
+func (m *BmMongodb) FindOneByCondition(ptr BmModel.BmModelBase, out BmModel.BmModelBase, cond bson.M) error {
 	session, err := mgo.Dial(m.Host + ":" + m.Port)
 	if err != nil {
 		return errors.New("dial db error")

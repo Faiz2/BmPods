@@ -70,7 +70,8 @@ var BLACKMIRROR_FUNCTION_FACTORY = map[string]interface{}{
 	"BmCityHandler":        BmHandler.CityHandler{},
 	"BmDistrictHandler":    BmHandler.DistrictHandler{},
 	"BmUploadToOssHandler": BmHandler.UploadToOssHandler{},
-	"BmAuthHandler":        BmHandler.AuthHandler{},
+	"BmAccountHandler":     BmHandler.AccountHandler{},
+	"BmApplicantHandler":   BmHandler.ApplicantHandler{},
 }
 
 func GetModelByName(name string) interface{} {

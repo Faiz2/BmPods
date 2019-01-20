@@ -252,11 +252,19 @@ functions:
   http: POST
   args:
   - name
-- name: BmAuthHandler
-  create: NewAuthHandler
+- name: BmAccountHandler
+  create: NewAccountHandler
   daemons:
   - BmMongodbDaemon
-  method: Validation
+  method: AccountValidation
+  http: POST
+  args:
+  - name
+- name: BmApplicantHandler
+  create: NewApplicantHandler
+  daemons:
+  - BmMongodbDaemon
+  method: ApplicantValidation
   http: POST
   args:
   - name

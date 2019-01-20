@@ -4,34 +4,36 @@ import (
 	"crypto/md5"
 	"encoding/json"
 	"fmt"
+	"io"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"reflect"
 
-	"gopkg.in/mgo.v2/bson"
-
-	"github.com/alfredyang1986/BmPods/BmModel"
-	"github.com/alfredyang1986/BmPods/BmRedis"
-
 	"github.com/julienschmidt/httprouter"
+	"gopkg.in/mgo.v2/bson"
 
 	"github.com/alfredyang1986/BmPods/BmDaemons"
 	"github.com/alfredyang1986/BmPods/BmDaemons/BmMongodb"
+	"github.com/alfredyang1986/BmPods/BmModel"
+	"github.com/alfredyang1986/BmPods/BmRedis"
+	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton"
+	"github.com/alfredyang1986/blackmirror/jsonapi"
 	"github.com/alfredyang1986/blackmirror/jsonapi/jsonapiobj"
 )
 
-type AuthHandler struct {
+type AccountHandler struct {
 	Method     string
 	HttpMethod string
 	Args       []string
 	db         *BmMongodb.BmMongodb
 }
 
-func (h AuthHandler) NewAuthHandler(args ...interface{}) AuthHandler {
+func (h AccountHandler) NewAccountHandler(args ...interface{}) AccountHandler {
 	var m *BmMongodb.BmMongodb
 	var hm string
 	var md string
 	var ag []string
-	//sts := args[0].([]BmDaemons.BmDaemon)
 	for i, arg := range args {
 		if i == 0 {
 			sts := arg.([]BmDaemons.BmDaemon)
@@ -53,18 +55,31 @@ func (h AuthHandler) NewAuthHandler(args ...interface{}) AuthHandler {
 		} else {
 		}
 	}
-	return AuthHandler{Method: md, HttpMethod: hm, Args: ag, db: m}
+
+	//TODO: Register这边为了使用blackmirror的FromJSONAPI 2中风格迥异的Model
+	fac := bmsingleton.GetFactoryInstance()
+	fac.RegisterModel("Account", &BmModel.Account{})
+
+	return AccountHandler{Method: md, HttpMethod: hm, Args: ag, db: m}
 }
 
-func (h AuthHandler) Validation(w http.ResponseWriter, r *http.Request, _ httprouter.Params) int {
+func (h AccountHandler) AccountValidation(w http.ResponseWriter, r *http.Request, _ httprouter.Params) int {
 	w.Header().Add("Content-Type", "application/json")
-	var acc BmModel.Account
-	json.NewDecoder(r.Body).Decode(&acc)
 
-	out := BmModel.Account{}
-	// TODO 实在是不敢乱动，又加了一个
-	cond := bson.M{"account": acc.Account, "password": acc.Password}
-	err := h.db.FindAccont(&acc, &out, cond)
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Printf("Error reading body: %v", err)
+		http.Error(w, "can't read body", http.StatusBadRequest)
+		return 1
+	}
+	sjson := string(body)
+	rst, _ := jsonapi.FromJsonAPI(sjson)
+	model := rst.(BmModel.Account)
+	var out BmModel.Account
+
+	cond := bson.M{"account": model.Account, "password": model.Password}
+
+	err = h.db.FindOneByCondition(&model, &out, cond)
 
 	jso := jsonapiobj.JsResult{}
 	response := map[string]interface{}{
@@ -72,8 +87,10 @@ func (h AuthHandler) Validation(w http.ResponseWriter, r *http.Request, _ httpro
 		"result": nil,
 		"error":  nil,
 	}
-	if err == nil && out.Id_ != "" {
+
+	if err == nil && out.ID != "" {
 		hex := md5.New()
+		io.WriteString(hex, out.ID)
 		out.Password = ""
 		token := fmt.Sprintf("%x", hex.Sum(nil))
 		err = BmRedis.PushToken(token)
@@ -95,13 +112,12 @@ func (h AuthHandler) Validation(w http.ResponseWriter, r *http.Request, _ httpro
 		enc.Encode(jso.Obj)
 		return 1
 	}
-
 }
 
-func (h AuthHandler) GetHttpMethod() string {
+func (h AccountHandler) GetHttpMethod() string {
 	return h.HttpMethod
 }
 
-func (h AuthHandler) GetHandlerMethod() string {
+func (h AccountHandler) GetHandlerMethod() string {
 	return h.Method
 }
