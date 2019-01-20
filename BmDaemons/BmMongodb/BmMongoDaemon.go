@@ -3,13 +3,12 @@ package BmMongodb
 import (
 	"errors"
 	"fmt"
-	"reflect"
-
 	"github.com/alfredyang1986/BmPods/BmModel"
 	"github.com/alfredyang1986/blackmirror/bmmate"
 	"github.com/manyminds/api2go"
-	mgo "gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+	"reflect"
 )
 
 const (
@@ -112,9 +111,9 @@ func (m *BmMongodb) FindMulti(r api2go.Request, ptr BmModel.BmModelBase, out int
 	fmt.Println(cond)
 
 	if skip < 0 && take < 0 {
-		err = c.Find(cond).All(out)
+		err = c.Find(cond).Sort(Request2SortCondi(r)).All(out)
 	} else {
-		err = c.Find(cond).Skip(skip).Limit(take).All(out)
+		err = c.Find(cond).Skip(skip).Limit(take).Sort(Request2SortCondi(r)).All(out)
 	}
 
 	if err != nil {
@@ -306,4 +305,14 @@ func (m *BmMongodb) FindAccont(ptr BmModel.BmModelBase, out BmModel.BmModelBase,
 
 	m.ResetIdWithId_(out)
 	return nil
+}
+
+func Request2SortCondi(r api2go.Request) string {
+	for k, v := range r.QueryParams {
+		if k == "orderby" {
+			return v[0]
+		}
+	}
+	//如果不传orderby,暂时默认数据create-time的倒序
+	return "-create-time"
 }
