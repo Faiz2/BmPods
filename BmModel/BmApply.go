@@ -158,5 +158,5 @@ func (u *Apply) GetConditionsBsonM(parameters map[string][]string) bson.M {
 		}
 	}
 
-	return bson.M{}
+	return rst
 }

@@ -31,7 +31,7 @@ type Sessioninfo struct {
 	Cover        string   `json:"cover" bson:"cover"`
 
 	Images    []*Image `json:"-"`
-	ImagesIDs []string `json:"-" bson:"kid-ids"`
+	ImagesIDs []string `json:"-" bson:"image-ids"`
 
 	Category   Category `json:"-"`
 	CategoryID string   `json:"category-id" bson:"category-id"`
