@@ -37,7 +37,6 @@ type Yard struct {
 	/**
 	 * 在构建过程中，除了排课逻辑，不会通过query到Room
 	 */
-	//TODO:Certifications合并成TagImgs,添加category做区分.
 	ImagesIDs []string `json:"-" bson:"image-ids"`
 	Images    []*Image `json:"-"`
 	RoomsIDs  []string `json:"-" bson:"room-ids"`
