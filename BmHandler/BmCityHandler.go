@@ -2,18 +2,19 @@ package BmHandler
 
 import (
 	"encoding/json"
+	"net/http"
+	"reflect"
+
 	"github.com/alfredyang1986/BmPods/BmDaemons"
 	"github.com/alfredyang1986/BmPods/BmDaemons/BmMongodb"
 	"github.com/julienschmidt/httprouter"
-	"net/http"
-	"reflect"
 )
 
 type CityHandler struct {
-	Method string
+	Method     string
 	HttpMethod string
-	Args []string
-	db *BmMongodb.BmMongodb
+	Args       []string
+	db         *BmMongodb.BmMongodb
 }
 
 func (h CityHandler) NewCityHandler(args ...interface{}) CityHandler {
@@ -26,8 +27,9 @@ func (h CityHandler) NewCityHandler(args ...interface{}) CityHandler {
 		if i == 0 {
 			sts := arg.([]BmDaemons.BmDaemon)
 			for _, dm := range sts {
-				tp := reflect.ValueOf(dm).Elem().Type()
-				if tp.Name() == "BmMongodbDaemon" {
+				tp := reflect.ValueOf(dm).Interface()
+				tm := reflect.ValueOf(tp).Elem().Type()
+				if tm.Name() == "BmMongodb" {
 					m = dm.(*BmMongodb.BmMongodb)
 				}
 			}
@@ -40,9 +42,10 @@ func (h CityHandler) NewCityHandler(args ...interface{}) CityHandler {
 			for _, str := range lst {
 				ag = append(ag, str)
 			}
-		} else {}
+		} else {
+		}
 	}
-	return CityHandler{Method:md, HttpMethod:hm, Args:ag, db:m}
+	return CityHandler{Method: md, HttpMethod: hm, Args: ag, db: m}
 }
 
 //TODO: load files

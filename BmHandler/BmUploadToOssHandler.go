@@ -35,8 +35,9 @@ func (h UploadToOssHandler) NewUploadToOssHandler(args ...interface{}) UploadToO
 		if i == 0 {
 			sts := arg.([]BmDaemons.BmDaemon)
 			for _, dm := range sts {
-				tp := reflect.ValueOf(dm).Elem().Type()
-				if tp.Name() == "BmMongodbDaemon" {
+				tp := reflect.ValueOf(dm).Interface()
+				tm := reflect.ValueOf(tp).Elem().Type()
+				if tm.Name() == "BmMongodb" {
 					m = dm.(*BmMongodb.BmMongodb)
 				}
 			}

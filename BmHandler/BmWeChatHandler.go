@@ -2,22 +2,23 @@ package BmHandler
 
 import (
 	"encoding/json"
+	"io/ioutil"
+	"net/http"
+	"reflect"
+	"strings"
+
 	"github.com/alfredyang1986/BmPods/BmDaemons"
 	"github.com/alfredyang1986/BmPods/BmDaemons/BmMongodb"
 	"github.com/alfredyang1986/BmPods/BmModel"
 	"github.com/alfredyang1986/blackmirror/jsonapi/jsonapiobj"
 	"github.com/julienschmidt/httprouter"
-	"io/ioutil"
-	"net/http"
-	"reflect"
-	"strings"
 )
 
 type WeChatHandler struct {
-	Method string
+	Method     string
 	HttpMethod string
-	Args []string
-	db *BmMongodb.BmMongodb
+	Args       []string
+	db         *BmMongodb.BmMongodb
 }
 
 func (h WeChatHandler) NewWeChatHandler(args ...interface{}) WeChatHandler {
@@ -29,8 +30,9 @@ func (h WeChatHandler) NewWeChatHandler(args ...interface{}) WeChatHandler {
 		if i == 0 {
 			sts := arg.([]BmDaemons.BmDaemon)
 			for _, dm := range sts {
-				tp := reflect.ValueOf(dm).Elem().Type()
-				if tp.Name() == "BmMongodbDaemon" {
+				tp := reflect.ValueOf(dm).Interface()
+				tm := reflect.ValueOf(tp).Elem().Type()
+				if tm.Name() == "BmMongodb" {
 					m = dm.(*BmMongodb.BmMongodb)
 				}
 			}
@@ -43,9 +45,10 @@ func (h WeChatHandler) NewWeChatHandler(args ...interface{}) WeChatHandler {
 			for _, str := range lst {
 				ag = append(ag, str)
 			}
-		} else {}
+		} else {
+		}
 	}
-	return WeChatHandler{Method:md, HttpMethod:hm, Args:ag, db:m}
+	return WeChatHandler{Method: md, HttpMethod: hm, Args: ag, db: m}
 }
 
 func (h WeChatHandler) GetWeChatInfo(w http.ResponseWriter, r *http.Request, _ httprouter.Params) int {

@@ -2,6 +2,10 @@ package BmPodsDefine
 
 import (
 	"fmt"
+	"io/ioutil"
+	"net/http"
+	"strings"
+
 	"github.com/alfredyang1986/BmPods/BmDaemons"
 	"github.com/alfredyang1986/BmPods/BmDataStorage"
 	"github.com/alfredyang1986/BmPods/BmFactory"
@@ -12,10 +16,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"github.com/manyminds/api2go"
 	"github.com/manyminds/api2go/jsonapi"
-	"gopkg.in/yaml.v2"
-	"io/ioutil"
-	"net/http"
-	"strings"
+	yaml "gopkg.in/yaml.v2"
 )
 
 type Pod struct {
@@ -144,11 +145,11 @@ func (p Pod) RegisterAllFunctions(prefix string, api *api2go.API) {
 	for i, _ := range p.Handler {
 		ifunc := p.Handler[i]
 		if ifunc.GetHttpMethod() == "POST" {
-			handler.POST(prefixSlashes + ifunc.GetHandlerMethod(), func(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+			handler.POST(prefixSlashes+ifunc.GetHandlerMethod(), func(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 				BmSingleton.GetFactoryInstance().ReflectFunctionCall(ifunc, ifunc.GetHandlerMethod(), writer, request, params)
 			})
 		} else {
-			handler.GET(prefixSlashes + ifunc.GetHandlerMethod(), func(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+			handler.GET(prefixSlashes+ifunc.GetHandlerMethod(), func(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 				BmSingleton.GetFactoryInstance().ReflectFunctionCall(ifunc, ifunc.GetHandlerMethod(), writer, request, params)
 			})
 		}

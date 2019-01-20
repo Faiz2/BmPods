@@ -42,16 +42,14 @@ func (h AccountHandler) NewAccountHandler(args ...interface{}) AccountHandler {
 		if i == 0 {
 			sts := arg.([]BmDaemons.BmDaemon)
 			for _, dm := range sts {
-				fmt.Println(reflect.TypeOf(dm))
-				tp := reflect.ValueOf(dm).Elem().Type()
-
-				if tp.Name() == "BmMongodb" { //TODO: 这个地方有问题 BmMongodbDaemon
+				tp := reflect.ValueOf(dm).Interface()
+				tm := reflect.ValueOf(tp).Elem().Type()
+				if tm.Name() == "BmMongodb" {
 					m = dm.(*BmMongodb.BmMongodb)
 				}
-				if tp.Name() == "BmRedis" {
+				if tm.Name() == "BmRedis" {
 					r = dm.(*BmRedis.BmRedis)
 				}
-				fmt.Println(tp.Name())
 			}
 		} else if i == 1 {
 			md = arg.(string)

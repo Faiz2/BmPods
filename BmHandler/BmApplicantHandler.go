@@ -39,11 +39,12 @@ func (h ApplicantHandler) NewApplicantHandler(args ...interface{}) ApplicantHand
 		if i == 0 {
 			sts := arg.([]BmDaemons.BmDaemon)
 			for _, dm := range sts {
-				tp := reflect.ValueOf(dm).Elem().Type()
-				if tp.Name() == "BmMongodb" { //TODO: 这个地方有问题 BmMongodbDaemon
+				tp := reflect.ValueOf(dm).Interface()
+				tm := reflect.ValueOf(tp).Elem().Type()
+				if tm.Name() == "BmMongodb" {
 					m = dm.(*BmMongodb.BmMongodb)
 				}
-				if tp.Name() == "BmRedis" {
+				if tm.Name() == "BmRedis" {
 					r = dm.(*BmRedis.BmRedis)
 				}
 			}
