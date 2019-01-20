@@ -48,23 +48,23 @@ func (u *Class) SetID(id string) error {
 func (u Class) GetReferences() []jsonapi.Reference {
 	return []jsonapi.Reference{
 		{
-			Type: "Yard",
+			Type: "yards",
 			Name: "yard",
 		},
 		{
-			Type: "Sessioninfo",
+			Type: "sessioninfos",
 			Name: "sessioninfo",
 		},
 		{
-			Type: "Student",
+			Type: "students",
 			Name: "students",
 		},
 		{
-			Type: "Teacher",
+			Type: "teachers",
 			Name: "teachers",
 		},
 		{
-			Type: "Unit",
+			Type: "units",
 			Name: "units",
 		},
 	}
@@ -76,21 +76,21 @@ func (u Class) GetReferencedIDs() []jsonapi.ReferenceID {
 	for _, tmpID := range u.StudentsIDs {
 		result = append(result, jsonapi.ReferenceID{
 			ID:   tmpID,
-			Type: "student",
+			Type: "students",
 			Name: "students",
 		})
 	}
 	for _, tmpID := range u.TeachersIDs {
 		result = append(result, jsonapi.ReferenceID{
 			ID:   tmpID,
-			Type: "teacher",
+			Type: "teachers",
 			Name: "teachers",
 		})
 	}
 	for _, tmpID := range u.UnitsIDs {
 		result = append(result, jsonapi.ReferenceID{
 			ID:   tmpID,
-			Type: "unit",
+			Type: "uints",
 			Name: "uints",
 		})
 	}
@@ -98,14 +98,14 @@ func (u Class) GetReferencedIDs() []jsonapi.ReferenceID {
 	if u.YardID != "" {
 		result = append(result, jsonapi.ReferenceID{
 			ID:   u.YardID,
-			Type: "yard",
+			Type: "yards",
 			Name: "yard",
 		})
 	}
 	if u.SessioninfoID != "" {
 		result = append(result, jsonapi.ReferenceID{
 			ID:   u.SessioninfoID,
-			Type: "sessioninfo",
+			Type: "sessioninfos",
 			Name: "sessioninfo",
 		})
 	}
