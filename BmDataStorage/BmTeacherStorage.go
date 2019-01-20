@@ -11,7 +11,7 @@ import (
 )
 
 // BmTeacherStorage stores all of the tasty chocolate, needs to be injected into
-// User and Teacher Resource. In the real world, you would use a database for that.
+// Teacher and Teacher Resource. In the real world, you would use a database for that.
 type BmTeacherStorage struct {
 	db *BmMongodb.BmMongodb
 }
@@ -45,7 +45,7 @@ func (s BmTeacherStorage) GetOne(id string) (BmModel.Teacher, error) {
 	if err == nil {
 		return out, nil
 	}
-	errMessage := fmt.Sprintf("User for id %s not found", id)
+	errMessage := fmt.Sprintf("Teacher for id %s not found", id)
 	return BmModel.Teacher{}, api2go.NewHTTPError(errors.New(errMessage), errMessage, http.StatusNotFound)
 }
 

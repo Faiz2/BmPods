@@ -11,7 +11,7 @@ import (
 )
 
 // BmKidStorage stores all of the tasty modelleaf, needs to be injected into
-// User and Kid Resource. In the real world, you would use a database for that.
+// Kid Resource. In the real world, you would use a database for that.
 type BmKidStorage struct {
 	kids    map[string]*BmModel.Kid
 	idCount int
@@ -48,7 +48,7 @@ func (s BmKidStorage) GetOne(id string) (BmModel.Kid, error) {
 	if err == nil {
 		return out, nil
 	}
-	errMessage := fmt.Sprintf("User for id %s not found", id)
+	errMessage := fmt.Sprintf("Kid for id %s not found", id)
 	return BmModel.Kid{}, api2go.NewHTTPError(errors.New(errMessage), errMessage, http.StatusNotFound)
 }
 

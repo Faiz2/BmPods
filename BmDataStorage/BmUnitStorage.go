@@ -11,7 +11,7 @@ import (
 )
 
 // BmUnitStorage stores all of the tasty chocolate, needs to be injected into
-// User and Unit Resource. In the real world, you would use a database for that.
+// Unit Resource. In the real world, you would use a database for that.
 type BmUnitStorage struct {
 	db *BmMongodb.BmMongodb
 }
@@ -47,7 +47,7 @@ func (s BmUnitStorage) GetOne(id string) (BmModel.Unit, error) {
 	if err == nil {
 		return out, nil
 	}
-	errMessage := fmt.Sprintf("User for id %s not found", id)
+	errMessage := fmt.Sprintf("Unit for id %s not found", id)
 	return BmModel.Unit{}, api2go.NewHTTPError(errors.New(errMessage), errMessage, http.StatusNotFound)
 }
 

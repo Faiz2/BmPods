@@ -26,28 +26,7 @@ func (c BmApplicantResource) NewApplicantResource(args []BmDataStorage.BmStorage
 
 // FindAll apeolates
 func (c BmApplicantResource) FindAll(r api2go.Request) (api2go.Responder, error) {
-	//usersID, ok := r.QueryParams["usersID"]
 	result := c.ApplicantStorage.GetAll(r, -1, -1)
-	//if ok {
-	//	// this means that we want to show all sweets of a user, this is the route
-	//	// /v0/users/1/sweets
-	//	userID := usersID[0]
-	//	// filter out sweets with userID, in real world, you would just run a different database query
-	//	filteredSweets := []BmModel.Applicant{}
-	//	user, err := c.UserStorage.GetOne(userID)
-	//	if err != nil {
-	//		return &Response{}, err
-	//	}
-	//	for _, sweetID := range user.ApplicantsIDs {
-	//		sweet, err := c.ApplicantStorage.GetOne(sweetID)
-	//		if err != nil {
-	//			return &Response{}, err
-	//		}
-	//		filteredSweets = append(filteredSweets, sweet)
-	//	}
-	//
-	//	return &Response{Res: filteredSweets}, nil
-	//}
 	return &Response{Res: result}, nil
 }
 

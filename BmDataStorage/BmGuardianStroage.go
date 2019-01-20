@@ -11,7 +11,7 @@ import (
 )
 
 // BmGuardianStorage stores all of the tasty modelleaf, needs to be injected into
-// User and Guardian Resource. In the real world, you would use a database for that.
+// Guardian and Guardian Resource. In the real world, you would use a database for that.
 type BmGuardianStorage struct {
 	guardians map[string]*BmModel.Guardian
 	idCount   int
@@ -48,7 +48,7 @@ func (s BmGuardianStorage) GetOne(id string) (BmModel.Guardian, error) {
 	if err == nil {
 		return out, nil
 	}
-	errMessage := fmt.Sprintf("User for id %s not found", id)
+	errMessage := fmt.Sprintf("Guardian for id %s not found", id)
 	return BmModel.Guardian{}, api2go.NewHTTPError(errors.New(errMessage), errMessage, http.StatusNotFound)
 }
 
