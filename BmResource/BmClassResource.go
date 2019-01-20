@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"reflect"
 	"strconv"
+	"time"
 )
 
 type BmClassResource struct {
@@ -300,6 +301,7 @@ func (s BmClassResource) Create(obj interface{}, r api2go.Request) (api2go.Respo
 		return &Response{}, api2go.NewHTTPError(errors.New("Invalid instance given"), "Invalid instance given", http.StatusBadRequest)
 	}
 
+	model.CreateTime = float64(time.Now().UnixNano() / 1e6)
 	id := s.BmClassStorage.Insert(model)
 	model.ID = id
 

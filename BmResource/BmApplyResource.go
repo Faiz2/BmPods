@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"reflect"
 	"strconv"
+	"time"
 )
 
 type BmApplyResource struct {
@@ -188,6 +189,7 @@ func (s BmApplyResource) Create(obj interface{}, r api2go.Request) (api2go.Respo
 		return &Response{}, api2go.NewHTTPError(errors.New("Invalid instance given"), "Invalid instance given", http.StatusBadRequest)
 	}
 
+	model.CreateTime = float64(time.Now().UnixNano() / 1e6)
 	id := s.BmApplyStorage.Insert(model)
 	model.ID = id
 

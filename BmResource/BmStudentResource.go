@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"reflect"
 	"strconv"
+	"time"
 )
 
 type BmStudentResource struct {
@@ -174,15 +175,16 @@ func (s BmStudentResource) FindOne(ID string, r api2go.Request) (api2go.Responde
 
 // Create method to satisfy `api2go.DataSource` interface
 func (s BmStudentResource) Create(obj interface{}, r api2go.Request) (api2go.Responder, error) {
-	user, ok := obj.(BmModel.Student)
+	model, ok := obj.(BmModel.Student)
 	if !ok {
 		return &Response{}, api2go.NewHTTPError(errors.New("Invalid instance given"), "Invalid instance given", http.StatusBadRequest)
 	}
 
-	id := s.BmStudentStorage.Insert(user)
-	user.ID = id
+	model.CreateTime = float64(time.Now().UnixNano() / 1e6)
+	id := s.BmStudentStorage.Insert(model)
+	model.ID = id
 
-	return &Response{Res: user, Code: http.StatusCreated}, nil
+	return &Response{Res: model, Code: http.StatusCreated}, nil
 }
 
 // Delete to satisfy `api2go.DataSource` interface

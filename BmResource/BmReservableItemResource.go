@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"reflect"
 	"strconv"
+	"time"
 )
 
 type BmReservableitemResource struct {
@@ -158,6 +159,7 @@ func (s BmReservableitemResource) Create(obj interface{}, r api2go.Request) (api
 		return &Response{}, api2go.NewHTTPError(errors.New("Invalid instance given"), "Invalid instance given", http.StatusBadRequest)
 	}
 
+	model.CreateTime = float64(time.Now().UnixNano() / 1e6)
 	id := s.BmReservableitemStorage.Insert(model)
 	model.ID = id
 
