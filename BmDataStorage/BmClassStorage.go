@@ -42,10 +42,51 @@ func (s BmClassStorage) GetAll(r api2go.Request, skip int, take int) []*BmModel.
 // GetOne model
 func (s BmClassStorage) GetOne(id string) (BmModel.Class, error) {
 	in := BmModel.Class{ID: id}
-	out := BmModel.Class{ID: id}
-	err := s.db.FindOne(&in, &out)
+	model := BmModel.Class{ID: id}
+	err := s.db.FindOne(&in, &model)
 	if err == nil {
-		return out, nil
+
+		model.Students = []*BmModel.Student{}
+		for _, tmpID := range model.StudentsIDs {
+			choc, err := BmStudentStorage{db:s.db}.GetOne(tmpID)
+			if err != nil {
+				return BmModel.Class{}, err
+			}
+			model.Students = append(model.Students, &choc)
+		}
+		model.Teachers = []*BmModel.Teacher{}
+		for _, tmpID := range model.TeachersIDs {
+			choc, err := BmTeacherStorage{db:s.db}.GetOne(tmpID)
+			if err != nil {
+				return BmModel.Class{}, err
+			}
+			model.Teachers = append(model.Teachers, &choc)
+		}
+		model.Units = []*BmModel.Unit{}
+		for _, tmpID := range model.UnitsIDs {
+			choc, err := BmUnitStorage{db:s.db}.GetOne(tmpID)
+			if err != nil {
+				return BmModel.Class{}, err
+			}
+			model.Units = append(model.Units, &choc)
+		}
+
+		if model.YardID != "" {
+			yard, err := BmYardStorage{db:s.db}.GetOne(model.YardID)
+			if err != nil {
+				return BmModel.Class{}, err
+			}
+			model.Yard = yard
+		}
+		if model.SessioninfoID != "" {
+			item, err := BmSessioninfoStorage{db:s.db}.GetOne(model.SessioninfoID)
+			if err != nil {
+				return BmModel.Class{}, err
+			}
+			model.Sessioninfo = item
+		}
+
+		return model, nil
 	}
 	errMessage := fmt.Sprintf("Class for id %s not found", id)
 	return BmModel.Class{}, api2go.NewHTTPError(errors.New(errMessage), errMessage, http.StatusNotFound)

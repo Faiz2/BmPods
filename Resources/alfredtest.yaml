@@ -70,8 +70,9 @@ resources:
 - name: BmReservableitemResource
   method: NewReservableitemResource
   storages:
-  - BmSessioninfoStorage
   - BmReservableitemStorage
+  - BmSessioninfoStorage
+  - BmClassStorage
 - name: BmImageResource
   method: NewImageResource
   storages:
@@ -134,7 +135,7 @@ resources:
   method: NewClassResource
   storages:
   - BmClassStorage
-  - BmReservableitemStorage
+  - BmSessioninfoStorage
   - BmYardStorage
   - BmStudentStorage
   - BmTeacherStorage

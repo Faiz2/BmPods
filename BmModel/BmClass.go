@@ -27,10 +27,10 @@ type Class struct {
 	Units       []*Unit    `json:"-"`
 	UnitsIDs    []string   `json:"-" bson:"unitsIds"`
 
-	YardID           string         `json:"yard-id" bson:"yard-id"`
-	Yard             Yard           `json:"-"`
-	ReservableitemID string         `json:"reservable-item-id" bson:"reservable-item-id"`
-	Reservableitem   Reservableitem `json:"-"`
+	YardID        string      `json:"yard-id" bson:"yard-id"`
+	Yard          Yard        `json:"-"`
+	SessioninfoID string      `json:"sessioninfo-id" bson:"sessioninfo-id"`
+	Sessioninfo   Sessioninfo `json:"-"`
 }
 
 // GetID to satisfy jsonapi.MarshalIdentifier interface
@@ -52,8 +52,8 @@ func (u Class) GetReferences() []jsonapi.Reference {
 			Name: "yard",
 		},
 		{
-			Type: "Reservableitem",
-			Name: "reservableitem",
+			Type: "Sessioninfo",
+			Name: "sessioninfo",
 		},
 		{
 			Type: "Student",
@@ -102,11 +102,11 @@ func (u Class) GetReferencedIDs() []jsonapi.ReferenceID {
 			Name: "yard",
 		})
 	}
-	if u.ReservableitemID != "" {
+	if u.SessioninfoID != "" {
 		result = append(result, jsonapi.ReferenceID{
-			ID:   u.ReservableitemID,
-			Type: "reservableitem",
-			Name: "reservableitem",
+			ID:   u.SessioninfoID,
+			Type: "sessioninfo",
+			Name: "sessioninfo",
 		})
 	}
 
@@ -129,8 +129,8 @@ func (u Class) GetReferencedStructs() []jsonapi.MarshalIdentifier {
 	if u.YardID != "" {
 		result = append(result, u.Yard)
 	}
-	if u.ReservableitemID != "" {
-		result = append(result, u.Reservableitem)
+	if u.SessioninfoID != "" {
+		result = append(result, u.Sessioninfo)
 	}
 
 	return result
@@ -141,8 +141,8 @@ func (u *Class) SetToOneReferenceID(name, ID string) error {
 		u.YardID = ID
 		return nil
 	}
-	if name == "reservableitem" {
-		u.ReservableitemID = ID
+	if name == "sessioninfo" {
+		u.SessioninfoID = ID
 		return nil
 	}
 

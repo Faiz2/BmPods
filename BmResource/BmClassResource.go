@@ -16,13 +16,13 @@ type BmClassResource struct {
 	BmTeacherStorage        *BmDataStorage.BmTeacherStorage
 	BmUnitStorage           *BmDataStorage.BmUnitStorage
 	BmYardStorage           *BmDataStorage.BmYardStorage
-	BmReservableitemStorage *BmDataStorage.BmReservableitemStorage
+	BmSessioninfoStorage *BmDataStorage.BmSessioninfoStorage
 }
 
 func (s BmClassResource) NewClassResource(args []BmDataStorage.BmStorage) BmClassResource {
 	var us *BmDataStorage.BmClassStorage
 	var ys *BmDataStorage.BmYardStorage
-	var ss *BmDataStorage.BmReservableitemStorage
+	var ss *BmDataStorage.BmSessioninfoStorage
 	var cs *BmDataStorage.BmStudentStorage
 	var ts *BmDataStorage.BmTeacherStorage
 	var ns *BmDataStorage.BmUnitStorage
@@ -38,11 +38,11 @@ func (s BmClassResource) NewClassResource(args []BmDataStorage.BmStorage) BmClas
 			ns = arg.(*BmDataStorage.BmUnitStorage)
 		} else if tp.Name() == "BmYardStorage" {
 			ys = arg.(*BmDataStorage.BmYardStorage)
-		} else if tp.Name() == "BmReservableitemStorage" {
-			ss = arg.(*BmDataStorage.BmReservableitemStorage)
+		} else if tp.Name() == "BmSessioninfoStorage" {
+			ss = arg.(*BmDataStorage.BmSessioninfoStorage)
 		}
 	}
-	return BmClassResource{BmClassStorage: us, BmYardStorage: ys, BmReservableitemStorage: ss, BmStudentStorage: cs, BmTeacherStorage: ts, BmUnitStorage: ns}
+	return BmClassResource{BmClassStorage: us, BmYardStorage: ys, BmSessioninfoStorage: ss, BmStudentStorage: cs, BmTeacherStorage: ts, BmUnitStorage: ns}
 }
 
 // FindAll to satisfy api2go data source interface
@@ -84,12 +84,12 @@ func (s BmClassResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 			}
 			model.Yard = yard
 		}
-		if model.ReservableitemID != "" {
-			item, err := s.BmReservableitemStorage.GetOne(model.ReservableitemID)
+		if model.SessioninfoID != "" {
+			item, err := s.BmSessioninfoStorage.GetOne(model.SessioninfoID)
 			if err != nil {
 				return &Response{}, err
 			}
-			model.Reservableitem = item
+			model.Sessioninfo = item
 		}
 
 		result = append(result, *model)
@@ -134,8 +134,49 @@ func (s BmClassResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respon
 		}
 
 		start := sizeI * (numberI - 1)
-		for _, iter := range s.BmClassStorage.GetAll(r, int(start), int(sizeI)) {
-			result = append(result, *iter)
+		for _, model := range s.BmClassStorage.GetAll(r, int(start), int(sizeI)) {
+
+			model.Students = []*BmModel.Student{}
+			for _, tmpID := range model.StudentsIDs {
+				choc, err := s.BmStudentStorage.GetOne(tmpID)
+				if err != nil {
+					return 0, &Response{}, err
+				}
+				model.Students = append(model.Students, &choc)
+			}
+			model.Teachers = []*BmModel.Teacher{}
+			for _, tmpID := range model.TeachersIDs {
+				choc, err := s.BmTeacherStorage.GetOne(tmpID)
+				if err != nil {
+					return 0, &Response{}, err
+				}
+				model.Teachers = append(model.Teachers, &choc)
+			}
+			model.Units = []*BmModel.Unit{}
+			for _, tmpID := range model.UnitsIDs {
+				choc, err := s.BmUnitStorage.GetOne(tmpID)
+				if err != nil {
+					return 0, &Response{}, err
+				}
+				model.Units = append(model.Units, &choc)
+			}
+
+			if model.YardID != "" {
+				yard, err := s.BmYardStorage.GetOne(model.YardID)
+				if err != nil {
+					return 0, &Response{}, err
+				}
+				model.Yard = yard
+			}
+			if model.SessioninfoID != "" {
+				item, err := s.BmSessioninfoStorage.GetOne(model.SessioninfoID)
+				if err != nil {
+					return 0, &Response{}, err
+				}
+				model.Sessioninfo = item
+			}
+
+			result = append(result, *model)
 		}
 
 	} else {
@@ -149,8 +190,49 @@ func (s BmClassResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respon
 			return 0, &Response{}, err
 		}
 
-		for _, iter := range s.BmClassStorage.GetAll(r, int(offsetI), int(limitI)) {
-			result = append(result, *iter)
+		for _, model := range s.BmClassStorage.GetAll(r, int(offsetI), int(limitI)) {
+
+			model.Students = []*BmModel.Student{}
+			for _, tmpID := range model.StudentsIDs {
+				choc, err := s.BmStudentStorage.GetOne(tmpID)
+				if err != nil {
+					return 0, &Response{}, err
+				}
+				model.Students = append(model.Students, &choc)
+			}
+			model.Teachers = []*BmModel.Teacher{}
+			for _, tmpID := range model.TeachersIDs {
+				choc, err := s.BmTeacherStorage.GetOne(tmpID)
+				if err != nil {
+					return 0, &Response{}, err
+				}
+				model.Teachers = append(model.Teachers, &choc)
+			}
+			model.Units = []*BmModel.Unit{}
+			for _, tmpID := range model.UnitsIDs {
+				choc, err := s.BmUnitStorage.GetOne(tmpID)
+				if err != nil {
+					return 0, &Response{}, err
+				}
+				model.Units = append(model.Units, &choc)
+			}
+
+			if model.YardID != "" {
+				yard, err := s.BmYardStorage.GetOne(model.YardID)
+				if err != nil {
+					return 0, &Response{}, err
+				}
+				model.Yard = yard
+			}
+			if model.SessioninfoID != "" {
+				item, err := s.BmSessioninfoStorage.GetOne(model.SessioninfoID)
+				if err != nil {
+					return 0, &Response{}, err
+				}
+				model.Sessioninfo = item
+			}
+
+			result = append(result, *model)
 		}
 	}
 
@@ -200,12 +282,12 @@ func (s BmClassResource) FindOne(ID string, r api2go.Request) (api2go.Responder,
 		}
 		model.Yard = yard
 	}
-	if model.ReservableitemID != "" {
-		item, err := s.BmReservableitemStorage.GetOne(model.ReservableitemID)
+	if model.SessioninfoID != "" {
+		item, err := s.BmSessioninfoStorage.GetOne(model.SessioninfoID)
 		if err != nil {
 			return &Response{}, err
 		}
-		model.Reservableitem = item
+		model.Sessioninfo = item
 	}
 
 	return &Response{Res: model}, nil
