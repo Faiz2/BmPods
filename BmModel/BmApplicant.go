@@ -7,8 +7,8 @@ import (
 )
 
 type Applicant struct {
-	ID  string        `json:"-"`
-	Id_ bson.ObjectId `json:"-" bson:"_id"`
+	ID  string        `json:"id"`
+	Id_ bson.ObjectId `bson:"_id"`
 
 	Name            string  `json:"name" bson:"name"`
 	Gender          float64 `json:"gender" bson:"gender"`

@@ -301,7 +301,7 @@ func (m *BmMongodb) FindOneByCondition(ptr BmModel.BmModelBase, out BmModel.BmMo
 
 	err = c.Find(cond).One(out)
 	if err != nil {
-		return errors.New("query error")
+		return err
 	}
 
 	m.ResetIdWithId_(out)

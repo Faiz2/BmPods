@@ -82,31 +82,47 @@ func (h ApplicantHandler) ApplicantValidation(w http.ResponseWriter, r *http.Req
 	rst, _ := jsonapi.FromJsonAPI(sjson)
 	model := rst.(BmModel.Applicant)
 
-	var (
-		out BmModel.Applicant
-	)
-	cond := bson.M{"wechat-openid": model.WeChatOpenid}
-	err = h.db.FindOneByCondition(&model, &out, cond)
+	out, flag := h.checkApplicantExist(model)
 
-	if err == nil && out.ID != "" {
-		hex := md5.New()
-		io.WriteString(hex, out.ID)
-		token := fmt.Sprintf("%x", hex.Sum(nil))
-		err = BmRedis.PushToken(token)
+	hex := md5.New()
+	io.WriteString(hex, out.ID)
+	token := fmt.Sprintf("%x", hex.Sum(nil))
+	BmRedis.PushToken(token)
 
-		bmLoginSucceed := BmModel.BmLoginSucceed{
-			ID:        out.ID,
-			Id_:       out.Id_,
-			Applicant: out,
-			Token:     token,
-		}
-		jsonapi.ToJsonAPI(&bmLoginSucceed, w)
-
-	} else if out.ID == "" {
-
-	} else {
-
+	bmLoginSucceed := BmModel.BmLoginSucceed{
+		ID:        out.ID,
+		Id_:       out.Id_,
+		Applicant: out,
+		Token:     token,
 	}
 
-	return 0
+	if err != nil {
+		panic(err.Error())
+	}
+
+	if flag {
+		jsonapi.ToJsonAPI(&bmLoginSucceed, w)
+		return 0
+	} else {
+		id, _ := h.registerApplicant(out)
+		bmLoginSucceed.ID = id
+		bmLoginSucceed.Applicant.ID = id
+		jsonapi.ToJsonAPI(&bmLoginSucceed, w)
+		return 0
+	}
+}
+
+func (h ApplicantHandler) registerApplicant(model BmModel.Applicant) (string, error) {
+	return h.db.InsertBmObject(&model)
+}
+
+func (h ApplicantHandler) checkApplicantExist(model BmModel.Applicant) (BmModel.Applicant, bool) {
+	var out BmModel.Applicant
+	cond := bson.M{"wechat-openid": model.WeChatOpenid}
+	err := h.db.FindOneByCondition(&model, &out, cond)
+
+	if err != nil && err.Error() == "not found" {
+		return model, false
+	}
+	return out, true
 }
