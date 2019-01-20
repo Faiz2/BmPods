@@ -32,7 +32,6 @@ func (c BmRoomResource) NewRoomResource(args []BmDataStorage.BmStorage) BmRoomRe
 // FindAll Rooms
 func (c BmRoomResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 	roomsID, ok := r.QueryParams["roomsID"]
-	rooms := c.BmRoomStorage.GetAll(r)
 	if ok {
 		// this means that we want to show all rooms of a model, this is the route
 		// /v0/models/1/rooms
@@ -53,6 +52,7 @@ func (c BmRoomResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 
 		return &Response{Res: filteredLeafs}, nil
 	}
+	rooms := c.BmRoomStorage.GetAll(r)
 	return &Response{Res: rooms}, nil
 }
 
