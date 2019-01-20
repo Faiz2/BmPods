@@ -10,6 +10,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 
 	"github.com/alfredyang1986/BmPods/BmModel"
+	"github.com/alfredyang1986/BmPods/BmRedis"
 
 	"github.com/julienschmidt/httprouter"
 
@@ -75,10 +76,12 @@ func (h AuthHandler) Validation(w http.ResponseWriter, r *http.Request, _ httpro
 		hex := md5.New()
 		out.Password = ""
 		token := fmt.Sprintf("%x", hex.Sum(nil))
+		err = BmRedis.PushToken(token)
 		out.Token = token
 
 		response["status"] = "ok"
 		response["result"] = out
+		response["error"] = err
 
 		jso.Obj = response
 		enc := json.NewEncoder(w)
