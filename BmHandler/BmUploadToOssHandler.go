@@ -10,12 +10,12 @@ import (
 	"strings"
 
 	"github.com/alfredyang1986/BmPods/BmConfig"
-	"github.com/alfredyang1986/BmPods/BmDaemons"
 	"github.com/alfredyang1986/BmPods/BmDaemons/BmMongodb"
 	"github.com/alfredyang1986/blackmirror/bmalioss"
 	"github.com/alfredyang1986/blackmirror/jsonapi/jsonapiobj"
-	uuid "github.com/hashicorp/go-uuid"
+	"github.com/hashicorp/go-uuid"
 	"github.com/julienschmidt/httprouter"
+	"github.com/alfredyang1986/BmPods/BmDaemons"
 )
 
 type UploadToOssHandler struct {
@@ -30,7 +30,6 @@ func (h UploadToOssHandler) NewUploadToOssHandler(args ...interface{}) UploadToO
 	var hm string
 	var md string
 	var ag []string
-	//sts := args[0].([]BmDaemons.BmDaemon)
 	for i, arg := range args {
 		if i == 0 {
 			sts := arg.([]BmDaemons.BmDaemon)
