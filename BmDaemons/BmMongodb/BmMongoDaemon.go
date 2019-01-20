@@ -273,13 +273,6 @@ func Struct2map(v reflect.Value) (map[string]interface{}, error) {
 			continue
 		}
 
-		//ja, ok := tag.Lookup(BMJsonAPI)
-		//if ok && ja == "relationships" {
-		//NOTE: relationships
-		//rst[name] = "TODO"
-		//continue
-		//}
-
 		tmp, _ := AttrValue(fieldValue)
 		rst[name] = tmp
 	}
