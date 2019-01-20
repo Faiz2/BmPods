@@ -22,7 +22,7 @@ type Reservableitem struct {
 	Sessioninfo   Sessioninfo `json:"-"`
 
 	Classes    []*Class `json:"-"`
-	ClassesIDs []string `json:"-" bson:"classe-ids"`
+	ClassesIDs []string `json:"-" bson:"class-ids"`
 }
 
 // GetID to satisfy jsonapi.MarshalIdentifier interface
