@@ -21,11 +21,11 @@ type Class struct {
 	BrandId           string  `json:"brand-id" bson:"brand-id"`
 
 	Students    []*Student `json:"-"`
-	StudentsIDs []string   `json:"-" bson:"studentsIds"`
+	StudentsIDs []string   `json:"-" bson:"student-ids"`
 	Teachers    []*Teacher `json:"-"`
-	TeachersIDs []string   `json:"-" bson:"teachersIds"`
+	TeachersIDs []string   `json:"-" bson:"teacher-ids"`
 	Units       []*Unit    `json:"-"`
-	UnitsIDs    []string   `json:"-" bson:"unitsIds"`
+	UnitsIDs    []string   `json:"-" bson:"unit-ids"`
 
 	YardID        string      `json:"yard-id" bson:"yard-id"`
 	Yard          Yard        `json:"-"`

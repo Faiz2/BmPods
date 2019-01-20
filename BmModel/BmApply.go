@@ -24,7 +24,7 @@ type Apply struct {
 	ReservableId string  `json:"reservable-id" bson:"reservable-id"`
 
 	Kids    []*Kid   `json:"-"`
-	KidsIDs []string `json:"-" bson:"kidsIds"`
+	KidsIDs []string `json:"-" bson:"kid-ids"`
 
 	ApplicantID string    `json:"applicant-id" bson:"applicant-id"`
 	Applicant   Applicant `json:"-"`

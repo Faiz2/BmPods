@@ -46,7 +46,7 @@ type Student struct {
 	TeacherID string   `json:"-" bson:"teacher-id"`
 
 	Guardians    []*Guardian `json:"-"`
-	GuardiansIDs []string    `json:"-" bson:"guardians-ids"`
+	GuardiansIDs []string    `json:"-" bson:"guardian-ids"`
 }
 
 // GetID to satisfy jsonapi.MarshalIdentifier interface
