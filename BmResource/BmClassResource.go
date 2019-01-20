@@ -53,10 +53,70 @@ func (s BmClassResource) NewClassResource(args []BmDataStorage.BmStorage) BmClas
 // FindAll to satisfy api2go data source interface
 func (s BmClassResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 	var result []BmModel.Class
-	models := s.BmClassStorage.GetAll(r, -1, -1)
 
+	//查詢 reservable 下的 classes
+	reservableitemsID, ok := r.QueryParams["reservableitemsID"]
+	if ok {
+		modelRootID := reservableitemsID[0]
+		modelRoot, err := s.BmReservableitemStorage.GetOne(modelRootID)
+		if err != nil {
+			return &Response{}, err
+		}
+		for _, modelID := range modelRoot.ClassesIDs {
+			model, err := s.BmClassStorage.GetOne(modelID)
+			if err != nil {
+				return &Response{}, err
+			}
+
+			//TODO:rebindmodel 抽離成 func
+			model.Students = []*BmModel.Student{}
+			for _, tmpID := range model.StudentsIDs {
+				choc, err := s.BmStudentStorage.GetOne(tmpID)
+				if err != nil {
+					return &Response{}, err
+				}
+				model.Students = append(model.Students, &choc)
+			}
+			model.Teachers = []*BmModel.Teacher{}
+			for _, tmpID := range model.TeachersIDs {
+				choc, err := s.BmTeacherStorage.GetOne(tmpID)
+				if err != nil {
+					return &Response{}, err
+				}
+				model.Teachers = append(model.Teachers, &choc)
+			}
+			model.Units = []*BmModel.Unit{}
+			for _, tmpID := range model.UnitsIDs {
+				choc, err := s.BmUnitStorage.GetOne(tmpID)
+				if err != nil {
+					return &Response{}, err
+				}
+				model.Units = append(model.Units, &choc)
+			}
+
+			if model.YardID != "" {
+				yard, err := s.BmYardStorage.GetOne(model.YardID)
+				if err != nil {
+					return &Response{}, err
+				}
+				model.Yard = yard
+			}
+			if model.SessioninfoID != "" {
+				item, err := s.BmSessioninfoStorage.GetOne(model.SessioninfoID)
+				if err != nil {
+					return &Response{}, err
+				}
+				model.Sessioninfo = item
+			}
+
+			result = append(result, model)
+		}
+		return &Response{Res: result}, nil
+	}
+
+	models := s.BmClassStorage.GetAll(r, -1, -1)
 	for _, model := range models {
-		// get all sweets for the model
+		//TODO:rebindmodel 抽離成 func
 		model.Students = []*BmModel.Student{}
 		for _, tmpID := range model.StudentsIDs {
 			choc, err := s.BmStudentStorage.GetOne(tmpID)
@@ -139,49 +199,49 @@ func (s BmClassResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respon
 		}
 
 		start := sizeI * (numberI - 1)
-		for _, model := range s.BmClassStorage.GetAll(r, int(start), int(sizeI)) {
+		for _, modelRoot := range s.BmClassStorage.GetAll(r, int(start), int(sizeI)) {
 
-			model.Students = []*BmModel.Student{}
-			for _, tmpID := range model.StudentsIDs {
+			modelRoot.Students = []*BmModel.Student{}
+			for _, tmpID := range modelRoot.StudentsIDs {
 				choc, err := s.BmStudentStorage.GetOne(tmpID)
 				if err != nil {
 					return 0, &Response{}, err
 				}
-				model.Students = append(model.Students, &choc)
+				modelRoot.Students = append(modelRoot.Students, &choc)
 			}
-			model.Teachers = []*BmModel.Teacher{}
-			for _, tmpID := range model.TeachersIDs {
+			modelRoot.Teachers = []*BmModel.Teacher{}
+			for _, tmpID := range modelRoot.TeachersIDs {
 				choc, err := s.BmTeacherStorage.GetOne(tmpID)
 				if err != nil {
 					return 0, &Response{}, err
 				}
-				model.Teachers = append(model.Teachers, &choc)
+				modelRoot.Teachers = append(modelRoot.Teachers, &choc)
 			}
-			model.Units = []*BmModel.Unit{}
-			for _, tmpID := range model.UnitsIDs {
+			modelRoot.Units = []*BmModel.Unit{}
+			for _, tmpID := range modelRoot.UnitsIDs {
 				choc, err := s.BmUnitStorage.GetOne(tmpID)
 				if err != nil {
 					return 0, &Response{}, err
 				}
-				model.Units = append(model.Units, &choc)
+				modelRoot.Units = append(modelRoot.Units, &choc)
 			}
 
-			if model.YardID != "" {
-				yard, err := s.BmYardStorage.GetOne(model.YardID)
+			if modelRoot.YardID != "" {
+				yard, err := s.BmYardStorage.GetOne(modelRoot.YardID)
 				if err != nil {
 					return 0, &Response{}, err
 				}
-				model.Yard = yard
+				modelRoot.Yard = yard
 			}
-			if model.SessioninfoID != "" {
-				item, err := s.BmSessioninfoStorage.GetOne(model.SessioninfoID)
+			if modelRoot.SessioninfoID != "" {
+				item, err := s.BmSessioninfoStorage.GetOne(modelRoot.SessioninfoID)
 				if err != nil {
 					return 0, &Response{}, err
 				}
-				model.Sessioninfo = item
+				modelRoot.Sessioninfo = item
 			}
 
-			result = append(result, *model)
+			result = append(result, *modelRoot)
 		}
 
 	} else {
@@ -195,49 +255,49 @@ func (s BmClassResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respon
 			return 0, &Response{}, err
 		}
 
-		for _, model := range s.BmClassStorage.GetAll(r, int(offsetI), int(limitI)) {
+		for _, modelRoot := range s.BmClassStorage.GetAll(r, int(offsetI), int(limitI)) {
 
-			model.Students = []*BmModel.Student{}
-			for _, tmpID := range model.StudentsIDs {
+			modelRoot.Students = []*BmModel.Student{}
+			for _, tmpID := range modelRoot.StudentsIDs {
 				choc, err := s.BmStudentStorage.GetOne(tmpID)
 				if err != nil {
 					return 0, &Response{}, err
 				}
-				model.Students = append(model.Students, &choc)
+				modelRoot.Students = append(modelRoot.Students, &choc)
 			}
-			model.Teachers = []*BmModel.Teacher{}
-			for _, tmpID := range model.TeachersIDs {
+			modelRoot.Teachers = []*BmModel.Teacher{}
+			for _, tmpID := range modelRoot.TeachersIDs {
 				choc, err := s.BmTeacherStorage.GetOne(tmpID)
 				if err != nil {
 					return 0, &Response{}, err
 				}
-				model.Teachers = append(model.Teachers, &choc)
+				modelRoot.Teachers = append(modelRoot.Teachers, &choc)
 			}
-			model.Units = []*BmModel.Unit{}
-			for _, tmpID := range model.UnitsIDs {
+			modelRoot.Units = []*BmModel.Unit{}
+			for _, tmpID := range modelRoot.UnitsIDs {
 				choc, err := s.BmUnitStorage.GetOne(tmpID)
 				if err != nil {
 					return 0, &Response{}, err
 				}
-				model.Units = append(model.Units, &choc)
+				modelRoot.Units = append(modelRoot.Units, &choc)
 			}
 
-			if model.YardID != "" {
-				yard, err := s.BmYardStorage.GetOne(model.YardID)
+			if modelRoot.YardID != "" {
+				yard, err := s.BmYardStorage.GetOne(modelRoot.YardID)
 				if err != nil {
 					return 0, &Response{}, err
 				}
-				model.Yard = yard
+				modelRoot.Yard = yard
 			}
-			if model.SessioninfoID != "" {
-				item, err := s.BmSessioninfoStorage.GetOne(model.SessioninfoID)
+			if modelRoot.SessioninfoID != "" {
+				item, err := s.BmSessioninfoStorage.GetOne(modelRoot.SessioninfoID)
 				if err != nil {
 					return 0, &Response{}, err
 				}
-				model.Sessioninfo = item
+				modelRoot.Sessioninfo = item
 			}
 
-			result = append(result, *model)
+			result = append(result, *modelRoot)
 		}
 	}
 
@@ -248,68 +308,68 @@ func (s BmClassResource) PaginatedFindAll(r api2go.Request) (uint, api2go.Respon
 }
 
 // FindOne to satisfy `api2go.DataSource` interface
-// this method should return the model with the given ID, otherwise an error
+// this method should return the modelRoot with the given ID, otherwise an error
 func (s BmClassResource) FindOne(ID string, r api2go.Request) (api2go.Responder, error) {
-	model, err := s.BmClassStorage.GetOne(ID)
+	modelRoot, err := s.BmClassStorage.GetOne(ID)
 	if err != nil {
 		return &Response{}, api2go.NewHTTPError(err, err.Error(), http.StatusNotFound)
 	}
 
-	model.Students = []*BmModel.Student{}
-	for _, tmpID := range model.StudentsIDs {
+	modelRoot.Students = []*BmModel.Student{}
+	for _, tmpID := range modelRoot.StudentsIDs {
 		choc, err := s.BmStudentStorage.GetOne(tmpID)
 		if err != nil {
 			return &Response{}, err
 		}
-		model.Students = append(model.Students, &choc)
+		modelRoot.Students = append(modelRoot.Students, &choc)
 	}
-	model.Teachers = []*BmModel.Teacher{}
-	for _, tmpID := range model.TeachersIDs {
+	modelRoot.Teachers = []*BmModel.Teacher{}
+	for _, tmpID := range modelRoot.TeachersIDs {
 		choc, err := s.BmTeacherStorage.GetOne(tmpID)
 		if err != nil {
 			return &Response{}, err
 		}
-		model.Teachers = append(model.Teachers, &choc)
+		modelRoot.Teachers = append(modelRoot.Teachers, &choc)
 	}
-	model.Units = []*BmModel.Unit{}
-	for _, tmpID := range model.UnitsIDs {
+	modelRoot.Units = []*BmModel.Unit{}
+	for _, tmpID := range modelRoot.UnitsIDs {
 		choc, err := s.BmUnitStorage.GetOne(tmpID)
 		if err != nil {
 			return &Response{}, err
 		}
-		model.Units = append(model.Units, &choc)
+		modelRoot.Units = append(modelRoot.Units, &choc)
 	}
 
-	if model.YardID != "" {
-		yard, err := s.BmYardStorage.GetOne(model.YardID)
+	if modelRoot.YardID != "" {
+		yard, err := s.BmYardStorage.GetOne(modelRoot.YardID)
 		if err != nil {
 			return &Response{}, err
 		}
-		model.Yard = yard
+		modelRoot.Yard = yard
 	}
-	if model.SessioninfoID != "" {
-		item, err := s.BmSessioninfoStorage.GetOne(model.SessioninfoID)
+	if modelRoot.SessioninfoID != "" {
+		item, err := s.BmSessioninfoStorage.GetOne(modelRoot.SessioninfoID)
 		if err != nil {
 			return &Response{}, err
 		}
-		model.Sessioninfo = item
+		modelRoot.Sessioninfo = item
 	}
 
-	return &Response{Res: model}, nil
+	return &Response{Res: modelRoot}, nil
 }
 
 // Create method to satisfy `api2go.DataSource` interface
 func (s BmClassResource) Create(obj interface{}, r api2go.Request) (api2go.Responder, error) {
-	model, ok := obj.(BmModel.Class)
+	modelRoot, ok := obj.(BmModel.Class)
 	if !ok {
 		return &Response{}, api2go.NewHTTPError(errors.New("Invalid instance given"), "Invalid instance given", http.StatusBadRequest)
 	}
 
-	model.CreateTime = float64(time.Now().UnixNano() / 1e6)
-	id := s.BmClassStorage.Insert(model)
-	model.ID = id
+	modelRoot.CreateTime = float64(time.Now().UnixNano() / 1e6)
+	id := s.BmClassStorage.Insert(modelRoot)
+	modelRoot.ID = id
 
-	return &Response{Res: model, Code: http.StatusCreated}, nil
+	return &Response{Res: modelRoot, Code: http.StatusCreated}, nil
 }
 
 // Delete to satisfy `api2go.DataSource` interface
@@ -318,13 +378,13 @@ func (s BmClassResource) Delete(id string, r api2go.Request) (api2go.Responder, 
 	return &Response{Code: http.StatusNoContent}, err
 }
 
-//Update stores all changes on the model
+//Update stores all changes on the modelRoot
 func (s BmClassResource) Update(obj interface{}, r api2go.Request) (api2go.Responder, error) {
-	model, ok := obj.(BmModel.Class)
+	modelRoot, ok := obj.(BmModel.Class)
 	if !ok {
 		return &Response{}, api2go.NewHTTPError(errors.New("Invalid instance given"), "Invalid instance given", http.StatusBadRequest)
 	}
 
-	err := s.BmClassStorage.Update(model)
-	return &Response{Res: model, Code: http.StatusNoContent}, err
+	err := s.BmClassStorage.Update(modelRoot)
+	return &Response{Res: modelRoot, Code: http.StatusNoContent}, err
 }

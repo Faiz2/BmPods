@@ -45,11 +45,12 @@ func (s BmStudentResource) NewStudentResource(args []BmDataStorage.BmStorage) Bm
 // FindAll to satisfy api2go data source interface
 func (s BmStudentResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 
-	//查詢class下的students
+	var result []BmModel.Student
+
+	//查詢 class 下的 students
 	classesID, ok := r.QueryParams["classesID"]
 	if ok {
 		modelID := classesID[0]
-		filteredLeafs := []BmModel.Student{}
 		model, err := s.BmClassStorage.GetOne(modelID)
 		if err != nil {
 			return &Response{}, err
@@ -86,13 +87,11 @@ func (s BmStudentResource) FindAll(r api2go.Request) (api2go.Responder, error) {
 				stud.Teacher = &k
 			}
 
-			filteredLeafs = append(filteredLeafs, stud)
+			result = append(result, stud)
 		}
-
-		return &Response{Res: filteredLeafs}, nil
+		return &Response{Res: result}, nil
 	}
 
-	var result []BmModel.Student
 	studs := s.BmStudentStorage.GetAll(r, -1, -1)
 	for _, stud := range studs {
 		stud.Guardians = []*BmModel.Guardian{}
