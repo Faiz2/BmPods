@@ -164,6 +164,7 @@ func (m *BmMongodb) Update(ptr BmModel.BmModelBase) error {
 	return nil
 }
 
+//TODO:條件查詢 
 func (m *BmMongodb) Count(ptr BmModel.BmModelBase) (int, error) {
 	session, err := mgo.Dial(m.Host + ":" + m.Port)
 	if err != nil {

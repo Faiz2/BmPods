@@ -17,7 +17,8 @@ type BmClassResource struct {
 	BmTeacherStorage        *BmDataStorage.BmTeacherStorage
 	BmUnitStorage           *BmDataStorage.BmUnitStorage
 	BmYardStorage           *BmDataStorage.BmYardStorage
-	BmSessioninfoStorage *BmDataStorage.BmSessioninfoStorage
+	BmSessioninfoStorage    *BmDataStorage.BmSessioninfoStorage
+	BmReservableitemStorage *BmDataStorage.BmReservableitemStorage
 }
 
 func (s BmClassResource) NewClassResource(args []BmDataStorage.BmStorage) BmClassResource {
@@ -27,6 +28,7 @@ func (s BmClassResource) NewClassResource(args []BmDataStorage.BmStorage) BmClas
 	var cs *BmDataStorage.BmStudentStorage
 	var ts *BmDataStorage.BmTeacherStorage
 	var ns *BmDataStorage.BmUnitStorage
+	var rs *BmDataStorage.BmReservableitemStorage
 	for _, arg := range args {
 		tp := reflect.ValueOf(arg).Elem().Type()
 		if tp.Name() == "BmClassStorage" {
@@ -41,9 +43,11 @@ func (s BmClassResource) NewClassResource(args []BmDataStorage.BmStorage) BmClas
 			ys = arg.(*BmDataStorage.BmYardStorage)
 		} else if tp.Name() == "BmSessioninfoStorage" {
 			ss = arg.(*BmDataStorage.BmSessioninfoStorage)
+		} else if tp.Name() == "BmReservableitemStorage" {
+			rs = arg.(*BmDataStorage.BmReservableitemStorage)
 		}
 	}
-	return BmClassResource{BmClassStorage: us, BmYardStorage: ys, BmSessioninfoStorage: ss, BmStudentStorage: cs, BmTeacherStorage: ts, BmUnitStorage: ns}
+	return BmClassResource{BmClassStorage: us, BmYardStorage: ys, BmSessioninfoStorage: ss, BmStudentStorage: cs, BmTeacherStorage: ts, BmUnitStorage: ns, BmReservableitemStorage: rs}
 }
 
 // FindAll to satisfy api2go data source interface
