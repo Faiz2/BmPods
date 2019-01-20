@@ -11,43 +11,47 @@ import (
 
 type BmGuardianResource struct {
 	BmGuardianStorage *BmDataStorage.BmGuardianStorage
+	BmStudentStorage  *BmDataStorage.BmStudentStorage
 }
 
 func (c BmGuardianResource) NewGuardianResource(args []BmDataStorage.BmStorage) BmGuardianResource {
 	var cs *BmDataStorage.BmGuardianStorage
+	var ss *BmDataStorage.BmStudentStorage
 	for _, arg := range args {
 		tp := reflect.ValueOf(arg).Elem().Type()
 		if tp.Name() == "BmGuardianStorage" {
 			cs = arg.(*BmDataStorage.BmGuardianStorage)
 		}
+		if tp.Name() == "BmStudentStorage" {
+			ss = arg.(*BmDataStorage.BmStudentStorage)
+		}
 	}
-	return BmGuardianResource{BmGuardianStorage: cs}
+	return BmGuardianResource{BmGuardianStorage: cs, BmStudentStorage: ss}
 }
 
 // FindAll guardians
 func (c BmGuardianResource) FindAll(r api2go.Request) (api2go.Responder, error) {
-	//guardiansID, ok := r.QueryParams["guardiansID"]
+
+	studentsID, ok := r.QueryParams["studentsID"]
+	if ok {
+		modelID := studentsID[0]
+		filteredLeafs := []BmModel.Guardian{}
+		model, err := c.BmStudentStorage.GetOne(modelID)
+		if err != nil {
+			return &Response{}, err
+		}
+		for _, modelLeafID := range model.GuardiansIDs {
+			sweet, err := c.BmGuardianStorage.GetOne(modelLeafID)
+			if err != nil {
+				return &Response{}, err
+			}
+			filteredLeafs = append(filteredLeafs, sweet)
+		}
+
+		return &Response{Res: filteredLeafs}, nil
+	}
+
 	guardians := c.BmGuardianStorage.GetAll(r)
-	//if ok {
-	//	// this means that we want to show all guardians of a model, this is the route
-	//	// /v0/models/1/guardians
-	//	modelID := guardiansID[0]
-	//	// filter out guardians with modelID, in real world, you would just run a different database query
-	//	filteredLeafs := []BmModel.Guardian{}
-	//	model, err := c.BmApplyStorage.GetOne(modelID)
-	//	if err != nil {
-	//		return &Response{}, err
-	//	}
-	//	for _, modelLeafID := range model.GuardiansIDs {
-	//		sweet, err := c.BmGuardianStorage.GetOne(modelLeafID)
-	//		if err != nil {
-	//			return &Response{}, err
-	//		}
-	//		filteredLeafs = append(filteredLeafs, sweet)
-	//	}
-	//
-	//	return &Response{Res: filteredLeafs}, nil
-	//}
 	return &Response{Res: guardians}, nil
 }
 

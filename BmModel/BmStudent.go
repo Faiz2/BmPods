@@ -64,15 +64,15 @@ func (u *Student) SetID(id string) error {
 func (u Student) GetReferences() []jsonapi.Reference {
 	return []jsonapi.Reference{
 		{
-			Type: "Kid",
+			Type: "kid",
 			Name: "kid",
 		},
 		{
-			Type: "Teacher",
+			Type: "teachers",
 			Name: "teacher",
 		},
 		{
-			Type: "Guardian",
+			Type: "guardians",
 			Name: "guardians",
 		},
 	}
@@ -84,7 +84,7 @@ func (u Student) GetReferencedIDs() []jsonapi.ReferenceID {
 	for _, kID := range u.GuardiansIDs {
 		result = append(result, jsonapi.ReferenceID{
 			ID:   kID,
-			Type: "Guardian",
+			Type: "guardians",
 			Name: "guardians",
 		})
 	}
@@ -92,7 +92,7 @@ func (u Student) GetReferencedIDs() []jsonapi.ReferenceID {
 	if u.TeacherID != "" {
 		result = append(result, jsonapi.ReferenceID{
 			ID:   u.TeacherID,
-			Type: "Teacher",
+			Type: "teachers",
 			Name: "teacher",
 		})
 	}
@@ -100,7 +100,7 @@ func (u Student) GetReferencedIDs() []jsonapi.ReferenceID {
 	if u.KidID != "" {
 		result = append(result, jsonapi.ReferenceID{
 			ID:   u.KidID,
-			Type: "Kid",
+			Type: "kids",
 			Name: "kid",
 		})
 	}
@@ -176,5 +176,25 @@ func (u *Student) DeleteToManyIDs(name string, IDs []string) error {
 }
 
 func (u *Student) GetConditionsBsonM(parameters map[string][]string) bson.M {
+
+	//rst := make(map[string]interface{})
+	//for k, v := range parameters {
+	//	switch k {
+	//	case "class-id":
+	//		val := make([]string, 0)
+	//
+	//		classId := v[0]
+	//		fmt.Println(classId)
+	//		//clazz := Class{
+	//		//	ID:classId,
+	//		//}
+	//
+	//
+	//		r := make(map[string]interface{})
+	//		r["$in"] = val
+	//		rst["create-time"] = r
+	//	}
+	//}
+
 	return bson.M{}
 }
