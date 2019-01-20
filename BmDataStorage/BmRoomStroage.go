@@ -47,7 +47,7 @@ func (s BmRoomStorage) GetOne(id string) (BmModel.Room, error) {
 	if err == nil {
 		return out, nil
 	}
-	errMessage := fmt.Sprintf("User for id %s not found", id)
+	errMessage := fmt.Sprintf("Room for id %s not found", id)
 	return BmModel.Room{}, api2go.NewHTTPError(errors.New(errMessage), errMessage, http.StatusNotFound)
 }
 

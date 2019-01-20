@@ -72,6 +72,8 @@ var BLACKMIRROR_FUNCTION_FACTORY = map[string]interface{}{
 	"BmUploadToOssHandler": BmHandler.UploadToOssHandler{},
 	"BmAccountHandler":     BmHandler.AccountHandler{},
 	"BmApplicantHandler":   BmHandler.ApplicantHandler{},
+	"BmAuthHandler":        BmHandler.AuthHandler{},
+	"BmWeChatHandler":      BmHandler.WeChatHandler{},
 }
 
 func GetModelByName(name string) interface{} {

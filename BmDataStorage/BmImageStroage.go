@@ -11,7 +11,7 @@ import (
 )
 
 // BmImageStorage stores all of the tasty modelleaf, needs to be injected into
-// User and Image Resource. In the real world, you would use a database for that.
+// Image and Image Resource. In the real world, you would use a database for that.
 type BmImageStorage struct {
 	images  map[string]*BmModel.Image
 	idCount int
@@ -48,7 +48,7 @@ func (s BmImageStorage) GetOne(id string) (BmModel.Image, error) {
 	if err == nil {
 		return out, nil
 	}
-	errMessage := fmt.Sprintf("User for id %s not found", id)
+	errMessage := fmt.Sprintf("Image for id %s not found", id)
 	return BmModel.Image{}, api2go.NewHTTPError(errors.New(errMessage), errMessage, http.StatusNotFound)
 }
 

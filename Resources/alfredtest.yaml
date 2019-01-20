@@ -268,3 +268,11 @@ functions:
   http: POST
   args:
   - name
+- name: BmWeChatHandler
+  create: NewWeChatHandler
+  daemons:
+  - BmMongodbDaemon
+  method: GetWeChatInfo
+  http: POST
+  args:
+  - name
