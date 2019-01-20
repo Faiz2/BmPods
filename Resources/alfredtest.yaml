@@ -112,6 +112,7 @@ resources:
   - BmKidStorage
   - BmGuardianStorage
   - BmTeacherStorage
+  - BmClassStorage
 - name: BmGuardianResource
   method: NewGuardianResource
   storages:
