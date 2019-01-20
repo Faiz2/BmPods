@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/manyminds/api2go/jsonapi"
 	"gopkg.in/mgo.v2/bson"
+	"strconv"
 )
 
 // Apply is a generic database Apply
@@ -136,5 +137,26 @@ func (u *Apply) DeleteToManyIDs(name string, IDs []string) error {
 }
 
 func (u *Apply) GetConditionsBsonM(parameters map[string][]string) bson.M {
+
+	rst := make(map[string]interface{})
+	for k, v := range parameters {
+		switch k {
+		case "status":
+			val, err := strconv.ParseFloat(v[0], 64)
+			if err != nil {
+				panic(err.Error())
+			}
+			rst[k] = val
+		case "lt[create-time]":
+			val, err := strconv.ParseFloat(v[0], 64)
+			if err != nil {
+				panic(err.Error())
+			}
+			r := make(map[string]interface{})
+			r["$lt"] = val
+			rst["create-time"] = r
+		}
+	}
+
 	return bson.M{}
 }
