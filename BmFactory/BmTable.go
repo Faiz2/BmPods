@@ -2,6 +2,7 @@ package BmFactory
 
 import (
 	"github.com/alfredyang1986/BmPods/BmDaemons/BmMongodb"
+	"github.com/alfredyang1986/BmPods/BmDaemons/BmRedis"
 	"github.com/alfredyang1986/BmPods/BmDataStorage"
 	"github.com/alfredyang1986/BmPods/BmHandler"
 	"github.com/alfredyang1986/BmPods/BmModel"
@@ -63,7 +64,9 @@ var BLACKMIRROR_STORAGE_FACTORY = map[string]interface{}{
 }
 
 var BLACKMIRROR_DAEMON_FACTORY = map[string]interface{}{
-	"BmMongodbDaemon": BmMongodb.BmMongodb{}}
+	"BmMongodbDaemon": BmMongodb.BmMongodb{},
+	"BmRedisDaemon":   BmRedis.BmRedis{},
+}
 
 var BLACKMIRROR_FUNCTION_FACTORY = map[string]interface{}{
 	"BmProvinceHandler":    BmHandler.ProvinceHandler{},

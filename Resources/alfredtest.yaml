@@ -218,6 +218,13 @@ daemons:
     host: 127.0.0.1
     port: 27017
     database: test
+- name: BmRedisDaemon
+  method: NewRedisDBDaemon
+  args:
+    host: 127.0.0.1
+    port: 6379
+    password: 
+    database: 0
 
 functions:
 - name: BmProvinceHandler
@@ -256,6 +263,7 @@ functions:
   create: NewAccountHandler
   daemons:
   - BmMongodbDaemon
+  - BmRedisDaemon
   method: AccountValidation
   http: POST
   args:
@@ -264,6 +272,7 @@ functions:
   create: NewApplicantHandler
   daemons:
   - BmMongodbDaemon
+  - BmRedisDaemon
   method: ApplicantValidation
   http: POST
   args:

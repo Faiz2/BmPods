@@ -9,14 +9,16 @@ import (
 	"log"
 	"net/http"
 	"reflect"
+	"time"
 
 	"github.com/julienschmidt/httprouter"
 	"gopkg.in/mgo.v2/bson"
 
 	"github.com/alfredyang1986/BmPods/BmDaemons"
 	"github.com/alfredyang1986/BmPods/BmDaemons/BmMongodb"
+	"github.com/alfredyang1986/BmPods/BmDaemons/BmRedis"
 	"github.com/alfredyang1986/BmPods/BmModel"
-	"github.com/alfredyang1986/BmPods/BmRedis"
+
 	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
 	"github.com/alfredyang1986/blackmirror/jsonapi/jsonapiobj"
@@ -27,10 +29,12 @@ type AccountHandler struct {
 	HttpMethod string
 	Args       []string
 	db         *BmMongodb.BmMongodb
+	rd         *BmRedis.BmRedis
 }
 
 func (h AccountHandler) NewAccountHandler(args ...interface{}) AccountHandler {
 	var m *BmMongodb.BmMongodb
+	var r *BmRedis.BmRedis
 	var hm string
 	var md string
 	var ag []string
@@ -38,10 +42,16 @@ func (h AccountHandler) NewAccountHandler(args ...interface{}) AccountHandler {
 		if i == 0 {
 			sts := arg.([]BmDaemons.BmDaemon)
 			for _, dm := range sts {
+				fmt.Println(reflect.TypeOf(dm))
 				tp := reflect.ValueOf(dm).Elem().Type()
+
 				if tp.Name() == "BmMongodb" { //TODO: 这个地方有问题 BmMongodbDaemon
 					m = dm.(*BmMongodb.BmMongodb)
 				}
+				if tp.Name() == "BmRedis" {
+					r = dm.(*BmRedis.BmRedis)
+				}
+				fmt.Println(tp.Name())
 			}
 		} else if i == 1 {
 			md = arg.(string)
@@ -60,7 +70,7 @@ func (h AccountHandler) NewAccountHandler(args ...interface{}) AccountHandler {
 	fac := bmsingleton.GetFactoryInstance()
 	fac.RegisterModel("Account", &BmModel.Account{})
 
-	return AccountHandler{Method: md, HttpMethod: hm, Args: ag, db: m}
+	return AccountHandler{Method: md, HttpMethod: hm, Args: ag, db: m, rd: r}
 }
 
 func (h AccountHandler) AccountValidation(w http.ResponseWriter, r *http.Request, _ httprouter.Params) int {
@@ -93,7 +103,7 @@ func (h AccountHandler) AccountValidation(w http.ResponseWriter, r *http.Request
 		io.WriteString(hex, out.ID)
 		out.Password = ""
 		token := fmt.Sprintf("%x", hex.Sum(nil))
-		err = BmRedis.PushToken(token)
+		err = h.rd.PushToken(token, time.Hour*24*365)
 		out.Token = token
 
 		response["status"] = "ok"

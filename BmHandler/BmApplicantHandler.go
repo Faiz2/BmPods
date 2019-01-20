@@ -8,13 +8,14 @@ import (
 	"log"
 	"net/http"
 	"reflect"
+	"time"
 
 	"gopkg.in/mgo.v2/bson"
 
 	"github.com/alfredyang1986/BmPods/BmDaemons"
 	"github.com/alfredyang1986/BmPods/BmDaemons/BmMongodb"
+	"github.com/alfredyang1986/BmPods/BmDaemons/BmRedis"
 	"github.com/alfredyang1986/BmPods/BmModel"
-	"github.com/alfredyang1986/BmPods/BmRedis"
 	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
 	"github.com/julienschmidt/httprouter"
@@ -25,10 +26,12 @@ type ApplicantHandler struct {
 	HttpMethod string
 	Args       []string
 	db         *BmMongodb.BmMongodb
+	rd         *BmRedis.BmRedis
 }
 
 func (h ApplicantHandler) NewApplicantHandler(args ...interface{}) ApplicantHandler {
 	var m *BmMongodb.BmMongodb
+	var r *BmRedis.BmRedis
 	var hm string
 	var md string
 	var ag []string
@@ -39,6 +42,9 @@ func (h ApplicantHandler) NewApplicantHandler(args ...interface{}) ApplicantHand
 				tp := reflect.ValueOf(dm).Elem().Type()
 				if tp.Name() == "BmMongodb" { //TODO: 这个地方有问题 BmMongodbDaemon
 					m = dm.(*BmMongodb.BmMongodb)
+				}
+				if tp.Name() == "BmRedis" {
+					r = dm.(*BmRedis.BmRedis)
 				}
 			}
 		} else if i == 1 {
@@ -59,7 +65,7 @@ func (h ApplicantHandler) NewApplicantHandler(args ...interface{}) ApplicantHand
 	fac.RegisterModel("Applicant", &BmModel.Applicant{})
 	fac.RegisterModel("BmLoginSucceed", &BmModel.BmLoginSucceed{})
 
-	return ApplicantHandler{Method: md, HttpMethod: hm, Args: ag, db: m}
+	return ApplicantHandler{Method: md, HttpMethod: hm, Args: ag, db: m, rd: r}
 }
 
 func (h ApplicantHandler) GetHttpMethod() string {
@@ -87,7 +93,7 @@ func (h ApplicantHandler) ApplicantValidation(w http.ResponseWriter, r *http.Req
 	hex := md5.New()
 	io.WriteString(hex, out.ID)
 	token := fmt.Sprintf("%x", hex.Sum(nil))
-	BmRedis.PushToken(token)
+	h.rd.PushToken(token, time.Hour*24*365)
 
 	bmLoginSucceed := BmModel.BmLoginSucceed{
 		ID:        out.ID,
