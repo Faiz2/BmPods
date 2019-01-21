@@ -59,6 +59,14 @@ storages:
   method: NewUnitStorage
   daemons:
   - BmMongodbDaemon
+- name: BmPostStorage
+  method: NewPostStorage
+  daemons:
+  - BmMongodbDaemon
+- name: BmCommentStorage
+  method: NewCommentStorage
+  daemons:
+  - BmMongodbDaemon
 
 resources:
 - name: BmSessioninfoResource
@@ -149,6 +157,16 @@ resources:
   - BmTeacherStorage
   - BmClassStorage
   - BmRoomStorage
+- name: BmPostResource
+  method: NewPostResource
+  storages:
+  - BmPostStorage
+  - BmCommentStorage
+- name: BmCommentResource
+  method: NewCommentResource
+  storages:
+  - BmCommentStorage
+  - BmPostStorage
 
 models:
 - BmKid
@@ -165,6 +183,8 @@ models:
 - BmYard
 - BmClass
 - BmUnit
+- BmPost
+- BmComment
 
 services:
 - name: bm-kid
@@ -212,14 +232,20 @@ services:
 - name: bm-unit
   model: BmUnit
   resource: BmUnitResource
+- name: bm-post
+  model: BmPost
+  resource: BmPostResource
+- name: bm-comment
+  model: BmComment
+  resource: BmCommentResource
 
 daemons:
 - name: BmMongodbDaemon
   method: NewMongoDBDaemon
   args:
-    host: 192.168.100.174
+    host: 127.0.0.1
     port: 27017
-    database: test
+    database: review
 - name: BmRedisDaemon
   method: NewRedisDBDaemon
   args:

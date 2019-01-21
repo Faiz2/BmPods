@@ -2,11 +2,12 @@ package BmResource
 
 import (
 	"errors"
+	"net/http"
+	"reflect"
+
 	"github.com/alfredyang1986/BmPods/BmDataStorage"
 	"github.com/alfredyang1986/BmPods/BmModel"
 	"github.com/manyminds/api2go"
-	"net/http"
-	"reflect"
 )
 
 type BmKidResource struct {
